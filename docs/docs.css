@@ -2,7 +2,7 @@
    docs.css — کلنگ documentation
    --------------------------------------------------------------------------
    Flat, sidebar-driven documentation layout. RTL-first. Light/dark via
-   data-theme="light" on <html> (same attribute kolang-syntax-theme.css reads).
+   data-theme="light" on <html>.
    Sidebar sits on the RIGHT (inline-start in RTL). Content flows on the left.
    ========================================================================== */
 

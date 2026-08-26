@@ -13,7 +13,6 @@
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d9488'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>ک</text></svg>">
 
-  <link rel="stylesheet" href="kolang-syntax-theme.css">
   <link rel="stylesheet" href="docs.css">
 </head>
 <body>
@@ -91,9 +90,9 @@
         <a class="sb-link" href="#spec">مشخصات</a>
         <a class="sb-link" href="reference.html">مرجع کامل زبان</a>
         <a class="sb-link" href="stdlib.html">کتابخانهٔ استاندارد</a>
-        <a class="sb-link" href="playground.html">▶ محیط آزمایش</a>
+        <a class="sb-link external" href="https://github.com/faralidev/kolang-web" target="_blank" rel="noopener">▶ محیط آزمایش</a>
         <a class="sb-link external" href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
-        <a class="sb-link external" href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
+        <a class="sb-link external" href="https://github.com/faralidev/kolang-mobile" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
       </div>
 
       <div class="sb-section">
@@ -122,27 +121,12 @@
         <div class="callout">
           <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           <div class="callout-body">
-            <strong>ویرایشگر کلنگ (Kolang IDE)</strong> — برای تجربهٔ بهتر، افزونهٔ VS Code را نصب کنید:
+            <strong>ویرایشگر کلنگ (Kolang Editor)</strong> — برای تجربهٔ بهتر، افزونهٔ VS Code را نصب کنید:
             پشتیبانی از راست‌به‌چپ، هایلایت نحو و تکمیل خودکار.
-            <a href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">دریافت از GitHub ↗</a>
+            <a href="https://github.com/faralidev/kolang-mobile" target="_blank" rel="noopener">دریافت از GitHub ↗</a>
           </div>
         </div>
 
-        <div class="intro-shell">
-          <div class="intro-shell-header">
-            <span class="intro-shell-title">آشنایی — کد کلنگ را اینجا بنویسید و اجرا کنید</span>
-            <div class="intro-shell-actions">
-              <button id="intro-copy-btn" class="copy-btn" type="button">📋 کپی</button>
-              <button id="intro-run-btn" class="intro-shell-run" type="button">▶ اجرا</button>
-            </div>
-          </div>
-          <textarea id="intro-editor" class="intro-shell-editor" dir="rtl" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="ویرایشگر کد کلنگ">/ به کلنگ خوش آمدید!
-«سلام دنیا!» بنویس
-
-برای ای از ۱ تا ۵:
-    ای بنویس</textarea>
-          <pre id="intro-output" class="intro-shell-output" dir="rtl"><span class="intro-shell-placeholder">برای اجرا، دکمهٔ «اجرا» را بزنید</span></pre>
-        </div>
       </section>
 
       <!-- ===================================================== INSTALL -->
@@ -185,7 +169,7 @@
         <div class="terminal">
           <div class="terminal-bar"><span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span><span class="terminal-title">shell</span></div>
           <pre class="terminal-body"><code><span class="prompt">$</span> kolang -version
-<span class="out">کلنگ نسخه ۱.۰.۰ (kolang 1.0.0)</span>
+<span class="out">کلنگ نسخه ۰.۰.۱ (kolang 0.0.1)</span>
 <span class="dim">github.com/faralidev/kolang</span>
 <span class="dim">Go go1.27.0</span></code></pre>
         </div>
@@ -233,7 +217,7 @@
         <div class="terminal">
           <div class="terminal-bar"><span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span><span class="terminal-title">کلنگ — محیط تعاملی</span></div>
           <pre class="terminal-body"><code><span class="prompt">$</span> kolang
-<span class="dim">کلنگ v1.0.0 — محیط تعاملی (برای خروج: خروج)</span>
+<span class="dim">کلنگ v0.0.1 — محیط تعاملی (برای خروج: خروج)</span>
 کلنگ&gt; ۲ + ۳
 <span class="out">۵</span>
 کلنگ&gt; «سلام» بنویس
@@ -854,7 +838,7 @@
       <!-- ===================================================== SPEC -->
       <section class="section" id="spec">
         <h2 class="section-h2">مشخصات</h2>
-        <p>برای مشاهدهٔ مشخصات کامل زبان — شامل گرامر، انواع داده، معنا و رفتار زمان اجرا — به <a href="https://github.com/faralidev/kolang/blob/main/SPEC.html" target="_blank" rel="noopener"><code>SPEC.html</code></a> مراجعه کنید.</p>
+        <p>برای مشاهدهٔ مشخصات کامل زبان — شامل گرامر، انواع داده، معنا و رفتار زمان اجرا — به <a href="https://github.com/faralidev/kolang/blob/main/SPEC.md" target="_blank" rel="noopener"><code>SPEC.md</code></a> مراجعه کنید.</p>
 
         <div class="callout">
           <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
@@ -873,8 +857,8 @@
       <span>ساخته‌شده برای فارسی‌زبانان — مجوز MIT</span>
       <div class="footer-links">
         <a href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
-        <a href="https://github.com/faralidev/kolang/blob/main/SPEC.html" target="_blank" rel="noopener">SPEC</a>
+        <a href="https://github.com/faralidev/kolang-mobile" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
+        <a href="https://github.com/faralidev/kolang/blob/main/SPEC.md" target="_blank" rel="noopener">SPEC</a>
         <a href="https://github.com/faralidev/kolang/tree/main/examples" target="_blank" rel="noopener">مثال‌ها</a>
       </div>
     </div>
@@ -971,289 +955,5 @@
     })();
   </script>
 
-  <!-- ===== Inline Run buttons for code examples (WASM-powered) ===== -->
-  <script src="wasm/wasm_exec.js"></script>
-  <script>
-    (function () {
-      var wasmReady = false;
-      var wasmLoading = false;
-      var wasmError = null;
-
-      function loadWasm() {
-        if (wasmReady || wasmLoading) return;
-        if (typeof Go === 'undefined') {
-          wasmError = 'wasm_exec.js بارگذاری نشد';
-          console.error('Kolang WASM:', wasmError);
-          return;
-        }
-        wasmLoading = true;
-        var go = new Go();
-        var wasmUrl = 'wasm/kolang.wasm';
-
-        // Try streaming first (needs application/wasm MIME), fall back to
-        // fetch + arrayBuffer for servers that don't set the right content type.
-        var instantiatePromise;
-        if (typeof WebAssembly.instantiateStreaming === 'function') {
-          instantiatePromise = WebAssembly.instantiateStreaming(
-            fetch(wasmUrl), go.importObject
-          ).catch(function () {
-            return fetch(wasmUrl)
-              .then(function (r) { return r.arrayBuffer(); })
-              .then(function (bytes) { return WebAssembly.instantiate(bytes, go.importObject); });
-          });
-        } else {
-          instantiatePromise = fetch(wasmUrl)
-            .then(function (r) { return r.arrayBuffer(); })
-            .then(function (bytes) { return WebAssembly.instantiate(bytes, go.importObject); });
-        }
-
-        instantiatePromise.then(function (result) {
-          var instance = result.instance || result;
-          // go.run starts the Go runtime. It returns a Promise that resolves
-          // when the Go program exits — but our program blocks on select{}
-          // forever, keeping the runtime alive. Don't await it.
-          go.run(instance);
-
-          // Poll until runKolang is registered by Go's main()
-          var checkReady = setInterval(function () {
-            if (typeof runKolang === 'function') {
-              clearInterval(checkReady);
-              wasmReady = true;
-              wasmLoading = false;
-            }
-          }, 50);
-        }).catch(function (e) {
-          wasmLoading = false;
-          wasmError = 'خطا در بارگذاری مفسر';
-          console.error('Kolang WASM instantiation failed:', e);
-        });
-      }
-
-      function extractCode(pre) {
-        var codeEl = pre.querySelector('code');
-        if (!codeEl) return '';
-        return codeEl.textContent.replace(/\n\s*$/, '');
-      }
-
-      function runCode(pre, btn, outDiv) {
-        if (wasmError) {
-          outDiv.style.display = 'block';
-          outDiv.innerHTML = '<span class="run-error">' + wasmError + '</span>';
-          return;
-        }
-        if (!wasmReady) {
-          if (!wasmLoading) loadWasm();
-          btn.textContent = '⏳ در حال بارگذاری...';
-          var check = setInterval(function () {
-            if (wasmReady) {
-              clearInterval(check);
-              btn.textContent = '▶ اجرا';
-              doRun();
-            }
-            if (wasmError) {
-              clearInterval(check);
-              btn.textContent = '▶ اجرا';
-              outDiv.style.display = 'block';
-              outDiv.innerHTML = '<span class="run-error">' + wasmError + '</span>';
-            }
-          }, 200);
-          return;
-        }
-        doRun();
-
-        function doRun() {
-          var code = extractCode(pre);
-          btn.textContent = '⏳ در حال اجرا...';
-          btn.disabled = true;
-          outDiv.style.display = 'block';
-          outDiv.textContent = 'در حال اجرا...';
-          requestAnimationFrame(function () {
-            runKolang(code).then(function (result) {
-              if (result.error) {
-                outDiv.innerHTML = '<span class="run-error">' + result.error + '</span>' +
-                  (result.output ? '\n' + result.output : '');
-              } else {
-                outDiv.textContent = result.output || '(خروجی خالی)';
-              }
-              btn.textContent = '▶ اجرا';
-              btn.disabled = false;
-            }).catch(function (e) {
-              outDiv.innerHTML = '<span class="run-error">' + String(e) + '</span>';
-              btn.textContent = '▶ اجرا';
-              btn.disabled = false;
-            });
-          });
-        }
-      }
-
-      document.querySelectorAll('pre.kolang-code').forEach(function (pre) {
-        var wrapper = document.createElement('div');
-        wrapper.className = 'code-block-wrapper';
-        pre.parentNode.insertBefore(wrapper, pre);
-        wrapper.appendChild(pre);
-
-        var btn = document.createElement('button');
-        btn.className = 'run-btn';
-        btn.textContent = '▶ اجرا';
-        btn.type = 'button';
-
-        var copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-btn';
-        copyBtn.textContent = '📋 کپی';
-        copyBtn.type = 'button';
-        copyBtn.addEventListener('click', function (ev) {
-          ev.stopPropagation();
-          var code = extractCode(pre);
-          var done = function () {
-            copyBtn.textContent = '✓ کپی شد';
-            copyBtn.classList.add('copied');
-            setTimeout(function () {
-              copyBtn.textContent = '📋 کپی';
-              copyBtn.classList.remove('copied');
-            }, 2000);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(code).then(done).catch(function () {
-              // Fallback for older browsers
-              fallbackCopy(code); done();
-            });
-          } else {
-            fallbackCopy(code); done();
-          }
-        });
-
-        var outDiv = document.createElement('pre');
-        outDiv.className = 'run-output';
-        outDiv.style.display = 'none';
-
-        var toolbar = document.createElement('div');
-        toolbar.className = 'code-toolbar';
-        toolbar.appendChild(copyBtn);
-        toolbar.appendChild(btn);
-
-        wrapper.insertBefore(toolbar, pre);
-        wrapper.appendChild(outDiv);
-
-        btn.addEventListener('click', function (ev) {
-          ev.stopPropagation();
-          runCode(pre, btn, outDiv);
-        });
-      });
-
-      function fallbackCopy(text) {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); } catch (e) {}
-        document.body.removeChild(ta);
-      }
-
-      // ===== Intro shell Run button =====
-      var introBtn = document.getElementById('intro-run-btn');
-      var introEditor = document.getElementById('intro-editor');
-      var introOutput = document.getElementById('intro-output');
-      var introCopyBtn = document.getElementById('intro-copy-btn');
-
-      if (introCopyBtn && introEditor) {
-        introCopyBtn.addEventListener('click', function () {
-          var code = introEditor.value;
-          var done = function () {
-            introCopyBtn.textContent = '✓ کپی شد';
-            introCopyBtn.classList.add('copied');
-            setTimeout(function () {
-              introCopyBtn.textContent = '📋 کپی';
-              introCopyBtn.classList.remove('copied');
-            }, 2000);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(code).then(done).catch(function () {
-              fallbackCopy(code); done();
-            });
-          } else {
-            fallbackCopy(code); done();
-          }
-        });
-      }
-
-      if (introBtn && introEditor && introOutput) {
-        // Ctrl+Enter shortcut for the intro editor
-        introEditor.addEventListener('keydown', function (e) {
-          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            e.preventDefault();
-            introBtn.click();
-          }
-        });
-        // Tab key — insert 4 spaces
-        introEditor.addEventListener('keydown', function (e) {
-          if (e.key === 'Tab') {
-            e.preventDefault();
-            var s = introEditor.selectionStart;
-            var en = introEditor.selectionEnd;
-            var v = introEditor.value;
-            introEditor.value = v.substring(0, s) + '    ' + v.substring(en);
-            introEditor.selectionStart = introEditor.selectionEnd = s + 4;
-          }
-        });
-
-        introBtn.addEventListener('click', function () {
-          if (wasmError) {
-            introOutput.innerHTML = '<span class="run-error">' + wasmError + '</span>';
-            return;
-          }
-          if (!wasmReady) {
-            if (!wasmLoading) loadWasm();
-            introBtn.textContent = '⏳ در حال بارگذاری...';
-            var check = setInterval(function () {
-              if (wasmReady) {
-                clearInterval(check);
-                introBtn.textContent = '▶ اجرا';
-                doIntroRun();
-              }
-              if (wasmError) {
-                clearInterval(check);
-                introBtn.textContent = '▶ اجرا';
-                introOutput.innerHTML = '<span class="run-error">' + wasmError + '</span>';
-              }
-            }, 200);
-            return;
-          }
-          doIntroRun();
-
-          function doIntroRun() {
-            var code = introEditor.value;
-            introBtn.textContent = '⏳ در حال اجرا...';
-            introBtn.disabled = true;
-            introOutput.innerHTML = 'در حال اجرا...';
-            requestAnimationFrame(function () {
-              runKolang(code).then(function (result) {
-                if (result.error) {
-                  introOutput.innerHTML = '<span class="run-error">' + result.error + '</span>' +
-                    (result.output ? '\n' + result.output : '');
-                } else {
-                  introOutput.textContent = result.output || '(خروجی خالی)';
-                }
-                introBtn.textContent = '▶ اجرا';
-                introBtn.disabled = false;
-              }).catch(function (e) {
-                introOutput.innerHTML = '<span class="run-error">' + String(e) + '</span>';
-                introBtn.textContent = '▶ اجرا';
-                introBtn.disabled = false;
-              });
-            });
-          }
-        });
-      }
-
-      // Preload WASM on idle so the first Run click is instant
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(function () { loadWasm(); }, { timeout: 5000 });
-      } else {
-        setTimeout(loadWasm, 2000);
-      }
-    })();
-  </script>
 </body>
 </html>

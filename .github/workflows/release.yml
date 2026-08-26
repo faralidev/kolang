@@ -36,16 +36,29 @@ jobs:
             if [ "$os" = "windows" ]; then
               ext=".exe"
             fi
+            binary="dist/kolang-${os}-${arch}${ext}"
             GOOS="$os" GOARCH="$arch" go build \
-              -o "dist/kolang-${os}-${arch}${ext}" \
+              -o "$binary" \
               ./cmd/kolang
+            if [ "$os" = "windows" ]; then
+              mkdir -p "dist/pkg-${os}-${arch}"
+              cp "$binary" "dist/pkg-${os}-${arch}/kolang.exe"
+              (cd "dist/pkg-${os}-${arch}" && zip -qr "../kolang-${os}-${arch}.zip" kolang.exe)
+            else
+              mkdir -p "dist/pkg-${os}-${arch}"
+              cp "$binary" "dist/pkg-${os}-${arch}/kolang"
+              tar -czf "dist/kolang-${os}-${arch}.tar.gz" -C "dist/pkg-${os}-${arch}" kolang
+            fi
+            rm -rf "dist/pkg-${os}-${arch}"
           done
           ls -la dist
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
           name: "کلنگ نسخه ${{ github.ref_name }}"
           body: |
             ## کلنگ ${{ github.ref_name }}
@@ -67,3 +80,315 @@ jobs:
             ```
 
             Or download the binary for your platform below.
+
+  update-grammar-and-data:
+    name: Update grammar and data
+    # Runs after the release is created so the version/tag is final.
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout kolang
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.27"
+
+      - name: Generate keywords.json
+        run: go generate ./internal/token/
+
+      - name: Verify keywords.json
+        run: |
+          test -f keywords.json
+          jq -r '"generated keywords: " + ((.keywords | keys | length) | tostring)' keywords.json
+
+      # ── kolang-grammar ──────────────────────────────────────────────────
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Checkout kolang-grammar
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/kolang-grammar
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          path: kolang-grammar
+
+      - name: Regenerate grammar from keywords.json
+        working-directory: kolang-grammar
+        env:
+          # generate.js reads ../kolang/keywords.json by default; point it at
+          # the freshly generated file in this kolang checkout instead.
+          KOLANG_KEYWORDS_JSON: ${{ github.workspace }}/keywords.json
+        run: node scripts/generate.js
+
+      - name: Create PR to kolang-grammar
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: kolang-grammar
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          commit-message: "همگام‌سازی کلیدواژه‌ها با kolang ${{ github.ref_name }}"
+          branch: bot/update-keywords-${{ github.ref_name }}
+          delete-branch: true
+          title: "Update keywords from kolang ${{ github.ref_name }}"
+          body: |
+            این PR توسط فرآیند خودکار انتشار کلنگ باز شده است.
+
+            **تغییرات:**
+            - بازتولید `codemirror/` و `textmate/` از خروجی جدید `go generate ./internal/token/`.
+            - همگام‌سازی `kolang.grammar.json` با کلیدواژه‌های مفسر kolang `${{ github.ref_name }}`.
+
+            هیچ ویرایش دستی لازم نیست — در انتشار بعدی دوباره بازتولید می‌شود.
+
+            /cc @faralidev
+
+      # ── kolang-data ────────────────────────────────────────────────────
+      - name: Checkout kolang-data
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/kolang-data
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          path: kolang-data
+
+      - name: Sync keywords.json reference
+        run: cp keywords.json kolang-data/keywords.json
+
+      - name: Create PR to kolang-data
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: kolang-data
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          commit-message: "همگام‌سازی keywords.json با kolang ${{ github.ref_name }}"
+          branch: bot/update-keywords-${{ github.ref_name }}
+          delete-branch: true
+          title: "Update keywords.json from kolang ${{ github.ref_name }}"
+          body: |
+            این PR توسط فرآیند خودکار انتشار کلنگ باز شده است.
+
+            **تغییرات:**
+            - به‌روزرسانی `keywords.json` (مرجع کلیدواژه‌های مفسر) با نسخهٔ kolang `${{ github.ref_name }}`.
+
+            این فایل، خروجی مستقیم «go generate ./internal/token/» در مخزن مفسر است و
+            منبع همگام‌سازی فهرست کلیدواژه/builtin/type در این مخزن محسوب می‌شود.
+
+            /cc @faralidev
+
+  bump-taps:
+    name: Bump Homebrew tap + Scoop bucket
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute SHA256 for release assets
+        id: hashes
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.ref_name }}"
+          HB_VERSION="${VERSION#v}"
+          mkdir -p /tmp/assets
+          declare -A HASHES
+          for asset in \
+            kolang-linux-amd64.tar.gz \
+            kolang-linux-arm64.tar.gz \
+            kolang-darwin-amd64.tar.gz \
+            kolang-darwin-arm64.tar.gz \
+            kolang-windows-amd64.zip; do
+            for attempt in 1 2 3 4 5; do
+              if curl -fsSL -o "/tmp/assets/$asset" "https://github.com/faralidev/kolang/releases/download/${VERSION}/$asset"; then
+                break
+              fi
+              echo "تلاش $attempt ناموفق بود، ۱۵ ثانیه صبر..." >&2
+              sleep 15
+            done
+            # verify the file downloaded
+            test -s "/tmp/assets/$asset"
+            HASHES[$asset]=$(sha256sum "/tmp/assets/$asset" | awk '{print $1}')
+          done
+          {
+            echo "version=${VERSION}"
+            echo "hb_version=${HB_VERSION}"
+            echo "linux_amd64=${HASHES[kolang-linux-amd64.tar.gz]}"
+            echo "linux_arm64=${HASHES[kolang-linux-arm64.tar.gz]}"
+            echo "darwin_amd64=${HASHES[kolang-darwin-amd64.tar.gz]}"
+            echo "darwin_arm64=${HASHES[kolang-darwin-arm64.tar.gz]}"
+            echo "windows_amd64=${HASHES[kolang-windows-amd64.zip]}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Bump Homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Update Formula/kolang.rb
+        env:
+          PREFIX: kolang
+          VERSION: ${{ github.ref_name }}
+          HB_VERSION: ${{ steps.hashes.outputs.hb_version }}
+          HASH_LINUX_AMD64: ${{ steps.hashes.outputs.linux_amd64 }}
+          HASH_LINUX_ARM64: ${{ steps.hashes.outputs.linux_arm64 }}
+          HASH_DARWIN_AMD64: ${{ steps.hashes.outputs.darwin_amd64 }}
+          HASH_DARWIN_ARM64: ${{ steps.hashes.outputs.darwin_arm64 }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+
+          prefix = os.environ["PREFIX"]
+          version = os.environ["VERSION"]
+          hb_version = os.environ["HB_VERSION"]
+          hashes = {
+              "linux-amd64": os.environ["HASH_LINUX_AMD64"],
+              "linux-arm64": os.environ["HASH_LINUX_ARM64"],
+              "darwin-amd64": os.environ["HASH_DARWIN_AMD64"],
+              "darwin-arm64": os.environ["HASH_DARWIN_ARM64"],
+          }
+          path = "homebrew-tap/Formula/kolang.rb"
+
+          with open(path, encoding="utf-8") as f:
+              content = f.read()
+
+          # Bump the `version` line (Homebrew convention: no leading "v").
+          content = re.sub(
+              r'^(\s*version\s+")[^"]*(")',
+              lambda m: m.group(1) + hb_version + m.group(2),
+              content,
+              flags=re.M,
+          )
+
+          for platform, digest in hashes.items():
+              asset = prefix + "-" + platform
+              # Bump the tag inside the download URL for this asset.
+              content = re.sub(
+                  r'(url\s+"[^"]*/download/)v[^/]+(/' + re.escape(asset) + r'\.(?:tar\.gz|zip)")',
+                  lambda m: m.group(1) + version + m.group(2),
+                  content,
+              )
+              # Set the sha256 that immediately follows the matching URL.
+              content = re.sub(
+                  r'(url\s+"[^"]*/download/' + re.escape(version) + r'/' + re.escape(asset) + r'\.(?:tar\.gz|zip)"\s*\n\s*sha256\s+")[^"]*(")',
+                  lambda m: m.group(1) + digest + m.group(2),
+                  content,
+              )
+
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(content)
+          print(f"Updated {path}: version={hb_version}")
+          PY
+
+      - name: Create Homebrew PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          branch: kolang-${{ github.ref_name }}
+          title: "kolang ${{ github.ref_name }}"
+          commit-message: "kolang ${{ github.ref_name }}: bump version + sha256"
+          body: |
+            Bump kolang to ${{ github.ref_name }} and update the SHA256 hashes.
+
+            Automated by the kolang release workflow.
+
+      - name: Bump Scoop bucket
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/scoop-bucket
+          token: ${{ secrets.SCOOP_BUCKET_TOKEN }}
+          path: scoop-bucket
+
+      - name: Update bucket/kolang.json
+        env:
+          VERSION: ${{ github.ref_name }}
+          HB_VERSION: ${{ steps.hashes.outputs.hb_version }}
+          HASH_WINDOWS_AMD64: ${{ steps.hashes.outputs.windows_amd64 }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+
+          version = os.environ["VERSION"]
+          hb_version = os.environ["HB_VERSION"]
+          digest = os.environ["HASH_WINDOWS_AMD64"]
+          path = "scoop-bucket/bucket/kolang.json"
+
+          with open(path, encoding="utf-8") as f:
+              data = json.load(f)
+
+          data["version"] = hb_version
+          arch = data["architecture"]["64bit"]
+          arch["hash"] = digest
+          arch["url"] = re.sub(r"/download/v[^/]+/", f"/download/{version}/", arch["url"])
+
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=4, ensure_ascii=False)
+              f.write("\n")
+          print(f"Updated {path}: version={hb_version}")
+          PY
+
+      - name: Create Scoop PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: scoop-bucket
+          token: ${{ secrets.SCOOP_BUCKET_TOKEN }}
+          branch: kolang-${{ github.ref_name }}
+          title: "kolang ${{ github.ref_name }}"
+          commit-message: "kolang ${{ github.ref_name }}: bump version + hash"
+          body: |
+            Bump kolang to ${{ github.ref_name }} and update the Scoop manifest hash.
+
+            Automated by the kolang release workflow.
+
+  update-linter:
+    name: Update kolang-linter dependency
+    # Runs after the release is created so the tag exists on GitHub.
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout kolang-linter
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/kolang-linter
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          path: kolang-linter
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.27"
+
+      - name: Bump kolang dependency
+        working-directory: kolang-linter
+        run: go mod edit -require=github.com/faralidev/kolang@${{ github.ref_name }}
+
+      - name: Tidy modules
+        working-directory: kolang-linter
+        run: go mod tidy
+
+      - name: Create PR to kolang-linter
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: kolang-linter
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          commit-message: "deps: bump kolang to ${{ github.ref_name }}"
+          branch: deps/bump-kolang-${{ github.ref_name }}
+          delete-branch: true
+          title: "deps: bump kolang to ${{ github.ref_name }}"
+          body: |
+            این PR توسط فرآیند خودکار انتشار کلنگ باز شده است و وابستگی مفسر کلنگ را به نسخهٔ جدید به‌روزرسانی می‌کند.
+
+            **تغییرات:**
+            - ارتقای `github.com/faralidev/kolang` به `${{ github.ref_name }}` در `go.mod`.
+            - اجرای `go mod tidy` برای هماهنگ‌سازی `go.mod` و `go.sum`.
+
+            هیچ ویرایش دستی لازم نیست — در انتشار بعدی دوباره به‌روزرسانی می‌شود.
+
+            /cc @faralidev

@@ -31,3 +31,6 @@ coverage.*
 # OS files
 .DS_Store
 Thumbs.db
+# WASM build artifacts (canonical producer is kolang-wasm)
+*.wasm
+docs/wasm/

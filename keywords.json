@@ -1,0 +1,216 @@
+{
+  "_comment": "کلمات کلیدی زبان کلنگ — تولیدشده از internal/token/token.go. دستی ویرایش نکنید.",
+  "_version": "0.0.1",
+  "_source": "internal/token/token.go",
+  "_generator": "internal/token/gen_keywords.go (go generate)",
+  "keywords": {
+    "اتمام": {
+      "type": "BREAK",
+      "category": "control"
+    },
+    "از": {
+      "type": "FROM",
+      "category": "control"
+    },
+    "است": {
+      "type": "COP_POS",
+      "category": "copula"
+    },
+    "اگر": {
+      "type": "IF",
+      "category": "control"
+    },
+    "با": {
+      "type": "WITH",
+      "category": "other"
+    },
+    "باشد": {
+      "type": "COP_POS",
+      "category": "copula"
+    },
+    "بانام": {
+      "type": "AS",
+      "category": "other"
+    },
+    "ببند": {
+      "type": "CLOSE",
+      "category": "concurrency"
+    },
+    "بده": {
+      "type": "RAISE",
+      "category": "verb"
+    },
+    "برای": {
+      "type": "FOR",
+      "category": "control"
+    },
+    "برو": {
+      "type": "GO",
+      "category": "concurrency"
+    },
+    "بروبعدی": {
+      "type": "CONTINUE",
+      "category": "control"
+    },
+    "برگردان": {
+      "type": "RETURN",
+      "category": "verb"
+    },
+    "بساز": {
+      "type": "YIELD",
+      "category": "verb"
+    },
+    "بسازاز": {
+      "type": "YIELDFROM",
+      "category": "verb"
+    },
+    "بساز‌از": {
+      "type": "YIELDFROM",
+      "category": "verb"
+    },
+    "بستهاست": {
+      "type": "CLOSED",
+      "category": "concurrency"
+    },
+    "بسته‌است": {
+      "type": "CLOSED",
+      "category": "concurrency"
+    },
+    "بنویس": {
+      "type": "PRINT",
+      "category": "verb"
+    },
+    "به": {
+      "type": "BEH",
+      "category": "other"
+    },
+    "بپا": {
+      "type": "TRY",
+      "category": "control"
+    },
+    "بگیر": {
+      "type": "INPUT",
+      "category": "verb"
+    },
+    "بیار": {
+      "type": "IMPORT",
+      "category": "verb"
+    },
+    "بیافزا": {
+      "type": "APPEND",
+      "category": "verb"
+    },
+    "تأخیری": {
+      "type": "DEFER",
+      "category": "verb"
+    },
+    "تا": {
+      "type": "TO",
+      "category": "control"
+    },
+    "تاوقتی": {
+      "type": "WHILE",
+      "category": "control"
+    },
+    "تعریف": {
+      "type": "DEF",
+      "category": "declaration"
+    },
+    "تهی": {
+      "type": "NONE",
+      "category": "literal"
+    },
+    "جهانی": {
+      "type": "GLOBAL",
+      "category": "scope"
+    },
+    "حذفکن": {
+      "type": "REMOVE",
+      "category": "verb"
+    },
+    "حذف‌کن": {
+      "type": "REMOVE",
+      "category": "verb"
+    },
+    "خود": {
+      "type": "SELF",
+      "category": "self_super"
+    },
+    "در": {
+      "type": "IN",
+      "category": "control"
+    },
+    "درست": {
+      "type": "TRUE",
+      "category": "literal"
+    },
+    "درنهایت": {
+      "type": "FINALLY",
+      "category": "control"
+    },
+    "رابط": {
+      "type": "INTERF",
+      "category": "declaration"
+    },
+    "رهی": {
+      "type": "IMPLEMENTS",
+      "category": "declaration"
+    },
+    "غلط": {
+      "type": "FALSE",
+      "category": "literal"
+    },
+    "مثل": {
+      "type": "PASS",
+      "category": "other"
+    },
+    "نامحلی": {
+      "type": "NONLOCAL",
+      "category": "scope"
+    },
+    "نباشد": {
+      "type": "COP_NEG",
+      "category": "copula"
+    },
+    "همچنین": {
+      "type": "AND",
+      "category": "logical"
+    },
+    "و": {
+      "type": "SEP",
+      "category": "other"
+    },
+    "وارث": {
+      "type": "EXTENDS",
+      "category": "declaration"
+    },
+    "والد": {
+      "type": "SUPER",
+      "category": "self_super"
+    },
+    "وگرنه": {
+      "type": "ELSE",
+      "category": "control"
+    },
+    "پوشش": {
+      "type": "DECOR",
+      "category": "declaration"
+    },
+    "کانال": {
+      "type": "CHANNEL",
+      "category": "concurrency"
+    },
+    "گام": {
+      "type": "STEP",
+      "category": "control"
+    },
+    "گونه": {
+      "type": "CLASS",
+      "category": "declaration"
+    },
+    "یا": {
+      "type": "OR",
+      "category": "logical"
+    }
+  }
+}

@@ -9,9 +9,9 @@
 
 **[English version below](#english-section)**
 
-> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر دسکتاپ کلنگ (Kolang IDE)](https://github.com/faralidev/kolang-ide) را نصب کنید — ویرایشگری مستقل با پشتیبانی کامل از راست‌به‌چپ، هایلایت نحو، و تکمیل خودکار. همچنین [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز موجود است.
+> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر کلنگ (Kolang Editor)](https://github.com/faralidev/kolang-mobile) را نصب کنید — اپلیکیشن راست‌به‌چپ برای اندروید، iOS، مک و ویندوز با پشتیبانی کامل از هایلایت نحو و تکمیل خودکار. همچنین [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز موجود است.
 >
-> 🎮 **محیط آزمایش:** کد کلنگ را مستقیماً در مرورگر اجرا کنید — [playground](https://faralidev.github.io/kolang/playground.html)
+> 🎮 **محیط آزمایش:** کد کلنگ را مستقیماً در مرورگر اجرا کنید — [ویرایشگر وب کلنگ](https://github.com/faralidev/kolang-web) (در حال انتقال به kolang-web)
 
 ---
 
@@ -29,7 +29,7 @@
 
 ### چرا ویرایشگر جداگانه؟
 
-موتور داخلی VS Code امکان تجربه‌ی واقعی راست‌به‌چپ را فراهم نمی‌کند — مخصوصاً وقتی متن فارسی با کد و عملگرها ترکیب می‌شود. به همین دلیل [ویرایشگر دسکتاپ کلنگ](https://github.com/faralidev/kolang-ide) ساخته شد تا تجربه‌ی ویرایش واقعی RTL را فراهم کند. با این حال، [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز برای کاربرانی که VS Code را ترجیح می‌دهند توسعه یافته است.
+موتور داخلی VS Code امکان تجربه‌ی واقعی راست‌به‌چپ را فراهم نمی‌کند — مخصوصاً وقتی متن فارسی با کد و عملگرها ترکیب می‌شود. به همین دلیل [ویرایشگر کلنگ](https://github.com/faralidev/kolang-mobile) ساخته شد تا تجربه‌ی ویرایش واقعی RTL را فراهم کند. با این حال، [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز برای کاربرانی که VS Code را ترجیح می‌دهند توسعه یافته است.
 
 ### نقشه‌ی راه
 
@@ -87,7 +87,7 @@ kolang -version
 ```
 خروجی:
 ```
-کلنگ نسخه ۱.۰.۰ (kolang 1.0.0)
+کلنگ نسخه ۰.۰.۱ (kolang 0.0.1)
 github.com/faralidev/kolang
 Go go1.27.0
 ```
@@ -742,7 +742,7 @@ ch = کانال(صحیح و ۱)                   / کانال با بافر ۱
 
 ## ۷. مشخصات کامل
 
-برای مشاهده‌ی مشخصات کامل زبان به [`SPEC.html`](SPEC.html) مراجعه کنید.
+برای مشاهده‌ی مشخصات کامل زبان به [`SPEC.md`](SPEC.md) مراجعه کنید.
 
 ---
 
@@ -772,13 +772,13 @@ kolang/
 ├── cmd/kolang/           / خط فرمان (CLI)
 ├── internal/
 │   ├── token/            / توکن‌ها و کلمات کلیدی
-│   ├── lexer/            / تجزیه‌کننده‌ی لغوی
+│   ├── lexer/            / تحلیل واژگانی
 │   ├── ast/              / درخت نحو انتزاعی
 │   ├── parser/           / تجزیه‌کننده‌ی نحو
 │   └── eval/             / ارزیاب درختی
 ├── examples/             / مثال‌ها
 ├── docs/                 / مستندات سایت
-├── SPEC.html             / مشخصات کامل زبان
+├── SPEC.md               / مشخصات کامل زبان
 ├── Makefile              / دستورات ساخت
 └── go.mod                / ماژول Go
 ```
@@ -838,7 +838,7 @@ kolang -version           # version info
 
 ## Documentation
 
-Full documentation is in Persian above. For the complete language specification, see [`SPEC.html`](SPEC.html). For the reference manual and standard library docs, see the [docs site](https://faralidev.github.io/kolang/).
+Full documentation is in Persian above. For the complete language specification, see [`SPEC.md`](SPEC.md). For the reference manual and standard library docs, see the [docs site](https://faralidev.github.io/kolang/).
 
 ## Examples
 
@@ -868,7 +868,7 @@ Kolang is written in Go. The interpreter is a tree-walking evaluator that direct
 
 ### Why a separate editor?
 
-VS Code's internal engine does not allow a true right-to-left experience — especially when Persian text mixes with code and operators. That's why the [Kolang desktop IDE](https://github.com/faralidev/kolang-ide) was built to provide a genuine RTL editing experience. However, a [VS Code extension](https://github.com/faralidev/kolang-vsextension) has also been developed for users who prefer VS Code.
+VS Code's internal engine does not allow a true right-to-left experience — especially when Persian text mixes with code and operators. That's why the [Kolang Editor](https://github.com/faralidev/kolang-mobile) was built to provide a genuine RTL editing experience. However, a [VS Code extension](https://github.com/faralidev/kolang-vsextension) has also been developed for users who prefer VS Code.
 
 ### Roadmap
 

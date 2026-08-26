@@ -17,7 +17,7 @@ import (
 )
 
 // version is the Kolang release version reported by -version.
-const version = "1.0.0"
+const version = "0.0.1"
 
 // main parses the command line and dispatches to the REPL, -c inline code, or
 // a source file, exiting with status 1 if the command fails.
@@ -68,7 +68,7 @@ func run(args []string) error {
 
 // printVersion writes version information to stdout.
 func printVersion() {
-	fmt.Printf("کلنگ نسخه ۱.۰.۰ (kolang %s)\n", version)
+	fmt.Printf("کلنگ نسخه ۰.۰.۱ (kolang %s)\n", version)
 	fmt.Println("github.com/faralidev/kolang")
 	fmt.Printf("Go %s\n", runtime.Version())
 }

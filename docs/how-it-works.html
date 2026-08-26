@@ -13,7 +13,6 @@
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d9488'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>ک</text></svg>">
 
-  <link rel="stylesheet" href="kolang-syntax-theme.css">
   <link rel="stylesheet" href="docs.css">
 </head>
 <body>
@@ -47,7 +46,7 @@
 
       <div class="sb-section">
         <a class="sb-link" href="index.html">مستندات</a>
-        <a class="sb-link" href="playground.html">▶ محیط آزمایش</a>
+        <a class="sb-link external" href="https://github.com/faralidev/kolang-web" target="_blank" rel="noopener">▶ محیط آزمایش</a>
         <a class="sb-link" href="reference.html">مرجع کامل زبان</a>
         <a class="sb-link" href="stdlib.html">کتابخانهٔ استاندارد</a>
       </div>
@@ -66,7 +65,7 @@
 
       <div class="sb-section">
         <a class="sb-link external" href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
-        <a class="sb-link external" href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
+        <a class="sb-link external" href="https://github.com/faralidev/kolang-mobile" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
       </div>
 
     </nav>
@@ -381,7 +380,7 @@ ch <span class="kolang-channel-op">&lt;&lt;</span> <span class="kolang-number">�
         <h3 class="section-h3">ساخت نسخهٔ WASM</h3>
         <div class="terminal">
           <div class="terminal-bar"><span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span><span class="terminal-title">shell</span></div>
-          <pre class="terminal-body"><code><span class="prompt">$</span> GOOS=js GOARCH=wasm go build -o docs/wasm/kolang.wasm ./cmd/wasm</code></pre>
+          <pre class="terminal-body"><code><span class="prompt">$</span> cd ../kolang-wasm && npm run build</code></pre>
         </div>
 
         <h3 class="section-h3">اجرا در مرورگر</h3>
@@ -398,7 +397,7 @@ ch <span class="kolang-channel-op">&lt;&lt;</span> <span class="kolang-number">�
           <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
           <div class="callout-body">
             <strong>محیط آزمایش</strong> — همین حالا کد کلنگ را در مرورگر خود اجرا کنید:
-            <a href="playground.html">ورود به محیط آزمایش ←</a>
+            <a href="https://github.com/faralidev/kolang-web" target="_blank" rel="noopener">ورود به محیط آزمایش ←</a>
           </div>
         </div>
       </section>
@@ -450,9 +449,9 @@ ch <span class="kolang-channel-op">&lt;&lt;</span> <span class="kolang-number">�
       <span>ساخته‌شده برای فارسی‌زبانان — مجوز MIT</span>
       <div class="footer-links">
         <a href="index.html">مستندات</a>
-        <a href="playground.html">محیط آزمایش</a>
+        <a href="https://github.com/faralidev/kolang-web" target="_blank" rel="noopener">محیط آزمایش</a>
         <a href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
+        <a href="https://github.com/faralidev/kolang-mobile" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
       </div>
     </div>
   </footer>

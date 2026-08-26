@@ -1,73 +1,73 @@
-# Contributing to Kolang
+# مشارکت در کلنگ
 
-Thanks for your interest in contributing to Kolang (کلنگ)! Contributions of all kinds are welcome — bug fixes, new features, documentation, tests, and example programs.
+کلنگ (Kolang) یک زبان برنامه‌نویسی فارسی است و از مشارکت شما استقبال می‌کنیم! هر نوع مشارکتی — رفع باگ، ویژگی جدید، مستندات، تست و مثال — پذیرفته می‌شود.
 
-## Prerequisites
+## پیش‌نیازها
 
-- [Go](https://go.dev) 1.27 or later
+- [Go](https://go.dev) نسخهٔ ۱٫۲۷ یا بالاتر
 - [git](https://git-scm.com/)
 
-## Setup
+## راه‌اندازی
 
 ```bash
 git clone https://github.com/faralidev/kolang.git
 cd kolang
-go build -o kolang ./cmd/kolang
-go test ./...
+make build
 ```
 
-## Development Workflow
+با `make build` فایل اجرایی `kolang` در ریشهٔ پروژه ساخته می‌شود.
 
-1. **Fork and branch** — fork the repository on GitHub, then create a feature branch:
-   ```bash
-   git checkout -b fix/your-branch-name
-   ```
-2. **Make your changes** — keep them focused on one issue or feature.
-3. **Run the full test suite with the race detector**:
-   ```bash
-   go test -race -count=1 ./...
-   ```
-4. **Verify all examples still run**:
-   ```bash
-   go run ./cmd/kolang examples/hello.kolang
-   ```
-5. **Commit** with a clear, descriptive message and **submit a pull request** to the `main` branch.
-
-## Code Style
-
-- Run `gofmt` on all Go files before committing (`gofmt -w .`).
-- Add `godoc`-style comments to all exported symbols.
-- Keep Persian keywords and error messages consistent with the [SPEC](SPEC.html).
-- New language features should be accompanied by tests and, ideally, an example program in `examples/`.
-
-## Project Structure
-
-```
-cmd/kolang/          CLI entry point (run file, -c flag, REPL)
-internal/token/      Token definitions
-internal/lexer/      Lexer (tokenizer)
-internal/ast/        Abstract syntax tree definitions
-internal/parser/     Parser (source → AST)
-internal/eval/       Tree-walking interpreter and builtins
-examples/            Example programs written in Kolang
-```
-
-## Reporting Bugs
-
-- Open a [GitHub Issue](https://github.com/faralidev/kolang/issues) with the **Kolang code** that triggers the bug and the **expected vs. actual** output.
-- Include your OS/Go version and the commit you are running, if known.
-
-## Suggesting Features
-
-- Open a [GitHub Issue](https://github.com/faralidev/kolang/issues) with the **Feature** label.
-- Describe the motivation, a concrete usage example, and the expected behavior.
-- For larger changes, consider opening a discussion first to align on the design.
-
-## Testing
+## اجرای تست‌ها
 
 ```bash
-go test -race -count=1 ./...            # full suite, race detector
-go run ./cmd/kolang examples/hello.kolang
+make test-race
 ```
 
-Always run the full suite before pushing — a pull request that breaks the race-clean test suite will need to be fixed before it can be merged.
+تست‌ها همراه با race detector اجرا می‌شوند تا مشکلات همزمانی از قلم نیفتد.
+
+## اجرای مثال‌ها
+
+```bash
+make examples
+```
+
+این دستور همهٔ مثال‌های پوشهٔ `examples/` را اجرا می‌کند؛ اگر همه موفق باشند، پیام موفقیت چاپ می‌شود.
+
+## ساختار پروژه
+
+```
+cmd/kolang/          خط فرمان (اجرای فایل، -c، REPL)
+internal/token/      توکن‌ها و کلمات کلیدی
+internal/lexer/      تحلیل واژگانی
+internal/ast/        درخت نحو انتزاعی
+internal/parser/     تجزیه‌کنندهٔ نحو
+internal/eval/       ارزیاب درختی و توابع داخلی
+examples/            برنامه‌های نمونهٔ کلنگ
+SPEC.md              مشخصات کامل زبان
+```
+
+## نکات کدنویسی
+
+- قبل از ارسال تغییرات، کد را با `gofmt -w .` قالب‌بندی کنید.
+- برای همهٔ نمادهای صادرشده توضیح به‌سبک godoc بنویسید.
+- کلمات کلیدی و پیام‌های خطای فارسی باید با [مشخصات زبان](SPEC.md) هماهنگ باشند.
+- ویژگی زبانی جدید باید همراه تست و در صورت امکان یک مثال در `examples/` باشد.
+
+## گزارش باگ و پیشنهاد ویژگی
+
+- باگ‌ها را در [صفحهٔ Issues](https://github.com/faralidev/kolang/issues) گزارش کنید و کد کلنگی که باگ را نشان می‌دهد به‌همراه خروجی مورد انتظار و واقعی بنویسید.
+- برای پیشنهاد ویژگی نیز از همان صفحه استفاده کنید و انگیزه و رفتار مورد انتظار را شرح دهید.
+
+## نحوهٔ مشارکت
+
+۱. مخزن را fork کنید و یک شاخهٔ اختصاصی بسازید:
+
+```bash
+git checkout -b fix/نام-شاخه
+```
+
+۲. تغییرات خود را روی یک موضوع متمرکز نگه دارید.
+۳. همهٔ تست‌ها را با `make test-race` و مثال‌ها را با `make examples` بررسی کنید.
+۴. با یک پیام واضح commit کنید و pull request به شاخهٔ `main` بفرستید.
+
+از مشارکت شما سپاسگزاریم؛ نقشهٔ راه این پروژه به نیاز و استقبال جامعه بستگی دارد!
