@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.27"
+
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+          for target in \
+            linux/amd64 \
+            linux/arm64 \
+            darwin/amd64 \
+            darwin/arm64 \
+            windows/amd64; do
+            os="${target%/*}"
+            arch="${target#*/}"
+            ext=""
+            if [ "$os" = "windows" ]; then
+              ext=".exe"
+            fi
+            GOOS="$os" GOARCH="$arch" go build \
+              -o "dist/kolang-${os}-${arch}${ext}" \
+              ./cmd/kolang
+          done
+          ls -la dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          name: "کلنگ نسخه ${GITHUB_REF_NAME}"
+          body: |
+            ## کلنگ ${GITHUB_REF_NAME}
+
+            نسخه‌ی جدید کلنگ منتشر شد! برای نصب:
+
+            ```bash
+            go install github.com/faralidev/kolang/cmd/kolang@latest
+            ```
+
+            یا فایل اجرایی مناسب سیستم‌عامل خود را از زیر دانلود کنید.
+
+            ## Kolang ${GITHUB_REF_NAME}
+
+            New release of Kolang. Install with:
+
+            ```bash
+            go install github.com/faralidev/kolang/cmd/kolang@latest
+            ```
+
+            Or download the binary for your platform below.

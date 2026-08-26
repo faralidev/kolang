@@ -1,0 +1,33 @@
+# Binary output
+/kolang
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Build artifacts
+*.o
+*.a
+*.out
+*.prof
+*.test
+/dist/
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Coverage files
+*.cover
+coverage.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

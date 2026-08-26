@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مشخصات زبان برنامه‌نویسی کلنگ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0d7377;
+    --accent-dark: #095156;
+    --accent-light: #e6f2f2;
+    --go-color: #00add8;
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-soft: #555;
+    --border: #e2e2e2;
+    --code-bg: #1e1e2e;
+    --code-text: #e0e0e0;
+    --code-label: #7c8aff;
+    --go-label: #00add8;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.8;
+    direction: rtl;
+  }
+  header.topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  header.topbar .brand { font-weight: 700; font-size: 18px; color: var(--accent); }
+  header.topbar .toggle {
+    display: none; background: var(--accent); color: #fff; border: none;
+    padding: 8px 14px; border-radius: 6px; font-family: inherit; font-size: 14px; cursor: pointer;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    max-width: 1200px; margin: 0 auto; gap: 32px; padding: 32px 24px 80px;
+  }
+  aside.toc {
+    position: sticky; top: 72px; align-self: start;
+    max-height: calc(100vh - 88px); overflow-y: auto;
+    font-size: 14px; padding-left: 16px; border-left: 2px solid var(--accent-light);
+  }
+  aside.toc h2 {
+    font-size: 13px; color: var(--text-soft); text-transform: uppercase;
+    letter-spacing: 1px; margin: 0 0 12px; font-weight: 600;
+  }
+  aside.toc ol { list-style: none; padding: 0; margin: 0; }
+  aside.toc ol > li { margin: 4px 0; }
+  aside.toc a {
+    color: var(--text); text-decoration: none; display: block;
+    padding: 4px 8px; border-radius: 4px; line-height: 1.5;
+    transition: background .15s, color .15s;
+  }
+  aside.toc a:hover { background: var(--accent-light); color: var(--accent-dark); }
+  aside.toc a .num { color: var(--accent); font-weight: 600; margin-left: 6px; }
+  main { min-width: 0; }
+  main h1 { font-size: 34px; font-weight: 700; margin: 0 0 8px; line-height: 1.3; }
+  main .subtitle {
+    color: var(--text-soft); font-size: 17px; margin-bottom: 32px;
+    padding-bottom: 24px; border-bottom: 2px solid var(--accent-light);
+  }
+  main h2 {
+    font-size: 26px; font-weight: 700; color: var(--accent-dark);
+    margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    scroll-margin-top: 80px;
+  }
+  main h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; scroll-margin-top: 80px; }
+  main h4 { font-size: 17px; font-weight: 600; color: var(--accent-dark); margin: 24px 0 8px; }
+  main p { margin: 0 0 16px; }
+  main ul, main ol { margin: 0 0 16px; padding-right: 24px; }
+  main li { margin: 6px 0; }
+  code {
+    font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+    background: var(--accent-light); color: var(--accent-dark);
+    padding: 2px 7px; border-radius: 4px; font-size: 0.92em;
+    direction: rtl; unicode-bidi: plaintext; white-space: nowrap;
+  }
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 8px; padding: 16px 18px; overflow-x: auto;
+    margin: 16px 0 20px; position: relative; direction: rtl;
+    font-size: 15px; line-height: 1.7;
+  }
+  pre::before {
+    content: "کلنگ"; position: absolute; top: 8px; left: 12px;
+    font-family: 'Vazirmatn', sans-serif; font-size: 11px; color: var(--code-label);
+    background: rgba(124,138,255,0.15); padding: 2px 8px; border-radius: 4px; font-weight: 500;
+  }
+  pre.python::before { content: "python"; }
+  pre.go::before { content: "go"; color: var(--go-label); background: rgba(0,173,216,0.15); }
+  pre.tree::before { content: "ساختار"; }
+  pre code {
+    background: transparent; color: inherit; padding: 0; border-radius: 0;
+    font-size: inherit; direction: rtl; unicode-bidi: plaintext; white-space: pre;
+  }
+  .table-wrap { overflow-x: auto; margin: 16px 0 24px; border: 1px solid var(--border); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; direction: rtl; }
+  th, td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); }
+  th { background: var(--accent-light); color: var(--accent-dark); font-weight: 600; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  td code, th code { font-size: 0.9em; }
+  blockquote {
+    margin: 16px 0; padding: 12px 18px; background: var(--accent-light);
+    border-right: 4px solid var(--accent); border-radius: 4px;
+  }
+  blockquote p { margin: 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  pre.tree { background: #f4f4f4; color: #333; direction: ltr; text-align: left; font-size: 14px; }
+  pre.tree code { direction: ltr; }
+  .badge-go {
+    display: inline-block; background: var(--go-color); color: #fff;
+    padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600;
+    margin-right: 6px; vertical-align: middle;
+  }
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding: 16px; }
+    aside.toc {
+      display: none; position: fixed; top: 56px; right: 0; left: 0; bottom: 0;
+      background: #fff; z-index: 40; max-height: none; padding: 24px;
+      border-left: none; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow-y: auto;
+    }
+    aside.toc.open { display: block; }
+    header.topbar .toggle { display: inline-block; }
+    main h1 { font-size: 26px; }
+    main h2 { font-size: 22px; }
+  }
+  @media print {
+    header.topbar, aside.toc { display: none; }
+    .layout { display: block; max-width: none; padding: 0; }
+    body { background: #fff; font-size: 12pt; color: #000; }
+    pre { background: #f4f4f4; color: #000; page-break-inside: avoid; }
+    pre::before { color: #888; }
+    a { color: #000; }
+    main h2 { page-break-after: avoid; }
+    table { font-size: 11pt; }
+  }
+</style>
+<link rel="stylesheet" href="kolang-syntax-theme.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">کلنگ · مشخصات زبان</div>
+  <button class="toggle" onclick="document.querySelector('aside.toc').classList.toggle('open')">فهرست</button>
+</header>
+
+<div class="layout">
+
+<aside class="toc">
+  <h2>فهرست مطالب</h2>
+  <ol>
+    <li><a href="#s1"><span class="num">۱.</span> فلسفه و اهداف</a></li>
+    <li><a href="#s2"><span class="num">۲.</span> ساختار کلی</a></li>
+    <li><a href="#s3"><span class="num">۳.</span> لغت‌شناسی</a></li>
+    <li><a href="#s4"><span class="num">۴.</span> انواع داده‌ای</a></li>
+    <li><a href="#s5"><span class="num">۵.</span> دستورات</a></li>
+    <li><a href="#s6"><span class="num">۶.</span> عبارات</a></li>
+    <li><a href="#s7"><span class="num">۷.</span> توابع داخلی</a></li>
+    <li><a href="#s8"><span class="num">۸.</span> ماژول‌های کتابخانه استاندارد</a></li>
+    <li><a href="#s9"><span class="num">۹.</span> جاسازی کد پایتون</a></li>
+    <li><a href="#s10"><span class="num">۱۰.</span> استثناها و مدیریت خطا</a></li>
+    <li><a href="#s11"><span class="num">۱۱.</span> همزمانی و خطا به‌عنوان مقدار <span class="badge-go">Go</span></a></li>
+    <li><a href="#s12"><span class="num">۱۲.</span> ماژول‌بندی و پروژه</a></li>
+    <li><a href="#s13"><span class="num">۱۳.</span> قالب‌بندی و سبک</a></li>
+    <li><a href="#s14"><span class="num">۱۴.</span> مثال‌های کامل</a></li>
+    <li><a href="#s15"><span class="num">۱۵.</span> معماری پیاده‌سازی</a></li>
+    <li><a href="#s16"><span class="num">۱۶.</span> نقشه راه</a></li>
+    <li><a href="#s17"><span class="num">۱۷.</span> ملاحظات طراحی</a></li>
+    <li><a href="#s18"><span class="num">۱۸.</span> جمع‌بندی</a></li>
+  </ol>
+</aside>
+
+<main>
+
+<h1>مشخصات زبان برنامه‌نویسی کلنگ</h1>
+<div class="subtitle">زبانی فارسی‌محور با حس طبیعیِ متن فارسی، هم‌تراز با پایتون در قابلیت‌ها و الهام‌گرفته از Go در استواری</div>
+
+<h2 id="s1">۱. فلسفه و اهداف</h2>
+
+<p><strong>کلنگ</strong> (Kolang) زبانی اسکریپتی است که مانند پایتون عمل می‌کند، ولی کد منبع آن فارسی است. هدف اصلی این است که <strong>خواندن کد، مانند خواندن یک دستور فارسی طبیعی</strong> باشد. به همین دلیل:</p>
+
+<ul>
+  <li><strong>فارسیِ محض در کد منبع.</strong> کلمات کلیدی و افعال همیشه فارسی هستند؛ شناسه‌ها می‌توانند فارسی یا انگلیسی باشند (حروف، اعداد، <code>_</code>، نیم‌فاصله). فقط در بلوک <code>پایتون:</code> کد لاتین کامل مجاز است.</li>
+  <li><strong>ترتیب طبیعیِ جمله فارسی.</strong> فعل در پایان قرار می‌گیرد. به‌جای <code>print("سلام")</code> می‌نویسیم <code>«سلام» بنویس</code> — «سلام بنویس».</li>
+  <li><strong>اضافه‌ی فارسی به‌جای نقطه.</strong> دسترسی به اعضای ماژول و صفات شیء با اضافه‌ی kasra (<code>ِ</code>) انجام می‌شود، نه با نقطه: <code>جذرِ ریاضی</code> نه <code>ریاضی.جذر</code>، <code>عنوانِ خود</code> نه <code>خود.عنوان</code>. این کلنگ را شبیه نثر فارسی می‌کند.</li>
+  <li><strong>جداکننده‌ی آرگومان‌ها «و» است.</strong> به‌جای ویرگول: <code>جمع(۱ و ۲ و ۳)</code>، <code>تعریف جمع(الف و ب):</code>. «و» در بافت پرانتز (و در انتساب چندتایی سمت چپ) به‌عنوان جداکننده رفتار می‌کند؛ عملگر منطقی «and» کلمه‌ی <code>همچنین</code> است (بیرون پرانتز).</li>
+  <li><strong>عملگرهای نمادین.</strong> ضرب با <code>×</code>، تقسیم با <code>÷</code> (نماد فارسی‌پسند)، توان با <code>*</code>، تقسیم صحیح با <code>÷/</code>. انتساب و جمع/منها نمادین می‌مانند.</li>
+  <li><strong>بدون درستی ضمنی.</strong> شرط باید همیشه مقایسه‌ی صریح باشد؛ <code>اگر x:</code> نامعتبر است.</li>
+  <li><strong>هم‌تراز با پایتون.</strong> تمام قابلیت‌های پایتون (متغیر، تابع، گونه، وارث، استثنا، جنریتور، پوشش، ماژول، ناهمگام) پشتیبانی می‌شود.</li>
+  <li><strong>الهام از Go برای استواری.</strong> مقدارهای برگشتی چندتایی، نوع صریح خطا، تارک‌ها، کانال‌ها، تأخیر و رابط‌ها. <span class="badge-go">Go</span></li>
+  <li><strong>دسترسی به کتابخانه‌ی پایتون.</strong> ماژول‌ها و توابع با نام فارسی در دسترس‌اند و در صورت نیاز می‌توان کد پایتون را مستقیماً جاسازی کرد.</li>
+  <li><strong>معماری.</strong> لِکسر ← پارسر ← AST ← ارزیاب درختی (tree-walking). کامپایلر، بایت‌کد و ماشین مجازی در نسخه‌های بعدی (v0.7+) برنامه‌ریزی شده‌اند.</li>
+</ul>
+
+<h2 id="s2">۲. ساختار کلی</h2>
+
+<p>یک برنامه‌ی کلنگ مجموعه‌ای از <strong>دستورها</strong> است که با خطوط جدا می‌شوند. مانند پایتون، <strong>تورفتگی</strong> (۴ فاصله) ساختار بلوک‌ها را تعیین می‌کند. پایان دستور با <strong>خط جدید</strong> است.</p>
+
+<h3>۲.۱ سلام دنیا</h3>
+<pre class="kolang-code"><code><span class="kolang-string">«سلام دنیا!»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۲.۲ تعریف تابع و فراخوانی</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">جمع</span>​<span class="kolang-punctuation">(</span>الف <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    الف <span class="kolang-operator">+</span> ب <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-function-name">جمع</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۳</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۵</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۲.۳ شرط</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> سن <span class="kolang-operator">&gt;=</span> <span class="kolang-number">۱۸</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«بزرگسال»</span> <span class="kolang-keyword">بنویس</span>
+<span class="kolang-keyword">وگرنه</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«کودک»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h2 id="s3">۳. لغت‌شناسی (Lexical)</h2>
+
+<h3>۳.۱ نویسه‌ها</h3>
+<p>کد منبع باید با یونیکد (UTF-8) ذخیره شود.</p>
+
+<h4>۳.۱.۱ ارقام</h4>
+<ul>
+  <li>ارقام فارسی <code>۰ ۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹</code> پذیرفته و در لِکسر به لاتین نرمال می‌شوند.</li>
+  <li>صحیح: <code>۱۲۳</code>، اعشاری: <code>۱۲٫۵</code> (نماد <code>٫</code> U+066B یا <code>.</code>).</li>
+  <li>جداکننده‌ی گروه ارقام: <code>۱٬۲۳۴</code> (نماد <code>٬</code> U+066C) یا <code>۱,۲۳۴,۵۶۷</code> (ویرگول ASCII) معتبر است و در لِکسر حذف می‌شود.</li>
+  <li>پیشوندها: <code>۰x</code> مبنای ۱۶، <code>۰b</code> باینری، <code>۰o</code> اکتال.</li>
+</ul>
+
+<h4>۳.۱.۲ شناسه‌ها</h4>
+<p>شناسه با حرف فارسی آغاز می‌شود و می‌تواند شامل حرف فارسی، رقم، خط زیر <code>_</code> و <strong>نیم‌فاصله</strong> (U+200C) باشد. نیم‌فاصله بخشی از شناسه است (نه جداکننده).</p>
+<pre class="kolang-code"><code>نام
+سن<span class="kolang-ezafe">ِ</span>کاربر
+_متغیر
+تابع۱
+امانت‌دادن</code></pre>
+
+<h4>۳.۱.۳ اضافه‌ی kasra (U+0650) — عملگر دسترسی به اعضا</h4>
+<p>کلنگ از اضافه‌ی فارسی (<code>ِ</code> U+0650) به‌عنوان <strong>تنها عملگر دسترسی به اعضا</strong> استفاده می‌کند. نقطه (<code>.</code>) برای این منظور به‌کار نمی‌رود. اضافه بین دو شناسه قرار می‌گیرد و به‌معنای «ِ» (kasra) در فارسی است:</p>
+<pre class="kolang-code"><code>جذر<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span>          <span class="kolang-comment">/معادل math.sqrt — صفت</span>
+عنوان<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span>          <span class="kolang-comment">/معادل self.title — صفت</span>
+صدادهی<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-self">خود</span>       <span class="kolang-comment">/معادل self.speak() — فراخوانی متد</span>
+روش<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-self">والد</span><span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span>  <span class="kolang-comment">/معادل self.parent.method() — زنجیره</span></code></pre>
+
+<h5>قواعد گرامری اضافه</h5>
+<p>اضافه در کلنگ تابع قواعد زیر است:</p>
+<ol>
+  <li><strong>اضافه همیشه یک توکن جداگانه است.</strong> چه فاصله‌ای گرد آن باشد چه نباشد، <code>الفِ ب</code> و <code>الفِب</code> در لِکسر یکسان تایم‌بندی می‌شوند: <code>الف</code> + <code>ِ</code> + <code>ب</code>. اضافه هرگز بخشی از شناسه نیست.</li>
+  <li><strong>اضافه فقط به حرف می‌چسبد.</strong> در فارسی، kasra یک نشانه‌ی ترکیبی (combining mark) است که زیر یک حرف قرار می‌گیرد. پس اضافه باید بعد از یک حرف (شناسه) بیاید، نه بعد از علائم نگارشی. <code>صدادهیِ</code> درست است (kasra زیر «ی»); <code>()ِ</code> نامعتبر است.</li>
+  <li><strong>زنجیره‌ی اضافه از راست به چپ است.</strong> <code>روشِ والدِ خود</code> = <code>روشِ (والدِ خود)</code> = روشِ (والدِ (خود)). این همان ترتیب طبیعی possession در فارسی است: چیزِ متعلّق‌به در ابتدا، مالک در انتها.</li>
+  <li><strong>دسترسی به صفت:</strong> <code>عنوانِ خود</code> — اضافه بین نام صفت و گیرنده. بدون پرانتز. معادل <code>self.title</code>.</li>
+  <li><strong>فراخوانی متد:</strong> <code>صدادهیِ()خود</code> — اضافه پس از نام متد (زیر حرف آخر نام)، سپس <code>()</code> یا <code>(آرگ‌ها)</code>، سپس گیرنده. این شکل می‌گوید: «صدادهیِ متعلّق‌به خود، سپس فراخوانی». پرانتزها به‌روشنی به نام متد چسبیده‌اند چون بلافاصله پس از اضافه می‌آیند. معادل <code>self.speak()</code>.
+    <ul>
+      <li>با آرگومان: <code>جمعِ(الف و ب)والدِ خود</code> = <code>self.parent.add(a, b)</code></li>
+      <li>زنجیره: <code>روشِ()والدِ خود</code> = <code>self.parent.method()</code></li>
+    </ul>
+  </li>
+  <li><strong>سمت چپ انتساب.</strong> <code>نامِ خود = مقدار</code> به <code>self.name = value</code> ترجمه می‌شود. زنجیره‌ی اضافه در سمت چپ <code>=</code> به‌عنوان هدفِ ذخیره‌سازی تفسیر می‌شود (store-target).</li>
+</ol>
+
+<p>در لِکسر، اضافه به‌عنوان یک <strong>عملگر میان‌گذاری</strong> شناخته می‌شود (مانند <code>+</code> یا <code>-</code>)، نه بخشی از شناسه. در پارسر، الگوی فراخوانی متد به‌صورت <code>NAMEِ(args)receiver</code> تایم‌بندی می‌شود: <code>()</code> به نام متد چسبیده و اضافه، نام متد را به گیرنده متصل می‌کند.</p>
+<blockquote><p>نکته: نقطه (<code>.</code>) در کلنگ فقط برای اعداد اعشاری استفاده می‌شود (<code>۳٫۱۴</code>) و دیگر عملگر دسترسی نیست. در v2 (VM مستقل)، برای مسیر ماژول (<code>::</code>) و generic (<code>&lt;ت&gt;</code>) از نمادهای جداگانه استفاده خواهد شد.</p></blockquote>
+
+<h4>۳.۱.۴ رشته‌ها</h4>
+<p>رشته با <strong>گیومه‌های فرانسوی</strong> <code>« »</code> تعریف می‌شود. رشته‌ها چندخطی‌اند و <strong>متن‌های «» از نوع f-string هستند</strong>: عبارات داخل <code>{...}</code> ارزیابی می‌شوند. برای نمایش <code>{...}</code> لفظی از <code>{{</code> و <code>}}</code> استفاده کنید. رشته‌ها از نوع <code>متن</code> هستند:</p>
+<pre class="kolang-code"><code><span class="kolang-string">«سلام»</span>
+<span class="kolang-string">«این یک رشته‌ی چندبخشی است»</span></code></pre>
+<p>چندخطی به‌طور طبیعی پشتیبانی می‌شود:</p>
+<pre class="kolang-code"><code><span class="kolang-string">«این
+یک
+رشته‌ی
+چندخطی است»</span></code></pre>
+<p><strong>درون‌یابی</strong> (interpolation) با آکولاد (f-string-like):</p>
+<pre class="kolang-code"><code>نام <span class="kolang-operator">=</span> <span class="kolang-string">«علی»</span>
+<span class="kolang-string">«سلام <span class="kolang-string-interp">{نام}</span>!»</span> <span class="kolang-keyword">بنویس</span>     <span class="kolang-comment">/چاپ: سلام علی!</span></code></pre>
+<p>برای نمایش literal آکولاد، آن را دو بار بنویسید: <code>{{</code> و <code>}}</code>.</p>
+
+<h4>۳.۱.۵ توضیحات (Comments)</h4>
+<p>توضیحات با <strong>خط اریب</strong> نوشته می‌شوند (نه با <code>#</code>):</p>
+<ul>
+  <li><strong>خطی:</strong> <code>/این یک توضیح است</code></li>
+  <li><strong>چندخطی:</strong> <code>//این یک توضیح چندخطی است//</code></li>
+</ul>
+<pre class="kolang-code"><code><span class="kolang-comment">/توضیح خطی</span>
+<span class="kolang-comment">//توضیح
+چندخطی//</span></code></pre>
+
+<h3>۳.۲ عملگرها</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>عملگر</th><th>معنی</th><th>مثال</th></tr></thead>
+  <tbody>
+    <tr><td><code>=</code></td><td>قرار دادن (انتساب)</td><td><code>الف = ۵</code></td></tr>
+    <tr><td><code>==</code></td><td>برابری — تنها شکل مقایسه در عبارات و شرط‌ها (نفی با <code>نباشد</code>)</td><td><code>الف == ب</code></td></tr>
+    <tr><td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td>مقایسه — تنها شکل مقایسه در عبارات و شرط‌ها</td><td><code>الف &lt; ب</code></td></tr>
+    <tr><td><code>+</code> <code>-</code></td><td>جمع/منها/الحاق</td><td><code>الف + ب</code></td></tr>
+    <tr><td><code>×</code></td><td>ضرب</td><td><code>الف × ب</code></td></tr>
+    <tr><td><code>÷</code></td><td>تقسیم</td><td><code>الف ÷ ب</code></td></tr>
+    <tr><td><code>÷/</code></td><td>تقسیم صحیح</td><td><code>الف ÷/ ب</code></td></tr>
+    <tr><td><code>%</code></td><td>باقی‌مانده</td><td><code>الف % ب</code></td></tr>
+    <tr><td><code>*</code></td><td>توان</td><td><code>الف * ۲</code></td></tr>
+    <tr><td><code>+=</code> <code>-=</code> <code>×=</code> <code>÷=</code> <code>*=</code> <code>÷/=</code> <code>%=</code></td><td>انتساب مرکب</td><td><code>الف += ۱</code></td></tr>
+    <tr><td><code>همچنین</code> <code>یا</code> <code>نباشد</code></td><td>و / یا / نفی منطقی</td><td><code>الف همچنین ب</code>، <code>ب نباشد</code></td></tr>
+    <tr><td><code>ِ</code> (اضافه)</td><td>دسترسی به عضو / صفت / متد</td><td><code>جذرِ ریاضی</code>، <code>عنوانِ خود</code></td></tr>
+    <tr><td><code>-&gt;</code></td><td>پیکان (نوع خروجی تابع یا لامبدا)</td><td><code>تعریف ف() -&gt; صحیح:</code></td></tr>
+    <tr><td><code>|&gt;</code></td><td>لوله (زنجیره‌ی فراخوانی)</td><td><code>الف |&gt; ف |&gt; گ</code></td></tr>
+    <tr><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td><td>ارسال (<code>&lt;&lt;</code>) / دریافت (<code>&gt;&gt;</code>) کانال <span class="badge-go">Go</span></td><td><code>ch &lt;&lt; مقدار</code>، <code>مقدار = &gt;&gt;ch</code></td></tr>
+    <tr><td><code>و</code> (درون پرانتز)</td><td>جداکننده‌ی آرگومان</td><td><code>جمع(۱ و ۲ و ۳)</code></td></tr>
+  </tbody>
+</table>
+</div>
+<blockquote><p>نکته: «و» در بافت پرانتز (و در انتساب چندتایی سمت چپ) جداکننده‌ی آرگومان است. عملگر منطقی «and» کلمه‌ی <code>همچنین</code> است (بیرون پرانتز). نفی منطقی <code>نباشد</code> است.</p></blockquote>
+
+<h3>۳.۳ کلمات کلیدی</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>کلمه کلیدی</th><th>معادل پایتون / Go</th><th>توضیح</th></tr></thead>
+  <tbody>
+    <tr><td><code>تعریف</code></td><td>def</td><td>تعریف تابع</td></tr>
+    <tr><td><code>برگردان</code></td><td>return</td><td>فعل: <code>x برگردان</code></td></tr>
+    <tr><td><code>اگر</code></td><td>if</td><td>شرط</td></tr>
+    <tr><td><code>وگرنه</code></td><td>else</td><td>در غیر این صورت</td></tr>
+    <tr><td><code>وگرنه اگر</code></td><td>elif</td><td>در غیر این صورت اگر</td></tr>
+    <tr><td><code>برای</code></td><td>for</td><td>حلقه</td></tr>
+    <tr><td><code>تاوقتی</code></td><td>while</td><td>تا وقتی که</td></tr>
+    <tr><td><code>در</code></td><td>in</td><td>عضویت/پیمایش</td></tr>
+    <tr><td><code>از ... تا ... گام ...</code></td><td>range</td><td>دامنه‌ی حلقه</td></tr>
+    <tr><td><code>اتمام</code></td><td>break</td><td>خروج از حلقه</td></tr>
+    <tr><td><code>بروبعدی</code></td><td>continue</td><td>پرش به تکرار بعدی</td></tr>
+    <tr><td><code>گونه</code></td><td>class / struct</td><td>تعریف گونه (نوع داده‌ی کاربر)</td></tr>
+    <tr><td><code>رابط</code></td><td>interface <span class="badge-go">Go</span></td><td>تعریف رابط (ساختاری)</td></tr>
+    <tr><td><code>رهی</code></td><td>implements</td><td>اعلان صریح پیاده‌سازی رابط (اختیاری)</td></tr>
+    <tr><td><code>وارث</code></td><td>extends</td><td>نشانگر ارث‌بری در گونه</td></tr>
+    <tr><td><code>خود</code></td><td>self</td><td>ارجاع به نمونه</td></tr>
+    <tr><td><code>ساخت</code></td><td>__init__</td><td>سازنده‌ی گونه</td></tr>
+    <tr><td><code>والد</code></td><td>super</td><td>ارجاع به گونه‌ی والد</td></tr>
+    <tr><td><code>درست</code></td><td>True</td><td>بولی درست</td></tr>
+    <tr><td><code>غلط</code></td><td>False</td><td>بولی غلط</td></tr>
+    <tr><td><code>تهی</code></td><td>None</td><td>هیچ</td></tr>
+    <tr><td><code>بیار</code></td><td>import</td><td>فعل پایانی: <code>ریاضی بیار</code> (فقط import)</td></tr>
+    <tr><td><code>از</code></td><td>from</td><td>برای <code>از ریاضی جذر بیار</code></td></tr>
+    <tr><td><code>بانام</code></td><td>as</td><td>نام‌گذاری هنگام گرفتن</td></tr>
+    <tr><td><code>بپا</code></td><td>try</td><td>بلوک امتحان (فعل: «برپا کن/کوشش کن»)</td></tr>
+    <tr><td><code>درنهایت</code></td><td>finally</td><td>بلوک نهایی</td></tr>
+    <tr><td><code>بده</code></td><td>raise</td><td>فعل: <code>x بده</code></td></tr>
+    <tr><td><code>با</code></td><td>with</td><td>مدیر محتوا</td></tr>
+    <tr><td><code>جهانی</code></td><td>global</td><td>متغیر جهانی</td></tr>
+    <tr><td><code>نامحلی</code></td><td>nonlocal</td><td>متغیر غیرمحلی</td></tr>
+    <tr><td><code>تابع</code></td><td>lambda</td><td>تابع بدون نام</td></tr>
+    <tr><td><code>مثل</code></td><td>pass</td><td>دستور خالی</td></tr>
+    <tr><td><code>حذف</code></td><td>del</td><td>حذف</td></tr>
+    <tr><td><code>ادعا</code></td><td>assert</td><td>ادعا</td></tr>
+    <tr><td><code>منتظر</code></td><td>await</td><td>در توابع ناهمگام</td></tr>
+    <tr><td><code>ناهمگام</code></td><td>async</td><td>تعریف تابع ناهمگام</td></tr>
+    <tr><td><code>بساز</code></td><td>yield</td><td>فعل: <code>ای بساز</code> (تولید مقدار در جنریتور)</td></tr>
+    <tr><td><code>بساز‌از</code></td><td>yield from</td><td>تولید از</td></tr>
+    <tr><td><code>پوشش</code></td><td>@ (decorator)</td><td>پوشش تابع با لایه‌ای دیگر — <code>پوشش نام</code> یا <code>پوشش نام(آرگ‌ها)</code> (خط بالای تعریف)</td></tr>
+    <tr><td><code>بنویس</code></td><td>print (Python 3)</td><td>فعل: <code>x بنویس</code> — بدون پرانتز</td></tr>
+    <tr><td><code>بگیر</code></td><td>input / except</td><td>فعل: <code>نام بگیر</code> (ورودی) یا <code>خطای‌صفر بگیر:</code> (استثنا)</td></tr>
+    <tr><td><code>بیافزا</code></td><td>append</td><td>فعل: <code>y به x بیافزا</code></td></tr>
+    <tr><td><code>حذف‌کن</code></td><td>remove</td><td>فعل: <code>y از x حذف‌کن</code></td></tr>
+    <tr><td><code>ببند</code></td><td>close <span class="badge-go">Go</span></td><td>فعل: <code>ch ببند</code> (بستن کانال)</td></tr>
+    <tr><td><code>باشد</code></td><td>—</td><td>فعل التزامی مثبت: <code>اگر x == ۵ باشد:</code>؛ آزمون عضویت: <code>اگر x در فهرست باشد:</code></td></tr>
+    <tr><td><code>نباشد</code></td><td>—</td><td>فعل التزامی منفی (نفی در شرط‌ها): <code>اگر x == تهی نباشد:</code>؛ نفی منطقی: <code>x نباشد</code> = not x؛ نفی مقایسه: <code>اگر x == ۵ نباشد:</code> (در پایتون: x != ۵)</td></tr>
+    <tr><td><code>است</code></td><td>—</td><td>فعل ربطی (برای ادعا/حالت)</td></tr>
+    <tr><td><code>برو</code></td><td>go <span class="badge-go">Go</span></td><td>اجرای تارک: <code>برو کار()</code></td></tr>
+    <tr><td><code>تأخیری</code></td><td>defer postfix <span class="badge-go">Go</span></td><td><code>پاک‌سازی() تأخیری</code></td></tr>
+    <tr><td><code>کانال</code></td><td>chan <span class="badge-go">Go</span></td><td>ساختن کانال: <code>کانال(صحیح و ۱۰)</code></td></tr>
+    <tr><td><code>خطا</code></td><td>error <span class="badge-go">Go</span></td><td>نوع صریح خطا</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="s4">۴. انواع داده‌ای</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>نوع در کلنگ</th><th>معادل پایتون / Go</th><th>مثال</th></tr></thead>
+  <tbody>
+    <tr><td><code>صحیح</code></td><td>int</td><td><code>۱۲۳</code></td></tr>
+    <tr><td><code>اعشاری</code></td><td>float</td><td><code>۱۲٫۵</code></td></tr>
+    <tr><td><code>مختلط</code></td><td>complex</td><td><code>۳ + ۲ی</code></td></tr>
+    <tr><td><code>بولی</code></td><td>bool</td><td><code>درست</code>، <code>غلط</code></td></tr>
+    <tr><td><code>متن</code></td><td>str</td><td><code>«متن»</code></td></tr>
+    <tr><td><code>بایت</code></td><td>bytes</td><td><code>ب(«abc»)</code></td></tr>
+    <tr><td><code>فهرست</code></td><td>list</td><td><code>[۱ و ۲ و ۳]</code></td></tr>
+    <tr><td><code>قفسه</code></td><td>tuple</td><td><code>(۱ و ۲ و ۳)</code></td></tr>
+    <tr><td><code>مجموعه</code></td><td>set</td><td><code>{۱ و ۲ و ۳}</code></td></tr>
+    <tr><td><code>مجموعه‌ثابت</code></td><td>frozenset</td><td><code>ثابت({۱ و ۲})</code></td></tr>
+    <tr><td><code>گنجه</code></td><td>dict</td><td><code>{«الف»: ۱ و «ب»: ۲}</code></td></tr>
+    <tr><td><code>تهی‌ها</code></td><td>NoneType</td><td><code>تهی</code></td></tr>
+    <tr><td><code>خطا</code></td><td>error <span class="badge-go">Go</span></td><td><code>خطا(«پیام»)</code></td></tr>
+    <tr><td><code>کانال</code></td><td>chan <span class="badge-go">Go</span></td><td><code>کانال(صحیح و ۱۰)</code></td></tr>
+    <tr><td><code>تارک</code></td><td>goroutine <span class="badge-go">Go</span></td><td>نوع برگشتی <code>برو</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>۴.۱ لیترال‌ها</h3>
+<pre class="kolang-code"><code><span class="kolang-comment">/عدد صحیح</span>
+<span class="kolang-number">۱۲۳</span>
+<span class="kolang-comment">/اعشاری</span>
+<span class="kolang-number">۱۲٫۵</span>
+<span class="kolang-comment">/بولی</span>
+<span class="kolang-boolean">درست</span>
+<span class="kolang-boolean">غلط</span>
+<span class="kolang-comment">/رشته (گیومه)</span>
+<span class="kolang-string">«سلام»</span>
+<span class="kolang-comment">/فهرست (با «و»)</span>
+<span class="kolang-punctuation">[</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">]</span>
+<span class="kolang-comment">/قفسه</span>
+<span class="kolang-punctuation">(</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">)</span>
+<span class="kolang-comment">/گنجه</span>
+<span class="kolang-punctuation">{</span><span class="kolang-string">«نام»</span><span class="kolang-punctuation">:</span> <span class="kolang-string">«علی»</span> <span class="kolang-punctuation">و</span> <span class="kolang-string">«سن»</span><span class="kolang-punctuation">:</span> <span class="kolang-number">۲۰</span><span class="kolang-punctuation">}</span>
+<span class="kolang-comment">/مجموعه</span>
+<span class="kolang-punctuation">{</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">}</span>
+<span class="kolang-comment">/خطا</span>
+<span class="kolang-builtin">خطا</span><span class="kolang-punctuation">(</span><span class="kolang-string">«مشکلی پیش آمد»</span><span class="kolang-punctuation">)</span></code></pre>
+
+<h3>۴.۲ سیستم نوع ( gradual typing )</h3>
+<p>کلنگ از <strong>نوع‌دهی تدریجی</strong> (gradual typing) پیروی می‌کند: حاشیه‌نویسی‌های نوع <strong>اختیاری</strong> هستند و در زمان اجرا بررسی می‌شوند. این یعنی می‌توان بدون هیچ حاشیه‌نویسی نوشت (مثل پایتون خالص) یا برای خوانایی و ایمنی بیشتر، نوع‌ها را صریح اعلام کرد. در نسخه‌های بعدی (v2 با VM مستقل)، این حاشیه‌نویسی‌ها به بررسی زمان-کامپایل تبدیل می‌شوند.</p>
+
+<h4>۴.۲.۱ حاشیه‌نویسی متغیر</h4>
+<pre class="kolang-code"><code>سن<span class="kolang-punctuation">:</span> <span class="kolang-class-name">صحیح</span> <span class="kolang-operator">=</span> <span class="kolang-number">۲۵</span>
+نام<span class="kolang-punctuation">:</span> <span class="kolang-class-name">متن</span> <span class="kolang-operator">=</span> <span class="kolang-string">«علی»</span>
+نرخ<span class="kolang-punctuation">:</span> <span class="kolang-class-name">اعشاری</span> <span class="kolang-operator">=</span> <span class="kolang-number">۳٫۱۴</span>
+فعال<span class="kolang-punctuation">:</span> <span class="kolang-class-name">بولی</span> <span class="kolang-operator">=</span> <span class="kolang-boolean">درست</span></code></pre>
+<p>اگر مقدار با نوع اعلام‌شده سازگار نباشد، در زمان اجرا خطا داده می‌شود:</p>
+<pre class="kolang-code"><code>سن<span class="kolang-punctuation">:</span> <span class="kolang-class-name">صحیح</span> <span class="kolang-operator">=</span> <span class="kolang-string">«علی»</span>  <span class="kolang-comment">/خطای‌نوع در زمان اجرا</span></code></pre>
+
+<h4>۴.۲.۲ حاشیه‌نویسی پارامتر و خروجی تابع</h4>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">جمع</span><span class="kolang-punctuation">‌</span><span class="kolang-punctuation">(</span>الف<span class="kolang-punctuation">:</span> <span class="kolang-class-name">صحیح</span> <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">:</span> <span class="kolang-class-name">صحیح</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">صحیح</span><span class="kolang-punctuation">:</span>
+    الف <span class="kolang-operator">+</span> ب <span class="kolang-keyword">برگردان</span></code></pre>
+<p>بدون حاشیه‌نویسی هم معتبر است (نوع‌دهی پویا):</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">جمع</span><span class="kolang-punctuation">‌</span><span class="kolang-punctuation">(</span>الف <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    الف <span class="kolang-operator">+</span> ب <span class="kolang-keyword">برگردان</span></code></pre>
+
+<h4>۴.۲.۳ نوع‌های مرکب و خطا</h4>
+<pre class="kolang-code"><code><span class="kolang-comment">/خروجی چندتایی با نوع</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تقسیم‌امن</span><span class="kolang-punctuation">‌</span><span class="kolang-punctuation">(</span>الف<span class="kolang-punctuation">:</span> <span class="kolang-class-name">اعشاری</span> <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">:</span> <span class="kolang-class-name">اعشاری</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-punctuation">(</span><span class="kolang-class-name">اعشاری</span> <span class="kolang-punctuation">و</span> <span class="kolang-class-name">خطا</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> ب <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-null">تهی</span> <span class="kolang-punctuation">و</span> <span class="kolang-error-type">خطا</span><span class="kolang-punctuation">‌</span><span class="kolang-punctuation">(</span><span class="kolang-string">«تقسیم بر صفر»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+    الف <span class="kolang-operator">÷</span> ب <span class="kolang-punctuation">و</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">برگردان</span></code></pre>
+<blockquote><p>نکته: در v1 حاشیه‌نویسی‌ها اختیاری و در زمان اجرا بررسی می‌شوند (مانند <code>typing</code> پایتون با <code>@runtime_checkable</code>). در v2 (VM مستقل)، این حاشیه‌نویسی‌ها به بررسی زمان-کامپایل تبدیل می‌شوند و پایه‌ی سیستم نوع استاتیک کلنگ (شامل genericها، traitها، و نوع‌های جمع) خواهند بود.</p></blockquote>
+
+<h2 id="s5">۵. دستورات (Statements)</h2>
+
+<h3>۵.۱ انتساب</h3>
+<pre class="kolang-code"><code>الف <span class="kolang-operator">=</span> <span class="kolang-number">۵</span>
+الف <span class="kolang-punctuation">و</span> ب <span class="kolang-punctuation">و</span> ج <span class="kolang-operator">=</span> <span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span>
+الف <span class="kolang-operator">+=</span> <span class="kolang-number">۱</span>
+الف <span class="kolang-operator">×=</span> <span class="kolang-number">۲</span></code></pre>
+
+<h3>۵.۲ انتساب چندتایی <span class="badge-go">Go</span></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تقسیم‌امن</span>​<span class="kolang-punctuation">(</span>الف <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> ب <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-null">تهی</span> <span class="kolang-punctuation">و</span> <span class="kolang-builtin">خطا</span><span class="kolang-punctuation">(</span><span class="kolang-string">«تقسیم بر صفر»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+    الف <span class="kolang-operator">÷</span> ب <span class="kolang-punctuation">و</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">برگردان</span>
+
+نتیجه <span class="kolang-punctuation">و</span> خط <span class="kolang-operator">=</span> <span class="kolang-function-name">تقسیم‌امن</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">اگر</span> خط <span class="kolang-operator">==</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+    پیام<span class="kolang-ezafe">ِ</span>خط <span class="kolang-keyword">بنویس</span>
+<span class="kolang-keyword">وگرنه</span><span class="kolang-punctuation">:</span>
+    نتیجه <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۳ شرط</h3>
+<p>در کلنگ <strong>هیچ درستی ضمنی (implicit truthiness) وجود ندارد</strong>: یک متغیر یا عبارت لخت نمی‌تواند شرط باشد. شرط باید همیشه یک <strong>مقایسه‌ی نمادین صریح</strong> باشد: <code>اگر x == ۵ باشد:</code>، <code>اگر x &gt;= ۰ نباشد:</code>. <code>اگر فهرست:</code> یا <code>اگر x:</code> (به‌سبک پایتون) <strong>نامعتبر</strong> است.</p>
+<p>تنها استثنا مقادیر واقعاً بولی هستند که با <code>== درست</code> / <code>== غلط</code> مقایسه می‌شوند — حتی <code>درست</code> به‌تنهایی به‌عنوان شرطِ حلقه‌ی بی‌پایان (<code>تاوقتی درست باشد:</code>) پذیرفته است چون خودش یک مقدار بولی صریح است.</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> نمره <span class="kolang-operator">&gt;=</span> <span class="kolang-number">۱۷</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«عالی»</span> <span class="kolang-keyword">بنویس</span>
+<span class="kolang-keyword">وگرنه اگر</span> نمره <span class="kolang-operator">&gt;=</span> <span class="kolang-number">۱۴</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«خوب»</span> <span class="kolang-keyword">بنویس</span>
+<span class="kolang-keyword">وگرنه</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«قابل قبول»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<p>بررسی خالی بودن:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> <span class="kolang-builtin">طول</span><span class="kolang-punctuation">(</span>فهرست<span class="kolang-punctuation">)</span> <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«فهرست خالی است»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<p>بررسی عضویت:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> آیتم <span class="kolang-keyword">در</span> فهرست <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«وجود دارد»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<p>بررسی خطا <span class="badge-go">Go</span>:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> خط <span class="kolang-operator">==</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+    پیام<span class="kolang-ezafe">ِ</span>خط <span class="kolang-keyword">بنویس</span>
+    <span class="kolang-keyword">اتمام</span></code></pre>
+<p>بررسی یک پرچم بولی:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">اگر</span> پرچم <span class="kolang-operator">==</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«فعال»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<blockquote><p>این قانون از خطاهای خاموش پایتون (<code>if x:</code> وقتی <code>x = 0</code> یا <code>x = []</code>) جلوگیری می‌کند و صراحت Go را به‌جا می‌گذارد.</p></blockquote>
+
+<h3>۵.۴ حلقه‌ی <code>تاوقتی</code> (while)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تاوقتی</span> شمارنده <span class="kolang-operator">&lt;</span> <span class="kolang-number">۱۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    شمارنده <span class="kolang-keyword">بنویس</span>
+    شمارنده <span class="kolang-operator">+=</span> <span class="kolang-number">۱</span></code></pre>
+
+<h3>۵.۵ حلقه‌ی <code>برای</code> (for)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">برای</span> آیتم <span class="kolang-keyword">در</span> فهرست<span class="kolang-ezafe">ِ</span>کارها<span class="kolang-punctuation">:</span>
+    آیتم <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا <span class="kolang-number">۱۰</span><span class="kolang-punctuation">:</span>
+    ای <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا <span class="kolang-number">۱۰</span> گام <span class="kolang-number">۲</span><span class="kolang-punctuation">:</span>
+    ای <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۱۰</span> تا <span class="kolang-number">۰</span> گام <span class="kolang-operator">-</span><span class="kolang-number">۱</span><span class="kolang-punctuation">:</span>
+    ای <span class="kolang-keyword">بنویس</span></code></pre>
+<p>شمارش با اندیس:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">برای</span> ای <span class="kolang-punctuation">و</span> مقدار <span class="kolang-keyword">در</span> <span class="kolang-builtin">شمارش</span><span class="kolang-punctuation">(</span>فهرست<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    ای <span class="kolang-punctuation">و</span> <span class="kolang-string">«: »</span> <span class="kolang-punctuation">و</span> مقدار <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۶ <code>اتمام</code> و <code>بروبعدی</code></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">در</span> <span class="kolang-builtin">بازه</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> ای <span class="kolang-operator">==</span> <span class="kolang-number">۵</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">اتمام</span>
+    <span class="kolang-keyword">اگر</span> ای <span class="kolang-operator">%</span> <span class="kolang-number">۲</span> <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">بروبعدی</span>
+    ای <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۷ تعریف تابع</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">ضرب</span>​<span class="kolang-punctuation">(</span>الف <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    الف <span class="kolang-operator">×</span> ب <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-comment">/مقدار پیش‌فرض</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">سلام</span>​<span class="kolang-punctuation">(</span>نام <span class="kolang-operator">=</span> <span class="kolang-string">«دنیا»</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«سلام »</span> <span class="kolang-operator">+</span> نام <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-comment">/آرگومان کلیدی-واژه‌ای</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">اطلاعات</span>​<span class="kolang-punctuation">(</span><span class="kolang-operator">**</span>اطلاعات<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> کل <span class="kolang-punctuation">و</span> مقدار <span class="kolang-keyword">در</span> موارد<span class="kolang-ezafe">ِ</span>اطلاعات<span class="kolang-punctuation">:</span>
+        کل <span class="kolang-punctuation">و</span> <span class="kolang-string">«: »</span> <span class="kolang-punctuation">و</span> مقدار <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-comment">/آرگومان متغیر</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">جمع‌همه</span>​<span class="kolang-punctuation">(</span><span class="kolang-operator">*</span>اعداد<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    نتیجه <span class="kolang-operator">=</span> <span class="kolang-number">۰</span>
+    <span class="kolang-keyword">برای</span> ن <span class="kolang-keyword">در</span> اعداد<span class="kolang-punctuation">:</span>
+        نتیجه <span class="kolang-operator">+=</span> ن
+    نتیجه <span class="kolang-keyword">برگردان</span></code></pre>
+
+<h4>تابع بدون نام (لامبدا)</h4>
+<pre class="kolang-code"><code>دوبرابر <span class="kolang-operator">=</span> <span class="kolang-keyword">تابع</span><span class="kolang-punctuation">(</span>الف<span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> الف <span class="kolang-operator">×</span> <span class="kolang-number">۲</span></code></pre>
+
+<h4>توابع ناهمگام</h4>
+<pre class="kolang-code"><code><span class="kolang-keyword">ناهمگام</span> <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">دریافت‌داده</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    داده <span class="kolang-operator">=</span> <span class="kolang-keyword">منتظر</span> درخواست​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>
+    داده <span class="kolang-keyword">برگردان</span></code></pre>
+
+<h3>۵.۸ تعریف گونه (class)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">گونه</span> <span class="kolang-class-name">حیوان</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> نام<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        نام<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> نام
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-string">«صدای حیوان»</span> <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">سگ</span> <span class="kolang-keyword">وارث</span> <span class="kolang-class-name">حیوان</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-string">«واف واف»</span> <span class="kolang-keyword">بنویس</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">معرفی</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        صدادهی<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-self">والد</span><span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span>
+        <span class="kolang-string">«من یک سگ هستم به نام »</span> <span class="kolang-operator">+</span> نام<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<blockquote><p>توجه: <code>نامِ خود = نام</code> به <code>self.name = name</code> ترجمه می‌شود. اضافه (<code>ِ</code>) در سمت چپ انتساب هم عملگر دسترسی است.</p></blockquote>
+
+<h3>۵.۹ رابط‌ها <span class="badge-go">Go</span></h3>
+<p>رابط مجموعه‌ای از امضاهای متد است. گونه‌ها به‌صورت <strong>ساختاری</strong> (implicit) رابط را پیاده می‌کنند:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">رابط</span> <span class="kolang-class-name">حیوان</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span>
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">نام</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">متن</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">گربه</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> نام<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        نام<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> نام
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-string">«میو»</span> <span class="kolang-keyword">بنویس</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">نام</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">متن</span><span class="kolang-punctuation">:</span>
+        نام<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-comment">/گربه خودبه‌خود رابط حیوان را پیاده‌سازی می‌کند.</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">معرفی</span>​<span class="kolang-punctuation">(</span>ح<span class="kolang-punctuation">:</span> <span class="kolang-class-name">حیوان</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    صدادهی<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ح
+    نام<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ح <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-function-name">معرفی</span>​<span class="kolang-punctuation">(</span><span class="kolang-class-name">گربه</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«پشمک»</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">)</span></code></pre>
+<p>اعلان صریح با <code>رهی</code> اختیاری است:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">گونه</span> <span class="kolang-class-name">گربه</span> <span class="kolang-keyword">رهی</span> <span class="kolang-class-name">حیوان</span><span class="kolang-punctuation">:</span>
+    ...</code></pre>
+
+<h3>۵.۱۰ گرفتن ماژول‌ها (import)</h3>
+<p>دستور import با فعل طبیعی <strong>«بیار»</strong> در پایان جمله نوشته می‌شود (بدون «را»):</p>
+<pre class="kolang-code"><code><span class="kolang-comment">/گرفتن کل ماژول</span>
+<span class="kolang-module-name">ریاضی</span> <span class="kolang-keyword">بیار</span>
+
+<span class="kolang-comment">/گرفتن یک نام از ماژول</span>
+<span class="kolang-keyword">از</span> <span class="kolang-module-name">ریاضی</span> جذر <span class="kolang-keyword">بیار</span>
+
+<span class="kolang-comment">/گرفتن با نام مستعار</span>
+<span class="kolang-keyword">از</span> <span class="kolang-module-name">ریاضی</span> جذر <span class="kolang-keyword">بانام</span> ریشه <span class="kolang-keyword">بیار</span>
+
+<span class="kolang-comment">/استفاده (با اضافه)</span>
+جذر<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۶</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+ریشه​<span class="kolang-punctuation">(</span><span class="kolang-number">۲۵</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۱۱ استثناها</h3>
+<p>شکل طبیعی با افعال «بپا»، «بگیر» (فعل‌پایانی)، «بده»:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">بپا</span><span class="kolang-punctuation">:</span>
+    نتیجه <span class="kolang-operator">=</span> <span class="kolang-number">۱۰</span> <span class="kolang-operator">÷</span> <span class="kolang-number">۰</span>
+<span class="kolang-error-type">خطای‌صفر</span> <span class="kolang-keyword">بگیر</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«تقسیم بر صفر!»</span> <span class="kolang-keyword">بنویس</span>
+<span class="kolang-keyword">درنهایت</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«پاک‌سازی»</span> <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-comment">/پرتاب استثنا</span>
+<span class="kolang-keyword">اگر</span> سن <span class="kolang-operator">&lt;</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-error-type">خطای‌مقدار</span><span class="kolang-punctuation">(</span><span class="kolang-string">«سن نمی‌تواند منفی باشد»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بده</span></code></pre>
+<p>گرفتن با نام متغیر:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">بپا</span><span class="kolang-punctuation">:</span>
+    نتیجه <span class="kolang-operator">=</span> <span class="kolang-number">۱۰</span> <span class="kolang-operator">÷</span> <span class="kolang-number">۰</span>
+<span class="kolang-error-type">خطای‌صفر</span> <span class="kolang-keyword">بگیر</span> <span class="kolang-keyword">بانام</span> err<span class="kolang-punctuation">:</span>
+    پیام<span class="kolang-ezafe">ِ</span>err <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۱۲ مدیر محتما (<code>با</code>)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">با</span> <span class="kolang-builtin">بازکردن</span><span class="kolang-punctuation">(</span><span class="kolang-string">«فایل.txt»</span> <span class="kolang-punctuation">و</span> <span class="kolang-string">«r»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بانام</span> ف<span class="kolang-punctuation">:</span>
+    محتوا <span class="kolang-operator">=</span> <span class="kolang-keyword">بخوان</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف</code></pre>
+
+<h3>۵.۱۳ تأخیر <span class="badge-go">Go</span></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">پردازش</span>​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    ف <span class="kolang-operator">=</span> <span class="kolang-builtin">بازکردن</span><span class="kolang-punctuation">(</span>مسیر <span class="kolang-punctuation">و</span> <span class="kolang-string">«r»</span><span class="kolang-punctuation">)</span>
+    ببند<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف <span class="kolang-keyword">تأخیری</span>
+    <span class="kolang-comment">/... کار با ف ...</span>
+    <span class="kolang-comment">/ببندِ ف() در پایان تابع به‌طور خودکار اجرا می‌شود</span></code></pre>
+
+<h3>۵.۱۴ جنریتورها</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">اعداد‌زوج</span>​<span class="kolang-punctuation">(</span>حد<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا حد<span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">اگر</span> ای <span class="kolang-operator">%</span> <span class="kolang-number">۲</span> <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+            ای <span class="kolang-keyword">بساز</span>
+
+<span class="kolang-keyword">برای</span> ن <span class="kolang-keyword">در</span> <span class="kolang-function-name">اعداد‌زوج</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    ن <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۵.۱۵ پوشش‌ها (decorators)</h3>
+<p>پوشش، تابع را با لایه‌ای از رفتار اضافی می‌پیچد. کلمه‌ی <code>پوشش</code> به‌معنای «در بر گرفتن/پوشاندن» است: تابع اصلی درون پوشش قرار می‌گیرد.</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">پوشش</span> <span class="kolang-decorator">زمان‌سنج</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تابع‌کند</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«در حال اجرا...»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<p>چند پوشش (پایینی‌ترین نخست اعمال می‌شود):</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">پوشش</span> <span class="kolang-decorator">الف</span>
+<span class="kolang-keyword">پوشش</span> <span class="kolang-decorator">ب</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">ف</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">مثل</span></code></pre>
+<p>پوشش با آرگومان:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">پوشش</span> <span class="kolang-decorator">مسیر</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«/api»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">کاربر</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«مدیریت کاربر»</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h2 id="s6">۶. عبارات (Expressions)</h2>
+
+<h3>۶.۱ عملگرهای حسابی</h3>
+<pre class="kolang-code"><code><span class="kolang-number">۱</span> <span class="kolang-operator">+</span> <span class="kolang-number">۲</span>
+<span class="kolang-number">۳</span> <span class="kolang-operator">×</span> <span class="kolang-number">۴</span>
+<span class="kolang-number">۱۰</span> <span class="kolang-operator">÷</span> <span class="kolang-number">۳</span>
+<span class="kolang-number">۱۰</span> <span class="kolang-operator">÷/</span> <span class="kolang-number">۳</span>
+<span class="kolang-number">۱۰</span> <span class="kolang-operator">%</span> <span class="kolang-number">۳</span>
+<span class="kolang-number">۲</span> <span class="kolang-operator">*</span> <span class="kolang-number">۱۰</span></code></pre>
+
+<h3>۶.۲ عملگرهای منطقی</h3>
+<pre class="kolang-code"><code><span class="kolang-boolean">درست</span> <span class="kolang-keyword">همچنین</span> <span class="kolang-boolean">غلط</span>
+<span class="kolang-boolean">درست</span> <span class="kolang-keyword">یا</span> <span class="kolang-boolean">غلط</span>
+<span class="kolang-boolean">درست</span> <span class="kolang-keyword">نباشد</span></code></pre>
+
+<h3>۶.۳ عملگرهای مقایسه‌ای (در عبارات خالص)</h3>
+<pre class="kolang-code"><code>الف <span class="kolang-operator">==</span> ب
+الف <span class="kolang-operator">&lt;</span> ب
+الف <span class="kolang-operator">&gt;=</span> ب</code></pre>
+
+<h3>۶.۴ فهرست‌سازی و برش</h3>
+<pre class="kolang-code"><code>فهرست​<span class="kolang-punctuation">[</span><span class="kolang-number">۰</span><span class="kolang-punctuation">]</span>
+فهرست​<span class="kolang-punctuation">[</span><span class="kolang-number">۱</span><span class="kolang-punctuation">:</span><span class="kolang-number">۳</span><span class="kolang-punctuation">]</span>
+فهرست​<span class="kolang-punctuation">[</span><span class="kolang-punctuation">:</span><span class="kolang-punctuation">:</span><span class="kolang-number">۲</span><span class="kolang-punctuation">]</span>
+رشته​<span class="kolang-punctuation">[</span><span class="kolang-number">۰</span><span class="kolang-punctuation">]</span>
+گنجه​<span class="kolang-punctuation">[</span><span class="kolang-string">«کلید»</span><span class="kolang-punctuation">]</span></code></pre>
+
+<h3>۶.۵ فراخوانی تابع و متد</h3>
+<pre class="kolang-code"><code><span class="kolang-comment">/فراخوانی تابع (آرگومان‌ها با «و»)</span>
+<span class="kolang-builtin">طول</span><span class="kolang-punctuation">(</span>فهرست<span class="kolang-punctuation">)</span>
+<span class="kolang-builtin">جمع</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">تابع</span><span class="kolang-punctuation">(</span>الف<span class="kolang-operator">=</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> ب<span class="kolang-operator">=</span><span class="kolang-number">۲</span><span class="kolang-punctuation">)</span>
+
+<span class="kolang-comment">/دسترسی به صفت (اضافه، بدون پرانتز)</span>
+عنوان<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span>
+جذر<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span>
+
+<span class="kolang-comment">/فراخوانی متد (اضافه + پرانتز + گیرنده)</span>
+صدادهی<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-self">خود</span>
+جمع‌کن<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-self">والد</span><span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span></code></pre>
+<blockquote><p>الگوی فراخوانی متد: <code>methodNameِ(args)receiver</code> — اضافه پس از نام متد (زیر حرف آخر)، سپس پرانتز با آرگومان‌ها، سپس گیرنده. صفت‌ها (بدون فراخوانی) فقط اضافه دارند: <code>attrِ receiver</code>.</p></blockquote>
+
+<h3>۶.۶ عملگر لوله (<code>|&gt;</code>)</h3>
+<pre class="kolang-code"><code>نتیجه <span class="kolang-operator">=</span> <span class="kolang-number">۵</span>
+    <span class="kolang-operator">|&gt;</span> ضرب‌به​<span class="kolang-punctuation">(</span><span class="kolang-number">۲</span><span class="kolang-punctuation">)</span>
+    <span class="kolang-operator">|&gt;</span> جمع‌کن​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span>
+    <span class="kolang-operator">|&gt;</span> <span class="kolang-keyword">بنویس</span></code></pre>
+<p>معادل:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">بنویس</span><span class="kolang-punctuation">(</span><span class="kolang-function-name">جمع‌کن</span>​<span class="kolang-punctuation">(</span><span class="kolang-function-name">ضرب‌به</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۵</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span><span class="kolang-punctuation">)</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">)</span></code></pre>
+
+<h3>۶.۷ عبارت شرطی (سه‌گانه)</h3>
+<pre class="kolang-code"><code>پیام <span class="kolang-operator">=</span> <span class="kolang-string">«بزرگسال»</span> <span class="kolang-keyword">اگر</span> سن <span class="kolang-operator">&gt;=</span> <span class="kolang-number">۱۸</span> <span class="kolang-keyword">باشد</span> <span class="kolang-keyword">وگرنه</span> <span class="kolang-string">«کودک»</span></code></pre>
+
+<h3>۶.۸ درک فهرست/گنجه/مجموعه (Comprehension)</h3>
+<pre class="kolang-code"><code><span class="kolang-comment">/فهرست</span>
+مربع‌ها <span class="kolang-operator">=</span> <span class="kolang-punctuation">[</span>ای <span class="kolang-operator">*</span> <span class="kolang-number">۲</span> <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">در</span> <span class="kolang-builtin">بازه</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">اگر</span> ای <span class="kolang-operator">%</span> <span class="kolang-number">۲</span> <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">]</span>
+
+<span class="kolang-comment">/گنجه</span>
+زوج‌ها <span class="kolang-operator">=</span> <span class="kolang-punctuation">{</span>ای<span class="kolang-punctuation">:</span> ای <span class="kolang-operator">*</span> <span class="kolang-number">۲</span> <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">در</span> <span class="kolang-builtin">بازه</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">}</span>
+
+<span class="kolang-comment">/مجموعه</span>
+منحصر <span class="kolang-operator">=</span> <span class="kolang-punctuation">{</span>ای <span class="kolang-operator">%</span> <span class="kolang-number">۳</span> <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">در</span> <span class="kolang-builtin">بازه</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">}</span>
+
+<span class="kolang-comment">/جنریتور</span>
+زوج‌ها <span class="kolang-operator">=</span> <span class="kolang-punctuation">(</span>ای <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">در</span> <span class="kolang-builtin">بازه</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">اگر</span> ای <span class="kolang-operator">%</span> <span class="kolang-number">۲</span> <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">)</span></code></pre>
+
+<h2 id="s7">۷. توابع داخلی (Builtins)</h2>
+<p>افعال امری (مثل <code>بنویس</code>، <code>بگیر</code>) به‌شکل فعل‌پایانی (بدون «را») استفاده می‌شوند؛ بقیه به‌شکل فراخوانی با پرانتز و آرگومان‌های جدا شده با «و». <strong>چاپ به‌سبک پایتون ۳:</strong> <code>بنویس</code> هم به‌شکل فعل‌پایانی (<code>x بنویس</code>)، هم به‌عنوان هدف لوله (<code>x |&gt; بنویس</code>)، و هم به‌شکل فراخوانی (<code>بنویس(x)</code>) استفاده می‌شود.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>کلنگ</th><th>پایتون / Go</th><th>شکل استفاده</th></tr></thead>
+  <tbody>
+    <tr><td><code>بنویس</code></td><td>print (verb)</td><td><code>x بنویس</code></td></tr>
+    <tr><td><code>بگیر</code></td><td>input / except</td><td><code>نام بگیر</code> / <code>خطای‌صفر بگیر:</code></td></tr>
+    <tr><td><code>برگردان</code></td><td>return (verb)</td><td><code>x برگردان</code></td></tr>
+    <tr><td><code>بیافزا</code></td><td>append</td><td><code>y به x بیافزا</code></td></tr>
+    <tr><td><code>حذف‌کن</code></td><td>remove</td><td><code>y از x حذف‌کن</code></td></tr>
+    <tr><td><code>بده</code></td><td>raise</td><td><code>x بده</code></td></tr>
+    <tr><td><code>اتمام</code></td><td>break</td><td><code>اتمام</code></td></tr>
+    <tr><td><code>بروبعدی</code></td><td>continue</td><td><code>بروبعدی</code></td></tr>
+    <tr><td><code>بیار</code></td><td>import</td><td><code>ریاضی بیار</code></td></tr>
+    <tr><td><code>ببند</code></td><td>close <span class="badge-go">Go</span></td><td><code>ch ببند</code></td></tr>
+    <tr><td><code>بسته‌است</code></td><td>closed check <span class="badge-go">Go</span></td><td><code>اگر بسته‌استِ ch == درست باشد:</code> (به‌صورت صفت/attribute استفاده می‌شود)</td></tr>
+    <tr><td><code>برو</code></td><td>go <span class="badge-go">Go</span></td><td><code>برو کار()</code></td></tr>
+    <tr><td><code>تأخیری</code></td><td>defer postfix <span class="badge-go">Go</span></td><td><code>پاک‌سازی() تأخیری</code></td></tr>
+    <tr><td><code>طول</code></td><td>len</td><td><code>طول(فهرست)</code></td></tr>
+    <tr><td><code>نوع</code></td><td>type</td><td><code>نوع(x)</code></td></tr>
+    <tr><td><code>بازه</code></td><td>range</td><td><code>بازه(۱۰)</code> یا <code>۰ تا ۱۰</code></td></tr>
+    <tr><td><code>صحیح</code></td><td>int</td><td><code>صحیح(«۱۲»)</code></td></tr>
+    <tr><td><code>اعشاری</code></td><td>float</td><td><code>اعشاری(«۳٫۱۴»)</code></td></tr>
+    <tr><td><code>متن</code></td><td>str</td><td><code>متن(۱۲۳)</code></td></tr>
+    <tr><td><code>بولی</code></td><td>bool</td><td><code>بولی(x)</code></td></tr>
+    <tr><td><code>فهرست</code></td><td>list</td><td><code>فهرست(x)</code></td></tr>
+    <tr><td><code>قفسه</code></td><td>tuple</td><td><code>قفسه(x)</code></td></tr>
+    <tr><td><code>مجموعه</code></td><td>set</td><td><code>مجموعه(x)</code></td></tr>
+    <tr><td><code>گنجه</code></td><td>dict</td><td><code>گنجه(x)</code></td></tr>
+    <tr><td><code>مرتب</code></td><td>sorted</td><td><code>مرتب(x)</code></td></tr>
+    <tr><td><code>معکوس</code></td><td>reversed</td><td><code>معکوس(x)</code></td></tr>
+    <tr><td><code>شمارش</code></td><td>enumerate</td><td><code>شمارش(x)</code></td></tr>
+    <tr><td><code>بقچه</code></td><td>zip</td><td><code>بقچه(الف و ب)</code></td></tr>
+    <tr><td><code>نگاشت</code></td><td>map</td><td><code>نگاشت(f و x)</code></td></tr>
+    <tr><td><code>پالایش</code></td><td>filter</td><td><code>پالایش(f و x)</code></td></tr>
+    <tr><td><code>جمع</code></td><td>sum</td><td><code>جمع(x)</code></td></tr>
+    <tr><td><code>کمینه</code></td><td>min</td><td><code>کمینه(x)</code></td></tr>
+    <tr><td><code>بیشینه</code></td><td>max</td><td><code>بیشینه(x)</code></td></tr>
+    <tr><td><code>مطلق</code></td><td>abs</td><td><code>مطلق(x)</code></td></tr>
+    <tr><td><code>گرد</code></td><td>round</td><td><code>گرد(x)</code></td></tr>
+    <tr><td><code>بازکردن</code></td><td>open</td><td><code>بازکردن(«f.txt»)</code></td></tr>
+    <tr><td><code>هویت</code></td><td>id</td><td><code>هویت(x)</code></td></tr>
+    <tr><td><code>کمک</code></td><td>help</td><td><code>کمک(x)</code></td></tr>
+    <tr><td><code>اجرا</code></td><td>eval</td><td><code>اجرا(«۱+۲»)</code></td></tr>
+    <tr><td><code>داخلی‌ها</code></td><td>dir</td><td><code>داخلی‌ها(x)</code></td></tr>
+    <tr><td><code>ویژگی</code></td><td>getattr</td><td><code>ویژگی(x و «نام»)</code></td></tr>
+    <tr><td><code>تنظیم‌ویژگی</code></td><td>setattr</td><td><code>تنظیم‌ویژگی(x و «نام» و v)</code></td></tr>
+    <tr><td><code>دارد</code></td><td>hasattr</td><td><code>دارد(x و «نام»)</code></td></tr>
+    <tr><td><code>کانال</code></td><td>chan <span class="badge-go">Go</span></td><td><code>کانال(صحیح و ۱۰)</code></td></tr>
+    <tr><td><code>خطا</code></td><td>error <span class="badge-go">Go</span></td><td><code>خطا(«پیام»)</code></td></tr>
+    <tr><td><code>استثنا</code></td><td>Exception</td><td><code>استثنا(«پیام»)</code></td></tr>
+    <tr><td><code>خطای‌مقدار</code></td><td>ValueError</td><td>—</td></tr>
+    <tr><td><code>خطای‌کلید</code></td><td>KeyError</td><td>—</td></tr>
+    <tr><td><code>خطای‌نوع</code></td><td>TypeError</td><td>—</td></tr>
+    <tr><td><code>خطای‌نمایه</code></td><td>IndexError</td><td>—</td></tr>
+    <tr><td><code>خطای‌صفر</code></td><td>ZeroDivisionError</td><td>—</td></tr>
+    <tr><td><code>خطای‌فایل</code></td><td>FileNotFoundError</td><td>—</td></tr>
+    <tr><td><code>توقف‌تکرار</code></td><td>StopIteration</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="s8">۸. ماژول‌های کتابخانه استاندارد</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>کلنگ</th><th>پایتون</th></tr></thead>
+  <tbody>
+    <tr><td><code>ریاضی</code></td><td>math</td></tr>
+    <tr><td><code>تصادفی</code></td><td>random</td></tr>
+    <tr><td><code>زمان</code></td><td>time</td></tr>
+    <tr><td><code>تقویم</code></td><td>datetime</td></tr>
+    <tr><td><code>سیستم</code></td><td>os</td></tr>
+    <tr><td><code>مسیر</code></td><td>os.path</td></tr>
+    <tr><td><code>سیستم‌عامل</code></td><td>sys</td></tr>
+    <tr><td><code>رشته‌ها</code></td><td>string</td></tr>
+    <tr><td><code>عبارت‌منظم</code> / <code>رجکس</code></td><td>re</td></tr>
+    <tr><td><code>جیسون</code></td><td>json</td></tr>
+    <tr><td><code>اینترنت</code></td><td>urllib</td></tr>
+    <tr><td><code>درخواست</code></td><td>requests (در صورت نصب)</td></tr>
+    <tr><td><code>ریاضی‌آمار</code></td><td>statistics</td></tr>
+    <tr><td><code>مجموعه‌داده</code></td><td>collections</td></tr>
+    <tr><td><code>تابع‌ابزار</code></td><td>itertools</td></tr>
+    <tr><td><code>عملکرد</code></td><td>functools</td></tr>
+    <tr><td><code>آرایه</code></td><td>array</td></tr>
+    <tr><td><code>پایگاه‌داده</code></td><td>sqlite3</td></tr>
+    <tr><td><code>ریاضی‌پیشرفته</code></td><td>numpy (در صورت نصب)</td></tr>
+    <tr><td><code>پانداز</code></td><td>pandas (در صورت نصب)</td></tr>
+    <tr><td><code>سندان</code></td><td>pytest (در صورت نصب)</td></tr>
+  </tbody>
+</table>
+</div>
+<p>استفاده:</p>
+<pre class="kolang-code"><code><span class="kolang-module-name">ریاضی</span> <span class="kolang-keyword">بیار</span>
+جذر<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱۶</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+پی<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span> <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">از</span> <span class="kolang-module-name">تصادفی</span> انتخاب <span class="kolang-keyword">بیار</span>
+<span class="kolang-module-name">تصادفی</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>تصادفی <span class="kolang-keyword">بنویس</span></code></pre>
+<blockquote><p>در صورت نیاز به ماژولی که در جدول نیست، نگاشت در فایل <code>modules_map.kolang.json</code> قابل تعریف است.</p></blockquote>
+
+<h2 id="s9">۹. جاسازی کد پایتون (Python Interop)</h2>
+<p>کلنگ از سه راه با پایتون تعامل دارد:</p>
+
+<h3>۹.۱ فراخوانی ماژول پایتون با نام فارسی</h3>
+<p>همان‌طور که در بخش ۸ توضیح داده شد، ماژول‌های پایتون با نام فارسی گرفته می‌شوند.</p>
+
+<h3>۹.۲ بلوک کد پایتون خام</h3>
+<p>اگر کاربر بخواهد کد پایتون را مستقیماً درون کلنگ بنویسد، می‌تواند از بلوک <code>پایتون:</code> استفاده کند. <strong>این تنها جایی در زبان است که کد لاتین کامل (دستورات پایتون) مجاز است؛ بیرون از آن فقط شناسه‌های لاتین مجازند.</strong></p>
+<pre class="python"><code>پایتون:
+    import numpy as np
+    arr = np.array([1, 2, 3])
+    print(arr.mean())
+
+نتایج_پایتون = پایتون_بازخورده()</code></pre>
+
+<h3>۹.۳ تابع داخلی <code>پایتون</code></h3>
+<pre class="kolang-code"><code>حاصل <span class="kolang-operator">=</span> <span class="kolang-function-name">پایتون</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«1 + 2 * 3»</span><span class="kolang-punctuation">)</span>
+حاصل <span class="kolang-keyword">بنویس</span>   <span class="kolang-comment">/۷</span>
+
+نامپای = <span class="kolang-function-name">پایتون_ماژول</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«numpy»</span><span class="kolang-punctuation">)</span>
+آرایه <span class="kolang-operator">=</span> <span class="kolang-module-name">آرایه</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">[</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">]</span><span class="kolang-punctuation">)</span>نامپای</code></pre>
+
+<h2 id="s10">۱۰. استثناها و مدیریت خطا (به‌سبک سنتی)</h2>
+<p>علاوه بر مدل «خطا به‌عنوان مقدار» (بخش ۱۱)، کلنگ سیستم استثنای پایتون را نیز نگه می‌دارد. ساختار با افعال طبیعی (فعل‌پایانی برای <code>بگیر</code>):</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">بپا</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-comment">/کد ممکن است خطا دهد</span>
+<span class="kolang-error-type">خطای‌نوع</span> <span class="kolang-keyword">بگیر</span> <span class="kolang-keyword">بانام</span> err<span class="kolang-punctuation">:</span>
+    <span class="kolang-comment">/مدیریت</span>
+<span class="kolang-error-type">خطای‌دیگر</span> <span class="kolang-keyword">بگیر</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-comment">/مدیریت</span>
+<span class="kolang-keyword">درنهایت</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-comment">/همیشه اجرا می‌شود</span></code></pre>
+<p>پرتاب:</p>
+<pre class="kolang-code"><code><span class="kolang-error-type">خطای‌مقدار</span><span class="kolang-punctuation">(</span><span class="kolang-string">«پیام»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">بده</span></code></pre>
+<p>تعریف استثنای سفارشی:</p>
+<pre class="kolang-code"><code><span class="kolang-keyword">گونه</span> <span class="kolang-class-name">خطای‌سفارشی</span> <span class="kolang-keyword">وارث</span> <span class="kolang-error-type">استثنا</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> پیام<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">ساخت</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> پیام<span class="kolang-punctuation">)</span><span class="kolang-self">والد</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span></code></pre>
+
+<h2 id="s11">۱۱. همزمانی و خطا به‌عنوان مقدار <span class="badge-go">Go</span></h2>
+
+<h3>۱۱.۱ مقدارهای برگشتی چندتایی و نوع خطا</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">بگیر‌پیکربندی</span>​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-punctuation">(</span><span class="kolang-class-name">گنجه</span> <span class="kolang-punctuation">و</span> <span class="kolang-class-name">خطا</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> فایل_وجود_دارد​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span> <span class="kolang-operator">==</span> <span class="kolang-boolean">غلط</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-null">تهی</span> <span class="kolang-punctuation">و</span> <span class="kolang-builtin">خطا</span><span class="kolang-punctuation">(</span><span class="kolang-string">«فایل پیدا نشد: »</span> <span class="kolang-operator">+</span> مسیر<span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+    داده <span class="kolang-operator">=</span> <span class="kolang-keyword">بخوان</span><span class="kolang-ezafe">ِ</span>​<span class="kolang-builtin">بازکردن</span><span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>
+    <span class="kolang-function-name">بارگذاری</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span>داده<span class="kolang-punctuation">)</span><span class="kolang-module-name">جیسون</span> <span class="kolang-punctuation">و</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">برگردان</span>
+
+cfg <span class="kolang-punctuation">و</span> err <span class="kolang-operator">=</span> <span class="kolang-function-name">بگیر‌پیکربندی</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«config.json»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">اگر</span> err <span class="kolang-operator">==</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+    پیام<span class="kolang-ezafe">ِ</span>err <span class="kolang-keyword">بنویس</span>
+    <span class="kolang-keyword">اتمام</span></code></pre>
+<blockquote><p>این الگو (به‌سبک Go) اکثر کاربردهای <code>بپا/بگیر</code> را جایگزین می‌کند. خطا یک مقدار است که بررسی می‌شود، نه چیزی که پرتاب می‌شود.</p></blockquote>
+
+<h3>۱۱.۲ تارک‌ها (goroutines)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">کار</span>​<span class="kolang-punctuation">(</span>نام<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا <span class="kolang-number">۳</span><span class="kolang-punctuation">:</span>
+        نام <span class="kolang-operator">+</span> <span class="kolang-string">«: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>ای<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+        خواب<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">زمان</span><span class="kolang-punctuation">(</span><span class="kolang-number">۱</span><span class="kolang-punctuation">)</span>
+
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کار</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«الف»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کار</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«ب»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کار</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«ج»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-comment">/هر سه به‌طور همزمان اجرا می‌شوند</span></code></pre>
+
+<h3>۱۱.۳ کانال‌ها (channels)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تولیدکننده</span>​<span class="kolang-punctuation">(</span>ch<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا <span class="kolang-number">۵</span><span class="kolang-punctuation">:</span>
+        ch <span class="kolang-channel-op">&lt;&lt;</span> ای       <span class="kolang-comment">/ارسال به کانال</span>
+    ch <span class="kolang-keyword">ببند</span>           <span class="kolang-comment">/بستن کانال</span>
+
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">مصرف‌کننده</span>​<span class="kolang-punctuation">(</span>ch<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">تاوقتی</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        مقدار <span class="kolang-operator">=</span> <span class="kolang-channel-op">&gt;&gt;</span>ch  <span class="kolang-comment">/دریافت از کانال</span>
+        <span class="kolang-keyword">اگر</span> بسته‌است<span class="kolang-ezafe">ِ</span>ch <span class="kolang-operator">==</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+            <span class="kolang-keyword">اتمام</span>
+        مقدار <span class="kolang-keyword">بنویس</span>
+
+ch <span class="kolang-operator">=</span> <span class="kolang-builtin">کانال</span><span class="kolang-punctuation">(</span><span class="kolang-builtin">صحیح</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۲</span><span class="kolang-punctuation">)</span>   <span class="kolang-comment">/کانال صحیح با بافر ۲</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">تولیدکننده</span>​<span class="kolang-punctuation">(</span>ch<span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">مصرف‌کننده</span>​<span class="kolang-punctuation">(</span>ch<span class="kolang-punctuation">)</span></code></pre>
+
+<h3>۱۱.۴ تأخیر (defer)</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">پردازش</span>​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    ف <span class="kolang-operator">=</span> <span class="kolang-builtin">بازکردن</span><span class="kolang-punctuation">(</span>مسیر <span class="kolang-punctuation">و</span> <span class="kolang-string">«r»</span><span class="kolang-punctuation">)</span>
+    ببند<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف <span class="kolang-keyword">تأخیری</span>
+    <span class="kolang-comment">/اگر خطا هم رخ دهد، ببندِ ف() حتماً اجرا می‌شود</span>
+    داده <span class="kolang-operator">=</span> <span class="kolang-keyword">بخوان</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف
+    داده <span class="kolang-keyword">برگردان</span></code></pre>
+
+<h3>۱۱.۵ رابط‌ها (interfaces)</h3>
+<p>رابط‌ها در بخش ۵.۹ توضیح داده شدند. نوع‌دهی ساختاری Go به این معناست که گونه‌ای که متدهای لازم را دارد، خودبه‌خود رابط را پیاده‌سازی می‌کند — بدون اعلان صریح.</p>
+
+<h2 id="s12">۱۲. ماژول‌بندی و پروژه</h2>
+<p>هر فایل <code>.kolang</code> یک ماژول است. برای گرفتن از فایل دیگر:</p>
+<pre class="kolang-code"><code><span class="kolang-comment">/فرض کنید فایل ابزار.kolang در همان پوشه است</span>
+<span class="kolang-keyword">از</span> ابزار تابع‌کمکی <span class="kolang-keyword">بیار</span></code></pre>
+<p>ساختار پیشنهادی پروژه:</p>
+<pre class="tree"><code>پروژه/
+├── main.kolang
+├── ابزار.kolang
+├── ماژول‌ها/
+│   └── ریاضی_خودم.kolang
+└── kolang.toml</code></pre>
+<p>فایل <code>kolang.toml</code>:</p>
+<pre class="tree"><code>[پروژه]
+نام = "برنامه‌نمونه"
+نسخه = "۱٫۰٫۰"
+
+[واردکردن]
+مسیرهای_اضافه = ["ماژول‌ها"]</code></pre>
+
+<h2 id="s13">۱۳. قالب‌بندی و سبک</h2>
+<ul>
+  <li><strong>تورفتگی:</strong> ۴ فاصله. تب به ۴ فاصله تبدیل می‌شود.</li>
+  <li><strong>حداکثر طول خط:</strong> ۱۰۰ نویسه.</li>
+  <li><strong>نام توابع و متغیرها:</strong> <code>snake_case</code> فارسی: <code>تابع‌کمکی</code>.</li>
+  <li><strong>نام گونه‌ها و رابط‌ها:</strong> CamelCase فارسی: <code>حیوان</code>، <code>حساب‌کاربر</code>.</li>
+  <li><strong>نام ثابت‌ها:</strong> ثابت‌ها متغیرهای عادی هستند که مقدارشان تغییر نمی‌کند؛ قرارداد نام‌گذاری: نام معنادار انتخاب کنید (مثل <code>بیشترین_مقدار</code>).</li>
+  <li><strong>افعال امری</strong> برای دستورهای I/O و تغییر حالت به‌شکل فعل‌پایانی (بدون «را») استفاده می‌شوند.</li>
+  <li><strong>دسترسی به اعضا</strong> با اضافه‌ی kasra (<code>ِ</code>)، نه نقطه.</li>
+  <li><strong>جداکننده‌ی آرگومان‌ها</strong> «و» است، نه ویرگول. عملگر منطقی «and» کلمه‌ی <code>همچنین</code> است (بیرون پرانتز).</li>
+  <li><strong>اولویت خطا به‌عنوان مقدار</strong> بر استثنا <span class="badge-go">Go</span>.</li>
+</ul>
+
+<h2 id="s14">۱۴. مثال‌های کامل</h2>
+
+<h3>۱۴.۱ محاسبه فیبوناچی</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">فیبوناچی</span>​<span class="kolang-punctuation">(</span>ن<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> ن <span class="kolang-operator">&lt;=</span> <span class="kolang-number">۱</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        ن <span class="kolang-keyword">برگردان</span>
+    <span class="kolang-function-name">فیبوناچی</span>​<span class="kolang-punctuation">(</span>ن <span class="kolang-operator">-</span> <span class="kolang-number">۱</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">+</span> <span class="kolang-function-name">فیبوناچی</span>​<span class="kolang-punctuation">(</span>ن <span class="kolang-operator">-</span> <span class="kolang-number">۲</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> تا <span class="kolang-number">۱۰</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-function-name">فیبوناچی</span>​<span class="kolang-punctuation">(</span>ای<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۲ گونه‌ی مدیریت کتاب</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">گونه</span> <span class="kolang-class-name">کتاب</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> عنوان <span class="kolang-punctuation">و</span> نویسنده<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        عنوان<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> عنوان
+        نویسنده<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> نویسنده
+        امانت<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> <span class="kolang-boolean">غلط</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">امانت‌دادن</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">اگر</span> امانت<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">==</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+            <span class="kolang-string">«این کتاب امانت است»</span> <span class="kolang-keyword">بنویس</span>
+        <span class="kolang-keyword">وگرنه</span><span class="kolang-punctuation">:</span>
+            امانت<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> <span class="kolang-boolean">درست</span>
+            <span class="kolang-string">«کتاب امانت داده شد»</span> <span class="kolang-keyword">بنویس</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">بازگرداندن</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        امانت<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> <span class="kolang-boolean">غلط</span>
+        <span class="kolang-string">«کتاب بازگردانده شد»</span> <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">کتابخانه</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        کتاب‌های <span class="kolang-self">خود</span> <span class="kolang-operator">=</span> <span class="kolang-punctuation">[</span><span class="kolang-punctuation">]</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">افزودن</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> کتاب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        کتاب  به کتاب‌های <span class="kolang-self">خود</span> <span class="kolang-keyword">بیافزا</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">فهرست‌نمایش</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-keyword">برای</span> کتاب <span class="kolang-keyword">در</span> کتاب‌های <span class="kolang-self">خود</span><span class="kolang-punctuation">:</span>
+            عنوان<span class="kolang-ezafe">ِ</span>کتاب <span class="kolang-operator">+</span> <span class="kolang-string">« - »</span> <span class="kolang-operator">+</span> نویسنده<span class="kolang-ezafe">ِ</span>کتاب <span class="kolang-keyword">بنویس</span>
+
+کت <span class="kolang-operator">=</span> <span class="kolang-class-name">کتاب</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«شاهنامه»</span> <span class="kolang-punctuation">و</span> <span class="kolang-string">«فردوسی»</span><span class="kolang-punctuation">)</span>
+امانت‌دادن<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>کت
+بازگرداندن<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>کت</code></pre>
+
+<h3>۱۴.۳ خواندن و پردازش فایل با تأخیر <span class="badge-go">Go</span></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">شمارش‌خطوط</span>​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-punctuation">(</span><span class="kolang-class-name">صحیح</span> <span class="kolang-punctuation">و</span> <span class="kolang-class-name">خطا</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">اگر</span> فایل_وجود_دارد​<span class="kolang-punctuation">(</span>مسیر<span class="kolang-punctuation">)</span> <span class="kolang-operator">==</span> <span class="kolang-boolean">غلط</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-number">۰</span> <span class="kolang-punctuation">و</span> <span class="kolang-builtin">خطا</span><span class="kolang-punctuation">(</span><span class="kolang-string">«فایل پیدا نشد»</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+    ف <span class="kolang-operator">=</span> <span class="kolang-builtin">بازکردن</span><span class="kolang-punctuation">(</span>مسیر <span class="kolang-punctuation">و</span> <span class="kolang-string">«r»</span><span class="kolang-punctuation">)</span>
+    ببند<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف <span class="kolang-keyword">تأخیری</span>
+    خطوط <span class="kolang-operator">=</span> <span class="kolang-keyword">بخوان</span><span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ف
+    <span class="kolang-builtin">طول</span><span class="kolang-punctuation">(</span>خطوط<span class="kolang-punctuation">)</span> <span class="kolang-punctuation">و</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">برگردان</span>
+
+تعداد <span class="kolang-punctuation">و</span> err <span class="kolang-operator">=</span> <span class="kolang-function-name">شمارش‌خطوط</span>​<span class="kolang-punctuation">(</span><span class="kolang-string">«داده.txt»</span><span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">اگر</span> err <span class="kolang-operator">==</span> <span class="kolang-null">تهی</span> <span class="kolang-keyword">نباشد</span><span class="kolang-punctuation">:</span>
+    پیام<span class="kolang-ezafe">ِ</span>err <span class="kolang-keyword">بنویس</span>
+    <span class="kolang-keyword">اتمام</span>
+<span class="kolang-string">«تعداد خطوط: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>تعداد<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۴ جنریتور و درک فهرست</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">اعداد‌اول</span>​<span class="kolang-punctuation">(</span>حد<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> ن <span class="kolang-keyword">از</span> <span class="kolang-number">۲</span> تا حد<span class="kolang-punctuation">:</span>
+        اول <span class="kolang-operator">=</span> <span class="kolang-boolean">درست</span>
+        <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۲</span> تا ن<span class="kolang-punctuation">:</span>
+            <span class="kolang-keyword">اگر</span> ن <span class="kolang-operator">%</span> ای <span class="kolang-operator">==</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+                اول <span class="kolang-operator">=</span> <span class="kolang-boolean">غلط</span>
+                <span class="kolang-keyword">اتمام</span>
+        <span class="kolang-keyword">اگر</span> اول <span class="kolang-operator">==</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+            ن <span class="kolang-keyword">بساز</span>
+
+مجموع‌اول‌ها <span class="kolang-operator">=</span> <span class="kolang-builtin">جمع</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">[</span>ن <span class="kolang-keyword">برای</span> ن <span class="kolang-keyword">در</span> <span class="kolang-function-name">اعداد‌اول</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۰۰</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">]</span><span class="kolang-punctuation">)</span>
+مجموع‌اول‌ها <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۵ کار با جیسون</h3>
+<pre class="kolang-code"><code><span class="kolang-module-name">جیسون</span> <span class="kolang-keyword">بیار</span>
+
+داده <span class="kolang-operator">=</span> <span class="kolang-punctuation">{</span>
+    <span class="kolang-string">«نام»</span><span class="kolang-punctuation">:</span> <span class="kolang-string">«علی»</span> <span class="kolang-punctuation">و</span>
+    <span class="kolang-string">«سن»</span><span class="kolang-punctuation">:</span> <span class="kolang-number">۲۵</span> <span class="kolang-punctuation">و</span>
+    <span class="kolang-string">«مهارت‌ها»</span><span class="kolang-punctuation">:</span> <span class="kolang-punctuation">[</span><span class="kolang-string">«پایتون»</span> <span class="kolang-punctuation">و</span> <span class="kolang-string">«کلنگ»</span><span class="kolang-punctuation">]</span>
+<span class="kolang-punctuation">}</span>
+
+متن‌جیسون <span class="kolang-operator">=</span> دورریز<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">جیسون</span><span class="kolang-punctuation">(</span>داده <span class="kolang-punctuation">و</span> تورفتگی<span class="kolang-operator">=</span><span class="kolang-number">۲</span><span class="kolang-punctuation">)</span>
+متن‌جیسون <span class="kolang-keyword">بنویس</span>
+
+بازخورده <span class="kolang-operator">=</span> بارگذاری<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">جیسون</span><span class="kolang-punctuation">(</span>متن‌جیسون<span class="kolang-punctuation">)</span>
+بازخورده​<span class="kolang-punctuation">[</span><span class="kolang-string">«نام»</span><span class="kolang-punctuation">]</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۶ کار با تاریخ</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">از</span> <span class="kolang-module-name">تقویم</span> <span class="kolang-function-name">تاریخ</span> <span class="kolang-keyword">بیار</span>
+
+امروز <span class="kolang-operator">=</span> <span class="kolang-function-name">امروز</span><span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">تاریخ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>
+<span class="kolang-string">«امروز: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>امروز<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+
+تولد <span class="kolang-operator">=</span> <span class="kolang-function-name">تاریخ</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۳۷۰</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۵</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۱۵</span><span class="kolang-punctuation">)</span>
+سن <span class="kolang-operator">=</span> سال<span class="kolang-ezafe">ِ</span>امروز <span class="kolang-operator">-</span> سال<span class="kolang-ezafe">ِ</span>تولد
+<span class="kolang-string">«سن: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>سن<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۷ مدیریت خطا با استثنا</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تقسیم‌امن</span>​<span class="kolang-punctuation">(</span>الف <span class="kolang-punctuation">و</span> ب<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">بپا</span><span class="kolang-punctuation">:</span>
+        الف <span class="kolang-operator">÷</span> ب <span class="kolang-keyword">برگردان</span>
+    <span class="kolang-error-type">خطای‌صفر</span> <span class="kolang-keyword">بگیر</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-string">«خطا: تقسیم بر صفر»</span> <span class="kolang-keyword">بنویس</span>
+        <span class="kolang-null">تهی</span> <span class="kolang-keyword">برگردان</span>
+    <span class="kolang-error-type">خطای‌نوع</span> <span class="kolang-keyword">بگیر</span> <span class="kolang-keyword">بانام</span> err<span class="kolang-punctuation">:</span>
+        <span class="kolang-string">«نوع نادرست: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>err<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+        err <span class="kolang-keyword">بده</span>
+
+نتیجه <span class="kolang-operator">=</span> <span class="kolang-function-name">تقسیم‌امن</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱۰</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۰</span><span class="kolang-punctuation">)</span>
+نتیجه <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۸ ماشین‌حساب</h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">ماشین‌حساب</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«ماشین حساب کلنگ»</span> <span class="kolang-keyword">بنویس</span>
+    <span class="kolang-string">«برای خروج 'خروج' را بنویسید»</span> <span class="kolang-keyword">بنویس</span>
+
+    <span class="kolang-keyword">تاوقتی</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        عبارت <span class="kolang-operator">=</span> <span class="kolang-string">«&gt;&gt; »</span> <span class="kolang-keyword">بگیر</span>
+        <span class="kolang-keyword">اگر</span> عبارت <span class="kolang-operator">==</span> <span class="kolang-string">«خروج»</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+            <span class="kolang-keyword">اتمام</span>
+        <span class="kolang-keyword">بپا</span><span class="kolang-punctuation">:</span>
+            نتیجه <span class="kolang-operator">=</span> <span class="kolang-builtin">اجرا</span><span class="kolang-punctuation">(</span>عبارت<span class="kolang-punctuation">)</span>
+            نتیجه <span class="kolang-keyword">بنویس</span>
+        <span class="kolang-error-type">استثنا</span> <span class="kolang-keyword">بگیر</span> <span class="kolang-keyword">بانام</span> err<span class="kolang-punctuation">:</span>
+            <span class="kolang-string">«خطا: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>err<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+
+<span class="kolang-function-name">ماشین‌حساب</span>​<span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span></code></pre>
+
+<h3>۱۴.۹ همزمانی با تارک و کانال <span class="badge-go">Go</span></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">کارگر</span>​<span class="kolang-punctuation">(</span>شناسه <span class="kolang-punctuation">و</span> ch<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">تا</span> <span class="kolang-number">۳</span><span class="kolang-punctuation">:</span>
+        ch <span class="kolang-channel-op">&lt;&lt;</span> <span class="kolang-punctuation">(</span><span class="kolang-string">«کارگر »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>شناسه<span class="kolang-punctuation">)</span> <span class="kolang-operator">+</span> <span class="kolang-string">«: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>ای<span class="kolang-punctuation">)</span><span class="kolang-punctuation">)</span>
+    ch <span class="kolang-keyword">ببند</span>
+
+ch <span class="kolang-operator">=</span> <span class="kolang-keyword">کانال</span><span class="kolang-punctuation">(</span><span class="kolang-class-name">متن</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۵</span><span class="kolang-punctuation">)</span>
+
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کارگر</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۱</span> <span class="kolang-punctuation">و</span> ch<span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کارگر</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۲</span> <span class="kolang-punctuation">و</span> ch<span class="kolang-punctuation">)</span>
+<span class="kolang-keyword">برو</span> <span class="kolang-function-name">کارگر</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۳</span> <span class="kolang-punctuation">و</span> ch<span class="kolang-punctuation">)</span>
+
+<span class="kolang-comment">/جمع‌آوری نتایج تا زمانی که همه‌ی کارگرها کانال را ببندند</span>
+تعداد_ببند <span class="kolang-operator">=</span> <span class="kolang-number">۰</span>
+<span class="kolang-keyword">تاوقتی</span> تعداد_ببند <span class="kolang-operator">&lt;</span> <span class="kolang-number">۳</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+    مقدار <span class="kolang-operator">=</span> <span class="kolang-channel-op">&gt;&gt;</span>ch
+    <span class="kolang-keyword">اگر</span> <span class="kolang-builtin">بسته‌است</span><span class="kolang-ezafe">ِ</span>ch <span class="kolang-operator">==</span> <span class="kolang-boolean">درست</span> <span class="kolang-keyword">باشد</span><span class="kolang-punctuation">:</span>
+        تعداد_ببند <span class="kolang-operator">+=</span> <span class="kolang-number">۱</span>
+        <span class="kolang-keyword">بروبعدی</span>
+    مقدار <span class="kolang-keyword">بنویس</span></code></pre>
+
+<h3>۱۴.۱۰ رابط و چندریختی <span class="badge-go">Go</span></h3>
+<pre class="kolang-code"><code><span class="kolang-keyword">رابط</span> <span class="kolang-class-name">شکل</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">مساحت</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span>
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">محیط</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">مستطیل</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> عرض <span class="kolang-punctuation">و</span> ارتفاع<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        عرض<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> عرض
+        ارتفاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> ارتفاع
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">مساحت</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span><span class="kolang-punctuation">:</span>
+        عرض<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">×</span> ارتفاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-keyword">برگردان</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">محیط</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-number">۲</span> <span class="kolang-operator">×</span> <span class="kolang-punctuation">(</span>عرض<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">+</span> ارتفاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">دایره</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-keyword">ساخت</span><span class="kolang-punctuation">(</span><span class="kolang-self">خود</span> <span class="kolang-punctuation">و</span> شعاع<span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+        شعاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">=</span> شعاع
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">مساحت</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span><span class="kolang-punctuation">:</span>
+        پی<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span> <span class="kolang-operator">×</span> شعاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-operator">*</span> <span class="kolang-number">۲</span> <span class="kolang-keyword">برگردان</span>
+
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">محیط</span>​<span class="kolang-punctuation">(</span><span class="kolang-self">خود</span><span class="kolang-punctuation">)</span> <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">اعشاری</span><span class="kolang-punctuation">:</span>
+        <span class="kolang-number">۲</span> <span class="kolang-operator">×</span> پی<span class="kolang-ezafe">ِ</span>​<span class="kolang-module-name">ریاضی</span> <span class="kolang-operator">×</span> شعاع<span class="kolang-ezafe">ِ</span>​<span class="kolang-self">خود</span> <span class="kolang-keyword">برگردان</span>
+
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">معرفی</span>​<span class="kolang-punctuation">(</span>ش<span class="kolang-punctuation">:</span> <span class="kolang-class-name">شکل</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">:</span>
+    <span class="kolang-string">«مساحت: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>مساحت<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ش<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+    <span class="kolang-string">«محیط: »</span> <span class="kolang-operator">+</span> <span class="kolang-builtin">متن</span><span class="kolang-punctuation">(</span>محیط<span class="kolang-ezafe">ِ</span><span class="kolang-punctuation">(</span><span class="kolang-punctuation">)</span>ش<span class="kolang-punctuation">)</span> <span class="kolang-keyword">بنویس</span>
+
+اشکال <span class="kolang-operator">=</span> <span class="kolang-punctuation">[</span><span class="kolang-function-name">مستطیل</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۳</span> <span class="kolang-punctuation">و</span> <span class="kolang-number">۴</span><span class="kolang-punctuation">)</span> <span class="kolang-punctuation">و</span> <span class="kolang-function-name">دایره</span>​<span class="kolang-punctuation">(</span><span class="kolang-number">۵</span><span class="kolang-punctuation">)</span><span class="kolang-punctuation">]</span>
+<span class="kolang-keyword">برای</span> ش <span class="kolang-keyword">در</span> اشکال<span class="kolang-punctuation">:</span>
+    <span class="kolang-function-name">معرفی</span>​<span class="kolang-punctuation">(</span>ش<span class="kolang-punctuation">)</span></code></pre>
+
+<h2 id="s15">۱۵. معماری پیاده‌سازی</h2>
+<p>کلنگ به‌سبک CPython پیاده‌سازی می‌شود.</p>
+
+<h3>۱۵.۱ مراحل اجرا</h3>
+<ol>
+  <li><strong>لِکسر (Lexer):</strong> متن کلنگ را به توکن تبدیل می‌کند. توکن‌ها شامل شناسه‌ی فارسی، عدد، رشته (گیومه)، عملگر (از جمله اضافه‌ی <code>ِ</code>)، کلمه‌ی کلیدی، تورفتگی هستند. ارقام فارسی به لاتین نرمال می‌شوند و نیم‌فاصله به‌عنوان بخشی از شناسه پذیرفته می‌شود. <strong>اضافه‌ی kasra (<code>ِ</code>) به‌عنوان یک عملگر میان‌گذاری تایم‌بندی می‌شود</strong> (مانند <code>+</code> یا <code>-</code>)، نه بخشی از شناسه.</li>
+  <li><strong>پارسر (Parser):</strong> توکن‌ها را به AST تبدیل می‌کند. گرامر LL(1) با پشتیبانی از تورفتگی به‌سبک پایتون. ساختارهای فعل‌پایانی (بدون «را») (مثل <code>x بنویس</code>، <code>ریاضی بیار</code>، <code>خطای‌صفر بگیر:</code>)، شرط‌های التزامی (<code>اگر ... باشد:</code>)، دسترسی به اعضا با اضافه (<code>جذرِ ریاضی</code>)، انتساب چندتایی، <code>برو</code>، <code>تأخیر</code>، و <code>&lt;&lt;</code> / <code>&gt;&gt;</code> کانال در سطح گرامر پشتیبانی می‌شوند. <strong>«و» در بافت پرانتز جداکننده‌ی آرگومان است؛ عملگر منطقی «and» بیرون پرانتز کلمه‌ی «همچنین» است.</strong></li>
+  <li><strong>ارزیاب درختی (Eval):</strong> در v1، AST مستقیماً اجرا می‌شود (tree-walking) — <code>internal/eval</code>.</li>
+  <li><strong>کامپایلر و ماشین مجازی:</strong> در v0.7+ اضافه می‌شوند. کامپایلر AST را به بایت‌کد تبدیل می‌کند و ماشین مجازی (پشته‌محور، با فریم‌های پشته برای توابع و زمان‌بند سبک برای تارک‌ها) آن را اجرا می‌کند.</li>
+</ol>
+
+<h3>۱۵.۲ ساختار بایت‌کد</h3>
+<p>بایت‌کد مشابه CPython است، به‌علاوه‌ی چند opcode الهام‌گرفته از Go:</p>
+<ul>
+  <li><code>LOAD_CONST</code>، <code>LOAD_NAME</code>، <code>STORE_NAME</code></li>
+  <li><code>LOAD_ATTR</code> (دسترسی با اضافه) — معادل <code>جذرِ ریاضی</code></li>
+  <li><code>BINARY_ADD</code>، <code>BINARY_SUBTRACT</code>، …</li>
+  <li><code>COMPARE_OP</code></li>
+  <li><code>POP_JUMP_IF_FALSE</code></li>
+  <li><code>CALL_FUNCTION</code>، <code>MAKE_FUNCTION</code>، <code>RETURN_VALUE</code></li>
+  <li><code>BUILD_LIST</code>، <code>BUILD_MAP</code>، <code>BUILD_TUPLE_UNPACK</code></li>
+  <li><code>GET_ITER</code>، <code>FOR_ITER</code></li>
+  <li><code>SETUP_EXCEPT</code>، <code>SETUP_FINALLY</code></li>
+  <li><code>IMPORT_NAME</code>، <code>IMPORT_FROM</code></li>
+  <li><code>DEFER_CALL</code> <span class="badge-go">Go</span></li>
+  <li><code>GO_SPAWN</code> <span class="badge-go">Go</span></li>
+  <li><code>CHAN_SEND</code>، <code>CHAN_RECV</code>، <code>CHAN_CLOSE</code> <span class="badge-go">Go</span></li>
+</ul>
+
+<h3>۱۵.۳ همکاری با پایتون</h3>
+<ul>
+  <li><strong>نگاشت ایستا:</strong> نام فارسی → نام پایتون (جدول در بخش ۸).</li>
+  <li><strong>نگاشت پویا:</strong> از طریق <code>Python.h</code> یا <code>cgo</code> به پایتون متصل می‌شود.</li>
+</ul>
+<blockquote><p>در v1، کلنگ یک ارزیاب درختی (tree-walking) در Go است؛ ماژول‌های کتابخانه‌ی استاندارد (مانند <code>ریاضی</code>) به‌صورت بومی در Go پیاده‌سازی شده‌اند. نگاشت پویا به پایتون (از طریق <code>cgo</code>/<code>Python.h</code>) و کامپایل AST به بایت‌کد پایتون (<code>.pyc</code>) برای نسخه‌های بعدی (v0.7+) برنامه‌ریزی شده‌اند. ویژگی‌های Go (تارک، کانال) به‌طور شبیه‌سازی‌شده پیاده‌سازی شده‌اند و در فاز ۲ به VM مستقل منتقل می‌شوند.</p></blockquote>
+
+<h3>۱۵.۴ ساختار مخزن (v1)</h3>
+<pre class="tree"><code>kolang/
+├── SPEC.html
+├── README.md
+├── go.mod
+├── cmd/
+│   └── kolang/
+│       └── main.go          # CLI (اجرای فایل، -c، REPL)
+├── internal/
+│   ├── token/
+│   │   └── token.go         # انواع توکن و کلمات کلیدی
+│   ├── lexer/
+│   │   └── lexer.go         # لِکسر (ارقام فارسی، رشته‌های «»، توضیحات / و //، اضافه)
+│   ├── ast/
+│   │   └── ast.go           # انواع گره‌های AST
+│   ├── parser/
+│   │   └── parser.go        # پارسر بازگشتی-نزولی (recursive-descent)
+│   └── eval/
+│       ├── eval.go          # ارزیاب درختی (tree-walking) — هسته
+│       ├── eval_expr.go
+│       ├── eval_members.go
+│       ├── eval_control.go
+│       ├── eval_oop.go
+│       ├── eval_exceptions.go
+│       ├── eval_generators.go
+│       ├── eval_decorators.go
+│       ├── eval_concurrency.go
+│       ├── eval_comp.go
+│       ├── eval_strings.go
+│       ├── eval_types.go
+│       ├── eval_helpers.go
+│       ├── eval_assign.go
+│       ├── builtins.go
+│       └── modules.go
+└── examples/
+    ├── hello.kolang
+    ├── fibonacci.kolang
+    ├── channel.kolang
+    └── interfaces.kolang</code></pre>
+<p>پوشه‌های <code>compiler/</code>، <code>bytecode/</code> و <code>vm/</code> (کامپایلر، بایت‌کد و ماشین مجازی) برای v0.7+ برنامه‌ریزی شده‌اند و فعلاً به تعویق افتاده‌اند؛ در v1 اجرا مستقیم AST با ارزیاب درختی است.</p>
+
+<h3>۱۵.۵ CLI</h3>
+<pre class="tree"><code>kolang script.kolang          # اجرای فایل
+kolang repl                   # محیط تعاملی
+kolang -c "«سلام» بنویس"   # اجرای خط فرمان</code></pre>
+<p><code>kolang compile</code>، <code>kolang fmt</code> و <code>kolang vet</code> در برنامه‌ی راه برای نسخه‌های بعدی هستند (در v1 هنوز پیاده‌سازی نشده‌اند).</p>
+
+<h2 id="s16">۱۶. نقشه راه (Roadmap)</h2>
+<p>توسعه‌ی کلنگ در <strong>دو فاز</strong> برنامه‌ریزی شده است:</p>
+<blockquote><p><strong>فاز ۱ (نسخه‌های ۰٫x تا ۱٫x) — پایتون فارسی:</strong> زبانی پویا با GC که به بایت‌کد پایتون کامپایل و روی CPython اجرا می‌شود. هدف: دسترسی کامل به اکوسیستم پایتون با سینتکس فارسی طبیعی. نوع‌دهی تدریجی (اختیاری، زمان-اجرا). همزمانی شبیه‌سازی‌شده.</p>
+<p><strong>فاز ۲ (نسخه‌های ۲٫x+) — زبان سیستمی فارسی (هدف Rust-like):</strong> VM مستقل با سیستم نوع استاتیک، ownership/borrowing، traitها، نوع‌های جمع (sum types)، تطبیق الگو (pattern matching)، و genericها. حاشیه‌نویسی‌های فاز ۱ به بررسی زمان-کامپایل تبدیل می‌شوند.</p></blockquote>
+
+<h3>۱۶.۱ فاز ۱ — پایتون فارسی</h3>
+<ul>
+  <li><strong>نسخه‌ی ۰٫۱ — پایه:</strong>
+    <ul>
+      <li>لِکسر کامل فارسی (شناسه، عدد، رشته با گیومه، عملگر، تورفتگی، نیم‌فاصله، اضافه)</li>
+      <li>پارسر: انتساب، شرط (با <code>باشد</code>)، حلقه، تابع، افعال امری، دسترسی با اضافه</li>
+      <li>ارزیاب درختی (tree-walking) به‌عنوان پایه‌ی اولیه</li>
+      <li>توابع داخلی اصلی: <code>بنویس</code>، <code>بگیر</code>، <code>طول</code>، <code>بازه</code></li>
+      <li>آوردن ماژول (<code>ریاضی بیار</code> / <code>از ریاضی جذر بیار</code>)</li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۲ — شیءگرایی و رابط‌ها:</strong>
+    <ul>
+      <li>گونه، وارث، متد، <code>خود</code>، <code>والد</code></li>
+      <li>رابط‌ها و نوع‌دهی ساختاری <span class="badge-go">Go</span></li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۳ — خطا و استثنا:</strong>
+    <ul>
+      <li>مقدار برگشتی چندتایی و نوع <code>خطا</code> <span class="badge-go">Go</span></li>
+      <li><code>بپا</code>/<code>خطا بگیر</code>/<code>درنهایت</code>، <code>بده</code></li>
+      <li><code>تأخیری</code> <span class="badge-go">Go</span></li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۴ — جنریتور و پوشش:</strong>
+    <ul>
+      <li><code>بساز</code>، <code>پوشش</code></li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۵ — نوع‌دهی تدریجی:</strong>
+    <ul>
+      <li>حاشیه‌نویسی نوع متغیر و پارامتر (اختیاری، زمان-اجرا)</li>
+      <li>بررسی نوع در زمان اجرا</li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۶ — همزمانی (شبیه‌سازی‌شده):</strong>
+    <ul>
+      <li>تارک (<code>برو</code>) و کانال‌ها <span class="badge-go">Go</span></li>
+      <li>پیاده‌سازی روی asyncio یا threadpool (به‌دلیل GIL پایتون)</li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۷ — بایت‌کد و کامپایل به .pyc:</strong>
+    <ul>
+      <li>کامپایل AST به بایت‌کد پایتون و اجرای مستقل</li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۰٫۸ — همکاری پایتون:</strong>
+    <ul>
+      <li>نگاشت ماژول‌ها، بلوک <code>پایتون:</code></li>
+    </ul>
+  </li>
+  <li><strong>نسخه‌ی ۱٫۰ — انتشار فاز ۱:</strong>
+    <ul>
+      <li>کتابخانه‌ی استاندارد فارسی کامل</li>
+      <li>REPL، <code>kolang fmt</code>، <code>kolang vet</code></li>
+      <li>مستندات کامل</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>۱۶.۲ فاز ۲ — زبان سیستمی فارسی (هدف Rust-like)</h3>
+<p>پس از تثبیت فاز ۱، توسعه‌ی فاز ۲ با هدف تبدیل کلنگ به زبانی سیستمی و ایمن (مانند Rust) آغاز می‌شود. ویژگی‌های برنامه‌ریزی‌شده:</p>
+<ul>
+  <li><strong>VM مستقل:</strong> ماشین مجازی بومی کلنگ (نه CPython). بایت‌کد و فرمت اجرایی مستقل.</li>
+  <li><strong>سیستم نوع استاتیک:</strong> حاشیه‌نویسی‌های فاز ۱ به بررسی زمان-کامپایل تبدیل می‌شوند. نوع‌دهی استاتیکی کامل (اختیاری در فاز ۱، اجباری در فاز ۲).</li>
+  <li><strong>Genericها:</strong> نوع‌های پارامتریک. <code>گونه پشته&lt;ت&gt;:</code> — پشته‌ی نوع <code>ت</code>.</li>
+  <li><strong>Traitها:</strong> مجموعه‌ی متد با dispatch استاتیک (برخلاف رابط‌های فاز ۱ که runtime هستند). <code>صفت نمایش { ... }</code> + <code>برای نوع ت رهی نمایش { ... }</code>.</li>
+  <li><strong>نوع‌های جمع (sum types / enums):</strong> <code>گونه نتیجه&lt;ت&gt; = موفق(ت) یا شکست(خطا)</code> — با استفاده از <code>یا</code>.</li>
+  <li><strong>تطبیق الگو (pattern matching):</strong> <code>پوشش مقدار { موفق(م) =&gt; ... شکست(ه) =&gt; ... }</code>.</li>
+  <li><strong>Ownership و borrowing:</strong> مدیریت حافظه‌ی ایمن بدون GC (مانند Rust). <code>&amp;</code> برای قرض‌گیری، قوانین عمر (lifetime).</li>
+  <li><strong>عملگر پخش خطا:</strong> <code>?</code> برای بازگشت زودهنگام هنگام خطا (مانند Rust). <code>مقدار = کار()؟</code>.</li>
+  <li><strong>دیدگاه ماژول:</strong> <code>عمومی</code> / <code>خصوصی</code> برای کنترل صادرات.</li>
+  <li><strong>عملگرهای بیتی:</strong> <code>&amp;</code> <code>|</code> <code>^</code> <code>~</code> <code>&lt;&lt;</code> <code>&gt;&gt;</code>.</li>
+</ul>
+<blockquote><p>توجه: فاز ۲ نیازمند طراحی عمیق سیستم نوع و ownership است و زمان‌بر خواهد بود. فاز ۱ به‌تنهایی یک زبان کامل و مفید است.</p></blockquote>
+
+<h2 id="s17">۱۷. ملاحظات طراحی</h2>
+
+<h3>۱۷.۱ راست‌به‌چپ (RTL)</h3>
+<p>کد منبع از راست به چپ نمایش داده می‌شود. تورفتگی در سمت راست قرار می‌گیرد. نمادهای <code>{}</code>، <code>[]</code>، <code>()</code> همان‌طور که هست ذخیره می‌شوند؛ در نمایش RTL جهت آن‌ها به‌صورت خودکار معکوس دیده می‌شود.</p>
+
+<h3>۱۷.۲ نیم‌فاصله در شناسه‌ها</h3>
+<p>شناسه‌های چندبخشی فارسی (مثل <code>برگردان</code>، <code>امانت‌دادن</code>) ممکن است شامل نیم‌فاصله باشند. لِکسر باید نیم‌فاصله را به‌عنوان بخشی از شناسه بپذیرد.</p>
+
+<h3>۱۷.۳ ارقام فارسی</h3>
+<p>ارقام فارسی <code>۰-۹</code> در سطح لِکسر به ارقام لاتین <code>0-9</code> تبدیل می‌شوند.</p>
+
+<h3>۱۷.۴ رشته‌ها با گیومه‌ی «»</h3>
+<p>گیومه‌های <code>« »</code> در متن RTL پایدارند (BIDI-stable) و به همین دلیل به‌عنوان جداکننده‌ی رشته انتخاب شدند؛ بک‌تیک در مرحله‌ی طراحی بررسی شد اما رد شد. متن‌های «» به‌صورت پیش‌فرض f-string هستند (درون‌یابی با <code>{...}</code>) و چندخطی را به‌طور طبیعی پشتیبانی می‌کنند. برای نمایش لفظی آکولاد از <code>{{</code> و <code>}}</code> استفاده کنید.</p>
+
+<h3>۱۷.۵ اضافه به‌جای نقطه</h3>
+<p>دسترسی به اعضا با اضافه‌ی kasra (<code>ِ</code> U+0650) انجام می‌شود. این تصمیم کلنگ را شبیه نثر فارسی می‌کند: <code>جذرِ ریاضی</code> به‌جای <code>ریاضی.جذر</code>. اضافه از راست به چپ می‌چسبد: <code>روشِ والدِ خود</code> = <code>self.parent.method</code>. در لِکسر، اضافه به‌عنوان یک عملگر میان‌گذاری شناخته می‌شود، نه بخشی از شناسه.</p>
+
+<h3>۱۷.۶ شرط‌های نمادین</h3>
+<p>کلنگ فقط شکل نمادین را برای مقایسه می‌پذیرد: <code>اگر x == ۵ باشد:</code>. شکل طبیعی فارسی (<code>اگر x برابر ۵ باشد:</code>) حذف شده است. فعل التزامی <code>باشد</code>/<code>نباشد</code> پس از مقایسه‌ی نمادین می‌آید. بنابراین هر شرط یک مقایسه‌ی نمادین صریح به‌همراه <code>باشد</code> یا <code>نباشد</code> است.</p>
+
+<h3>۱۷.۷ بدون درستی ضمنی (No implicit truthiness)</h3>
+<p>برخلاف پایتون، کلنگ <strong>تبدیل ضمنی به بولی انجام نمی‌دهد</strong>. یک شرط باید همیشه یک مقایسه‌ی صریح داشته باشد. این یعنی:</p>
+<ul>
+  <li><code>اگر x:</code> — <strong>نامعتبر</strong> (حتی اگر <code>x</code> بولی باشد؛ باید <code>اگر x == درست باشد:</code> نوشته شود).</li>
+  <li><code>اگر فهرست:</code> — <strong>نامعتبر</strong>؛ باید <code>اگر طول(فهرست) == ۰ نباشد:</code>.</li>
+  <li><code>اگر x == ۰ باشد:</code> — <strong>معتبر</strong> (مقایسه‌ی صریح).</li>
+  <li><code>تاوقتی درست باشد:</code> — <strong>معتبر</strong> (<code>درست</code> یک لیترال بولی صریح است، نه یک تبدیل ضمنی؛ این شکل استاندارد حلقه‌ی بی‌پایان است).</li>
+</ul>
+<p>این قانون از باگ‌های خاموش پایتون جلوگیری می‌کند (مثلاً <code>if x:</code> وقتی <code>x = 0</code> یا <code>x = []</code> یا <code>x = None</code>) و صراحت Go را به‌جا می‌گذارد. در پارسر، شرطی که یک عبارت لخت (نه یک مقایسه) باشد به‌عنوان خطای نحوی گزارش می‌شود — به‌جز لیترال بولی <code>درست</code> / <code>غلط</code>. <strong>فعل <code>باشد</code>/<code>نباشد</code> پس از مقایسه الزامی است.</strong></p>
+
+<h3>۱۷.۸ «و» و «همچنین»</h3>
+<p>در کلنگ، «و» دو کاربرد ندارد (برخلاف v5). «و» فقط جداکننده‌ی آرگومان است (درون پرانتز، مثل <code>جمع(۱ و ۲ و ۳)</code>) و در انتساب چندتایی سمت چپ (مثل <code>نتیجه و خطا = ...</code>). عملگر منطقی «and» کلمه‌ی جداگانه‌ی <code>همچنین</code> است (بیرون پرانتز، مثل <code>درست همچنین غلط</code>). این جداسازی از ابهام جلوگیری می‌کند: «و» همیشه «and» منطقی نیست، بلکه بستگی به بافت دارد. نفی منطقی <code>نباشد</code> است.</p>
+
+<h3>۱۷.۹ افعال امری</h3>
+<p>دستورهای I/O و تغییر حالت به‌شکل <strong>فعل‌پایانی (بدون «را»)</strong> نوشته می‌شوند: <code>x بنویس</code>، <code>نام بگیر</code>، <code>x برگردان</code>. این شامل <code>بنویس</code>، <code>بگیر</code>، <code>برگردان</code>، <code>بیافزا</code>، <code>حذف‌کن</code>، <code>بده</code>، <code>بیار</code> (import)، <code>ببند</code> می‌شود. استثناها: <code>اتمام</code> و <code>بروبعدی</code> که بدون مفعول‌اند.</p>
+
+<h3>۱۷.۱۰ چرا «خطا به‌عنوان مقدار» به‌جای استثنا؟ <span class="badge-go">Go</span></h3>
+<p>الهام‌گرفته از Go: خطا به‌عنوان مقدار، کنترل جریان را صریح و قابل‌ردیابی می‌کند. برنامه‌نویس مجبور است خطا را بررسی کند. این استواری برنامه‌ها را در برابر خطاهای خاموش بیافزایش می‌دهد. استثنا (<code>بپا/بگیر</code>) برای موارد واقعاً غیرمنتظره حفظ می‌شود.</p>
+
+<h3>۱۷.۱۱ چرا تارک و کانال؟ <span class="badge-go">Go</span></h3>
+<p>مدل CSP گو (ارتباط با کانال به‌جای حافظه‌ی مشترک) ساده‌تر و امن‌تر از نخ‌ها و قفل‌ها است. کلنگ آن را وام می‌گیرد تا همزمانی برای برنامه‌نویس فارسی‌زبان ساده و در دسترس باشد.</p>
+
+<h2 id="s18">۱۸. جمع‌بندی</h2>
+<p>کلنگ زبانی است که:</p>
+<ul>
+  <li>تمام قابلیت‌های پایتون را دارد.</li>
+  <li>کلمات کلیدی، عملگرها و افعال آن فارسی هستند؛ شناسه‌ها می‌توانند فارسی یا انگلیسی باشند (فقط در بلوک <code>پایتون:</code> کد لاتین کامل مجاز است).</li>
+  <li>دستورهای I/O و تغییر حالت به‌شکل <strong>فعل‌پایانی</strong> نوشته می‌شوند (<code>«سلام» بنویس</code>).</li>
+  <li>شرط‌ها با مقایسه‌ی نمادین صریح نوشته می‌شوند (<code>اگر سن == ۱۸ باشد:</code>) و <strong>درستی ضمنی وجود ندارد</strong>.</li>
+  <li>رشته‌ها با <strong>گیومه‌های <code>« »</code></strong> نوشته می‌شوند.</li>
+  <li>دسترسی به اعضا با <strong>اضافه‌ی kasra</strong> (<code>ِ</code>) انجام می‌شود، نه نقطه (<code>جذرِ ریاضی</code>).</li>
+  <li>آرگومان‌ها با <strong>«و»</strong> جدا می‌شوند، نه ویرگول (<code>جمع(۱ و ۲ و ۳)</code>).</li>
+  <li>گونه‌ها (class) و رابط‌ها (interface) با <code>گونه</code> و <code>رابط</code> تعریف می‌شوند.</li>
+  <li>گرفتن ماژول با فعل <strong>«بیار»</strong> در پایان جمله است (<code>ریاضی بیار</code>، <code>از ریاضی جذر بانام ریشه بیار</code>).</li>
+  <li>استثناها با افعال <strong>«بپا/خطا بگیر/درنهایت/بده»</strong> طبیعی‌اند.</li>
+  <li>از Go الهام گرفته برای استواری: <strong>مقدار برگشتی چندتایی</strong>، <strong>نوع خطا</strong>، <strong>تارک</strong>، <strong>کانال</strong>، <strong>تأخیر</strong>، <strong>رابط ساختاری</strong>.</li>
+  <li>به کتابخانه‌ی استاندارد پایتون با نام فارسی دسترسی دارد.</li>
+  <li>با خط لوله‌ی لِکسر ← پارسر ← AST ← ارزیاب درختی (tree-walking) طراحی شده است (کامپایلر و ماشین مجازی در نسخه‌های بعدی).</li>
+  <li>در v1 به‌صورت ارزیاب درختی در Go اجرا می‌شود و به کتابخانه‌ی استاندارد پایتون با نام فارسی دسترسی دارد.</li>
+</ul>
+<blockquote><p>این سند مرجع زبانی است و با پیشرفت پیاده‌سازی به‌روزرسانی می‌شود.</p></blockquote>
+
+</main>
+
+</div>
+
+<script>
+  document.querySelectorAll('aside.toc a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 880) {
+        document.querySelector('aside.toc').classList.remove('open');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کلنگ — زبان برنامه‌نویسی فارسی</title>
+  <meta name="description" content="کلنگ (Kolang) زبان برنامه‌نویسی فارسی با مفسر Go، الهام‌گرفته از پایتون و گو. راهنمای نصب، مفاهیم پایه و نمونه‌های کد.">
+  <meta name="theme-color" content="#13131c">
+
+  <!-- Fonts: Vazirmatn (Persian prose) + JetBrains Mono (code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Syntax theme (owns code palette + token classes) — lives one level up -->
+  <link rel="stylesheet" href="../kolang-syntax-theme.css">
+  <!-- Page-specific styles -->
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">پرش به محتوا</a>
+
+  <!-- ============================================================ TOP NAV -->
+  <header class="topnav">
+    <div class="container topnav-inner">
+      <a class="brand" href="#top" aria-label="کلنگ — خانه">
+        <span class="brand-mark">ک</span>
+        <span>کلنگ</span>
+      </a>
+      <nav aria-label="ناوبری اصلی">
+        <ul class="nav-links">
+          <li><a href="#install">نصب</a></li>
+          <li><a href="#quickstart">راه‌اندازی سریع</a></li>
+          <li><a href="#concepts">مفاهیم پایه</a></li>
+          <li><a href="#repl">محیط تعاملی</a></li>
+        </ul>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="تغییر حالت روشن/تاریک" aria-pressed="false">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+  <span id="top"></span>
+
+  <!-- ================================================================ HERO -->
+  <header class="hero">
+    <svg class="hero-motif" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="girih" x="0" y="0" width="72" height="72" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M36 2 L70 36 L36 70 L2 36 Z"/>
+            <rect x="16" y="16" width="40" height="40"/>
+            <rect x="16" y="16" width="40" height="40" transform="rotate(45 36 36)"/>
+            <circle cx="36" cy="36" r="22"/>
+            <circle cx="36" cy="36" r="6"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#girih)"/>
+    </svg>
+
+    <div class="container hero-content">
+      <span class="version-badge">v1.0.0</span>
+      <h1 class="hero-title">کلنگ</h1>
+      <p class="hero-tagline">زبان برنامه‌نویسی فارسی، با الهام از پایتون و گو</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#install">شروع سریع</a>
+        <a class="btn btn-ghost" href="#concepts">مشاهده مثال‌ها</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================= INSTALLATION -->
+  <section id="install">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">۱ — Installation</span>
+        <h2>نصب</h2>
+        <p>کلنگ یک باینری تک‌فایلی است که از روی کدمنبع ساخته می‌شود. در چهار گام آمادهٔ استفاده است.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">۱</div>
+          <div class="step-body">
+            <h3>پیش‌نیازها</h3>
+            <p>برای ساخت کلنگ به <a href="https://go.dev" target="_blank" rel="noopener">Go</a> نسخهٔ ۱.۲۷ یا بالاتر نیاز دارید. نصب بودن Go را این‌طور بررسی کنید:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+                <span class="terminal-title">shell — بررسی نسخهٔ Go</span>
+              </div>
+              <pre class="terminal-body"><code><span class="prompt">$</span> go version
+<span class="dim">go version go1.27.0 darwin/amd64</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">۲</div>
+          <div class="step-body">
+            <h3>دریافت کد</h3>
+            <p>مخزن پروژه را کلون کنید و وارد پوشهٔ آن شوید:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+                <span class="terminal-title">shell — دریافت کد</span>
+              </div>
+              <pre class="terminal-body"><code><span class="prompt">$</span> git clone https://github.com/faralidev/kolang.git
+<span class="prompt">$</span> cd kolang</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">۳</div>
+          <div class="step-body">
+            <h3>ساخت باینری</h3>
+            <p>باینری <code>kolang</code> را از کدمنبع بسازید:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+                <span class="terminal-title">shell — ساخت</span>
+              </div>
+              <pre class="terminal-body"><code><span class="prompt">$</span> go build -o kolang ./cmd/kolang</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">۴</div>
+          <div class="step-body">
+            <h3>بررسی نصب</h3>
+            <p>برای اطمینان از درست بودن نصب، اولین برنامهٔ کلنگ را از خط فرمان اجرا کنید:</p>
+            <div class="terminal">
+              <div class="terminal-bar">
+                <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+                <span class="terminal-title">shell — بررسی</span>
+              </div>
+              <pre class="terminal-body"><code><span class="prompt">$</span> ./kolang -c '«سلام کلنگ!» بنویس'
+<span class="out">سلام کلنگ!</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== QUICK START -->
+  <section id="quickstart">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">۲ — Quick start</span>
+        <h2>راه‌اندازی سریع</h2>
+        <p>سه راه برای اجرای کد کلنگ: از روی فایل، مستقیم در خط فرمان، یا در محیط تعاملی.</p>
+      </div>
+
+      <div class="qs-grid">
+        <div class="qs-card reveal">
+          <h3>از روی فایل <span class="tag">file</span></h3>
+          <p>یک فایل <code>.kolang</code> را به باینری بدهید.</p>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+              <span class="terminal-title">shell</span>
+            </div>
+            <pre class="terminal-body"><code><span class="prompt">$</span> ./kolang examples/hello.kolang
+<span class="out">سلام دنیا!</span></code></pre>
+          </div>
+        </div>
+
+        <div class="qs-card reveal">
+          <h3>خط فرمان <span class="tag">-c</span></h3>
+          <p>کد را مستقیم با پرچم <code>-c</code> اجرا کنید.</p>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+              <span class="terminal-title">shell</span>
+            </div>
+            <pre class="terminal-body"><code><span class="prompt">$</span> ./kolang -c '«سلام» بنویس'
+<span class="out">سلام</span></code></pre>
+          </div>
+        </div>
+
+        <div class="qs-card reveal">
+          <h3>محیط تعاملی <span class="tag">repl</span></h3>
+          <p>با <code>repl</code> وارد محیط تعاملی شوید. برای خروج <code>خروج</code> را بنویسید.</p>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+              <span class="terminal-title">shell</span>
+            </div>
+            <pre class="terminal-body"><code><span class="prompt">$</span> ./kolang
+<span class="dim">کلنگ&gt;</span> خروج</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= CONCEPTS -->
+  <section id="concepts">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">۳ — Core concepts</span>
+        <h2>مفاهیم پایه</h2>
+        <p>کلنگ آشنای پایتون و گو است: متغیر، شرط، تابع، شیءگرایی، خطا، همزمانی، لوله و نوع‌نویسی تدریجی. کد ستارهٔ نمایش است.</p>
+      </div>
+
+      <div class="cards">
+        <!-- 1. متغیر و چاپ -->
+        <article class="card reveal">
+          <h3><span class="icon">{ }</span> متغیر و چاپ</h3>
+          <p class="lead">متغیر با <code>=</code> تعریف می‌شود و با <code>بنویس</code> چاپ می‌شود. نیازی به اعلان نوع ندارد.</p>
+          <pre class="kolang-code"><code>نام <span class="kolang-operator">=</span> <span class="kolang-string">«کلنگ»</span>
+سال <span class="kolang-operator">=</span> <span class="kolang-number">۱۴۰۴</span>
+نام <span class="kolang-builtin">بنویس</span>
+سال <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 2. شرط‌ها -->
+        <article class="card reveal">
+          <h3><span class="icon">?</span> شرط‌ها</h3>
+          <p class="lead">با <code>اگر</code>، <code>وگرنه</code> و <code>باشد</code> شرط می‌سازید. تورفتگی بلوک‌ها را تعیین می‌کند.</p>
+          <pre class="kolang-code"><code>سن <span class="kolang-operator">=</span> <span class="kolang-number">۱۸</span>
+<span class="kolang-keyword">اگر</span> سن <span class="kolang-operator">==</span> <span class="kolang-number">۱۸</span> <span class="kolang-keyword">باشد</span>:
+    <span class="kolang-string">«هجده ساله»</span> <span class="kolang-builtin">بنویس</span>
+<span class="kolang-keyword">وگرنه</span>:
+    <span class="kolang-string">«سن دیگر»</span> <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 3. توابع و حلقه‌ها -->
+        <article class="card reveal">
+          <h3><span class="icon">ƒ</span> توابع و حلقه‌ها</h3>
+          <p class="lead">تابع با <code>تعریف</code> ساخته می‌شود و حلقهٔ شمارشی با <code>برای ... از ... تا</code>.</p>
+          <pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">فیبوناچی</span>(ن):
+    <span class="kolang-keyword">اگر</span> ن <span class="kolang-operator">&lt;=</span> <span class="kolang-number">۱</span> <span class="kolang-keyword">باشد</span>:
+        ن <span class="kolang-builtin">برگردان</span>
+    <span class="kolang-function-name">فیبوناچی</span>(ن <span class="kolang-operator">-</span> <span class="kolang-number">۱</span>) <span class="kolang-operator">+</span> <span class="kolang-function-name">فیبوناچی</span>(ن <span class="kolang-operator">-</span> <span class="kolang-number">۲</span>) <span class="kolang-builtin">برگردان</span>
+
+<span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">تا</span> <span class="kolang-number">۱۰</span>:
+    <span class="kolang-function-name">فیبوناچی</span>(ای) <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 4. شیءگرایی -->
+        <article class="card reveal">
+          <h3><span class="icon">◈</span> شیءگرایی</h3>
+          <p class="lead">با <code>گونه</code> کلاس، با <code>وارث</code> ارث‌بری و با <code>ساخت</code> سازنده می‌سازید. <code>خود</code> همان <code>self</code> است.</p>
+          <pre class="kolang-code"><code><span class="kolang-keyword">گونه</span> <span class="kolang-class-name">حیوان</span>:
+    <span class="kolang-keyword">ساخت</span> (<span class="kolang-self">خود</span> و نام):
+        نام<span class="kolang-ezafe">ِ</span> <span class="kolang-self">خود</span> <span class="kolang-operator">=</span> نام
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span> (<span class="kolang-self">خود</span>):
+        <span class="kolang-string">«صدای حیوان»</span> <span class="kolang-builtin">بنویس</span>
+
+<span class="kolang-keyword">گونه</span> <span class="kolang-class-name">سگ</span> <span class="kolang-keyword">وارث</span> <span class="kolang-class-name">حیوان</span>:
+    <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">صدادهی</span> (<span class="kolang-self">خود</span>):
+        <span class="kolang-string">«واف واف»</span> <span class="kolang-builtin">بنویس</span>
+
+حیوانات <span class="kolang-operator">=</span> <span class="kolang-builtin">فهرست</span> (<span class="kolang-class-name">سگ</span> (<span class="kolang-string">«رکس»</span>) و <span class="kolang-class-name">گربه</span> (<span class="kolang-string">«پشمک»</span>))
+<span class="kolang-keyword">برای</span> ح <span class="kolang-keyword">در</span> حیوانات:
+    <span class="kolang-function-name">صدادهی</span><span class="kolang-ezafe">ِ</span>() ح</code></pre>
+        </article>
+
+        <!-- 5. خطاها -->
+        <article class="card reveal">
+          <h3><span class="icon">!</span> خطاها</h3>
+          <p class="lead">با <code>بپا</code> شروع، با <code>بگیر</code> گرفتن خطا و با <code>درنهایت</code> پاک‌سازی انجام می‌شود.</p>
+          <pre class="kolang-code"><code><span class="kolang-keyword">بپا</span>:
+    <span class="kolang-string">«قبل از خطا»</span> <span class="kolang-builtin">بنویس</span>
+    <span class="kolang-error-type">خطای‌مقدار</span>(<span class="kolang-string">«یک مشکل!»</span>) <span class="kolang-builtin">بده</span>
+    <span class="kolang-string">«این چاپ نمی‌شود»</span> <span class="kolang-builtin">بنویس</span>
+<span class="kolang-error-type">خطای‌مقدار</span> <span class="kolang-builtin">بگیر</span> بانام err:
+    <span class="kolang-string">«خطا گرفته شد:»</span> <span class="kolang-builtin">بنویس</span>
+    پیام<span class="kolang-ezafe">ِ</span> err <span class="kolang-builtin">بنویس</span>
+<span class="kolang-keyword">درنهایت</span>:
+    <span class="kolang-string">«درنهایت اجرا شد»</span> <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 6. همزمانی -->
+        <article class="card reveal">
+          <h3><span class="icon">⇄</span> همزمانی: تارک و کانال</h3>
+          <p class="lead"><code>برو</code> یک تارک (goroutine) اجرا می‌کند و <code>کانال</code> ارتباط بین آن‌ها را برقرار می‌کند — درست مثل Go.</p>
+          <pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تولیدکننده</span>():
+    <span class="kolang-keyword">برای</span> ای <span class="kolang-keyword">از</span> <span class="kolang-number">۰</span> <span class="kolang-keyword">تا</span> <span class="kolang-number">۴</span>:
+        ch <span class="kolang-channel-op">&lt;&lt;</span> ای
+    ch <span class="kolang-builtin">ببند</span>
+
+ch <span class="kolang-operator">=</span> <span class="kolang-builtin">کانال</span>(<span class="kolang-class-name">صحیح</span>)
+<span class="kolang-builtin">برو</span> <span class="kolang-function-name">تولیدکننده</span>()
+<span class="kolang-keyword">برای</span> v <span class="kolang-keyword">در</span> ch:
+    v <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 7. لوله -->
+        <article class="card reveal">
+          <h3><span class="icon">|&gt;</span> لوله</h3>
+          <p class="lead">با عملگر <code>|&gt;</code> خروجی یک تابع را به تابع بعدی می‌دهید — خواندن جریان داده را ساده می‌کند.</p>
+          <pre class="kolang-code"><code><span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">دو‌برابر</span>(x):
+    x <span class="kolang-operator">×</span> <span class="kolang-number">۲</span> <span class="kolang-builtin">برگردان</span>
+
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">یکی‌اضافه</span>(x):
+    x <span class="kolang-operator">+</span> <span class="kolang-number">۱</span> <span class="kolang-builtin">برگردان</span>
+
+<span class="kolang-number">۵</span> <span class="kolang-operator">|&gt;</span> <span class="kolang-function-name">دو‌برابر</span> <span class="kolang-operator">|&gt;</span> <span class="kolang-function-name">یکی‌اضافه</span> <span class="kolang-operator">|&gt;</span> <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+
+        <!-- 8. نوع‌نویسی تدریجی -->
+        <article class="card reveal">
+          <h3><span class="icon">::</span> نوع‌نویسی تدریجی</h3>
+          <p class="lead">نوع‌ها اختیاری‌اند. با <code>:</code> نوع متغیر و با <code>-&gt;</code> نوع خروجی تابع را می‌نویسید.</p>
+          <pre class="kolang-code"><code>سن: <span class="kolang-class-name">صحیح</span> <span class="kolang-operator">=</span> <span class="kolang-number">۲۵</span>
+سن <span class="kolang-builtin">بنویس</span>
+
+<span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">جمع</span>(الف: <span class="kolang-class-name">صحیح</span> و ب: <span class="kolang-class-name">صحیح</span>) <span class="kolang-operator">-&gt;</span> <span class="kolang-class-name">صحیح</span>:
+    الف <span class="kolang-operator">+</span> ب <span class="kolang-builtin">برگردان</span>
+
+<span class="kolang-function-name">جمع</span>(<span class="kolang-number">۱۰</span> و <span class="kolang-number">۲۰</span>) <span class="kolang-builtin">بنویس</span></code></pre>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= REPL -->
+  <section id="repl">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">۴ — REPL</span>
+        <h2>محیط تعاملی</h2>
+        <p>با <code>./kolang</code> وارد محیط تعاملی شوید. عبارت‌ها را بنویسید و نتیجه را بلافاصله ببینید. برای خروج، <code>خروج</code> را بنویسید.</p>
+      </div>
+
+      <div class="repl-wrap reveal">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></span>
+            <span class="terminal-title">کلنگ — محیط تعاملی</span>
+          </div>
+          <pre class="terminal-body repl"><code><span class="prompt">$</span> ./kolang
+<span class="dim">کلنگ v0.1 — محیط تعاملی (برای خروج: خروج را بنویسید)</span>
+<span class="repl-prompt">کلنگ&gt;</span> ۲ + ۳
+<span class="out">۵</span>
+<span class="repl-prompt">کلنگ&gt;</span> <span class="kolang-string">«سلام»</span> <span class="kolang-builtin">بنویس</span>
+<span class="out">سلام</span>
+<span class="repl-prompt">کلنگ&gt;</span> خروج</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== NEXT STEPS -->
+  <section id="next">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">۵ — Next steps</span>
+        <h2>مراحل بعدی</h2>
+        <p>کلنگ را در عمل ببینید و عمیق‌تر بشناسید.</p>
+      </div>
+
+      <div class="nextsteps reveal">
+        <ul>
+          <li>
+            <div>
+              <a href="https://github.com/faralidev/kolang/tree/main/examples" target="_blank" rel="noopener">بررسی مثال‌ها</a>
+              <span class="desc">بیش از سی برنامهٔ نمونه در پوشهٔ <code>examples/</code> — از شرط و حلقه تا تولیدکننده و استثنا.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <a href="https://github.com/faralidev/kolang/blob/main/SPEC.html" target="_blank" rel="noopener">خواندن <code>SPEC.html</code></a>
+              <span class="desc">مشخصات کامل زبان: گرامر، انواع داده، معنا و رفتار زمان اجرا.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <a href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">مشارکت</a>
+              <span class="desc">گزارش خطا، پیشنهاد ویژگی و ارسال کد. پروژه در مراحل اولیه است و بازخورد شما ارزشمند است.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ============================================================= FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="foot-brand" href="#top">
+        <span class="brand-mark">ک</span>
+        <span>کلنگ</span>
+      </a>
+      <span class="foot-meta">ساخته‌شده با ❤ برای فارسی‌زبانان</span>
+      <div class="foot-links">
+        <a href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/faralidev/kolang/tree/main/examples" target="_blank" rel="noopener">مثال‌ها</a>
+        <a href="https://github.com/faralidev/kolang/blob/main/SPEC.html" target="_blank" rel="noopener">SPEC</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =================================================== THEME TOGGLE JS -->
+  <script>
+    (function () {
+      var html = document.documentElement;
+      var KEY = 'kolang-theme';
+      var btn = document.getElementById('theme-toggle');
+      try {
+        var saved = localStorage.getItem(KEY);
+        if (saved === 'light') html.setAttribute('data-theme', 'light');
+        else if (saved === 'dark') html.removeAttribute('data-theme');
+      } catch (e) {}
+
+      function isLight() { return html.getAttribute('data-theme') === 'light'; }
+      function sync() { btn.setAttribute('aria-pressed', String(isLight())); }
+      sync();
+
+      btn.addEventListener('click', function () {
+        if (isLight()) {
+          html.removeAttribute('data-theme');
+          try { localStorage.setItem(KEY, 'dark'); } catch (e) {}
+        } else {
+          html.setAttribute('data-theme', 'light');
+          try { localStorage.setItem(KEY, 'light'); } catch (e) {}
+        }
+        sync();
+      });
+    })();
+  </script>
+</body>
+</html>

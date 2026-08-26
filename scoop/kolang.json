@@ -1,0 +1,26 @@
+# Scoop manifest for Kolang (Windows)
+# Install with: scoop bucket add faralidev https://github.com/faralidev/scoop-bucket; scoop install kolang
+
+{
+    "version": "1.0.0",
+    "description": "Persian programming language interpreter",
+    "homepage": "https://github.com/faralidev/kolang",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/faralidev/kolang/releases/download/v1.0.0/kolang-windows-amd64.zip",
+            "bin": "kolang-windows-amd64.exe",
+            "shortcuts": [
+                ["kolang-windows-amd64.exe", "kolang"]
+            ]
+        }
+    },
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/faralidev/kolang/releases/download/v$version/kolang-windows-amd64.zip"
+            }
+        }
+    }
+}
