@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -266,7 +267,7 @@ type RuntimeError struct {
 }
 
 func (e *RuntimeError) Error() string {
-	return fmt.Sprintf("خطای اجرا در خط %d: %s", e.Line, e.Msg)
+	return fmt.Sprintf("خطای اجرا در خط %s: %s", toPersianDigits(strconv.Itoa(e.Line)), e.Msg)
 }
 
 // returnSignal is the control-flow signal for «برگردان», carrying the return

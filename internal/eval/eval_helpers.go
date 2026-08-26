@@ -7,6 +7,20 @@ import (
 	"strings"
 )
 
+// toPersianDigits converts ASCII digits 0-9 in a string to Persian digits ۰-۹.
+func toPersianDigits(s string) string {
+	var b strings.Builder
+	b.Grow(len(s) + len(s)/4)
+	for _, r := range s {
+		if r >= '0' && r <= '9' {
+			b.WriteRune(r - '0' + 0x06F0)
+		} else {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
 // toNumber converts a value to an int64, truncating floats. It returns a
 // non-nil error for non-numeric values.
 func toNumber(v Value) (int64, error) {
@@ -321,9 +335,9 @@ func Stringify(v Value) string {
 		}
 		return "غلط"
 	case int64:
-		return strconv.FormatInt(t, 10)
+		return toPersianDigits(strconv.FormatInt(t, 10))
 	case float64:
-		return strconv.FormatFloat(t, 'f', -1, 64)
+		return toPersianDigits(strconv.FormatFloat(t, 'f', -1, 64))
 	case string:
 		return t
 	case *List:

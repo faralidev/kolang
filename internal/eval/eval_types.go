@@ -2,6 +2,7 @@ package eval
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ func (e *Eval) checkType(v Value, ann string, env *Env, line int) error {
 			return e.raise(e.excType, fmt.Sprintf("خطای‌نوع: انتظار قفسه %s، داده شد %s", t, typeName(v)), line)
 		}
 		if len(parts) != len(tup.Vals) {
-			return e.raise(e.excType, fmt.Sprintf("خطای‌نوع: تعداد عناصر خروجی باید %d باشد، داده شد %d", len(parts), len(tup.Vals)), line)
+			return e.raise(e.excType, fmt.Sprintf("خطای‌نوع: تعداد عناصر خروجی باید %s باشد، داده شد %s", toPersianDigits(strconv.Itoa(len(parts))), toPersianDigits(strconv.Itoa(len(tup.Vals)))), line)
 		}
 		for i, p := range parts {
 			if tup.Vals[i] == nil {

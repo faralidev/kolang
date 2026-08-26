@@ -45,8 +45,8 @@ func TestTrueDivision(t *testing.T) {
 		src  string
 		want string
 	}{
-		{"۷ ÷ ۲ بنویس", "3.5"},
-		{"۸ ÷ ۲ بنویس", "4"}, // still correct float division result
+		{"۷ ÷ ۲ بنویس", "۳.۵"},
+		{"۸ ÷ ۲ بنویس", "۴"}, // still correct float division result
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -60,8 +60,8 @@ func TestPowerNegativeExponent(t *testing.T) {
 		src  string
 		want string
 	}{
-		{"۲ * -۲ بنویس", "0.25"},
-		{"۲ * ۳ بنویس", "8"},
+		{"۲ * -۲ بنویس", "۰.۲۵"},
+		{"۲ * ۳ بنویس", "۸"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -73,22 +73,22 @@ func TestPowerNegativeExponent(t *testing.T) {
 func TestEzafeIndexedReceiver(t *testing.T) {
 	// طولِ xs[۰] -> len(xs[0]); xs = [[1,2],[3,4]] so xs[0] length is 2.
 	src := "xs = فهرست(فهرست(۱ و ۲) و فهرست(۳ و ۴))\nطولِ xs[۰] بنویس\n"
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
-		t.Fatalf("طولِ xs[۰] = %q, want 2", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
+		t.Fatalf("طولِ xs[۰] = %q, want ۲", strings.TrimSpace(got))
 	}
 }
 
 func TestLenAttributeReturnsValue(t *testing.T) {
 	// طول as an attribute returns the length value (not the bound builtin).
 	src := "xs = فهرست(۱ و ۲ و ۳)\nطولِ xs بنویس\n"
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("طولِ xs = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("طولِ xs = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
 func TestPrintSpaceSeparated(t *testing.T) {
 	src := "نام = «علی»\nسن = ۲۵\nنام و سن بنویس\n"
-	if got := mustRun(t, src); strings.TrimSpace(got) != "علی 25" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "علی ۲۵" {
 		t.Fatalf("بنویس args = %q, want %q", strings.TrimSpace(got), "علی 25")
 	}
 }
@@ -135,8 +135,8 @@ func TestMultiReturn(t *testing.T) {
 `
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	if len(lines) != 2 || strings.TrimSpace(lines[0]) != "3.5" || strings.TrimSpace(lines[1]) != "1" {
-		t.Fatalf("multi-return = %q, want 3.5 and 1", out)
+	if len(lines) != 2 || strings.TrimSpace(lines[0]) != "۳.۵" || strings.TrimSpace(lines[1]) != "۱" {
+		t.Fatalf("multi-return = %q, want ۳.۵ and ۱", out)
 	}
 }
 
@@ -146,7 +146,7 @@ func TestForRange(t *testing.T) {
 `
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	want := []string{"0", "1", "2", "3", "4"}
+	want := []string{"۰", "۱", "۲", "۳", "۴"}
 	for i, w := range want {
 		if strings.TrimSpace(lines[i]) != w {
 			t.Fatalf("for-range = %q, want %v", out, want)
@@ -166,8 +166,8 @@ func TestEzafeMethodCallMathSqrt(t *testing.T) {
 	src := `ریاضی بیار
 جذرِ ریاضی(۱۶) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "4" {
-		t.Fatalf("جذرِ ریاضی(۱۶) = %q, want 4", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۴" {
+		t.Fatalf("جذرِ ریاضی(۱۶) = %q, want ۴", strings.TrimSpace(got))
 	}
 }
 
@@ -234,7 +234,7 @@ func TestInheritanceAndSuper(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	// parent's صدادهی via super, then the child's own name via getter
 	if len(lines) != 2 {
-		t.Fatalf("super = %q, want 2 lines", out)
+		t.Fatalf("super = %q, want ۲ lines", out)
 	}
 	if strings.TrimSpace(lines[0]) != "صدای حیوان" || strings.TrimSpace(lines[1]) != "رکس" {
 		t.Fatalf("super = %q, want صدای حیوان then رکس", out)
@@ -298,11 +298,11 @@ func TestThreeLevelSuper(t *testing.T) {
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	want := []string{"ج", "ب", "الف"}
 	if len(lines) != len(want) {
-		t.Fatalf("3-level super = %q, want %v (each once, no infinite loop)", out, want)
+		t.Fatalf("۳-level super = %q, want %v (each once, no infinite loop)", out, want)
 	}
 	for i, w := range want {
 		if strings.TrimSpace(lines[i]) != w {
-			t.Fatalf("3-level super = %q, want %v", out, want)
+			t.Fatalf("۳-level super = %q, want %v", out, want)
 		}
 	}
 }
@@ -339,8 +339,8 @@ func TestClassLevelFieldViaInstance(t *testing.T) {
 فزایشِ() س
 شمارندهِ ک بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
-		t.Fatalf("class-level field via instance = %q, want 2", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
+		t.Fatalf("class-level field via instance = %q, want ۲", strings.TrimSpace(got))
 	}
 }
 
@@ -515,8 +515,8 @@ func TestDictStringKeyAccess(t *testing.T) {
 ` + "د[«نام»] بنویس\nد[«سن»] بنویس\n"
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	if len(lines) != 2 || strings.TrimSpace(lines[0]) != "علی" || strings.TrimSpace(lines[1]) != "25" {
-		t.Fatalf("dict string-key = %q, want علی then 25", out)
+	if len(lines) != 2 || strings.TrimSpace(lines[0]) != "علی" || strings.TrimSpace(lines[1]) != "۲۵" {
+		t.Fatalf("dict string-key = %q, want علی then ۲۵", out)
 	}
 }
 
@@ -599,7 +599,7 @@ func TestGeneratorBasic(t *testing.T) {
 `
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	want := []string{"0", "1", "2"}
+	want := []string{"۰", "۱", "۲"}
 	if len(lines) != len(want) {
 		t.Fatalf("generator = %q, want %v", out, want)
 	}
@@ -622,8 +622,8 @@ func TestGeneratorYieldInLoop(t *testing.T) {
 	مجموع = مجموع + ن
 مجموع بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "6" {
-		t.Fatalf("yield in loop sum = %q, want 6 (0+2+4)", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۶" {
+		t.Fatalf("yield in loop sum = %q, want ۶ (۰+۲+۴)", strings.TrimSpace(got))
 	}
 }
 
@@ -638,8 +638,8 @@ func TestGeneratorExhaustion(t *testing.T) {
 	تعداد = تعداد + ۱
 تعداد بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
-		t.Fatalf("exhaustion = %q, want 2 iterations then stop", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
+		t.Fatalf("exhaustion = %q, want ۲ iterations then stop", strings.TrimSpace(got))
 	}
 }
 
@@ -659,7 +659,7 @@ func TestYieldFrom(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	want := []string{"1", "2", "3", "4"}
+	want := []string{"۱", "۲", "۳", "۴"}
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	if len(lines) != len(want) {
 		t.Fatalf("yield-from = %q, want %v", out, want)
@@ -680,7 +680,7 @@ func TestYieldFromList(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	want := []string{"10", "20", "30"}
+	want := []string{"۱۰", "۲۰", "۳۰"}
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	if len(lines) != len(want) {
 		t.Fatalf("yield-from list = %q, want %v", out, want)
@@ -705,7 +705,7 @@ func TestGeneratorRaisePropagates(t *testing.T) {
 	` + "«گرفته شد»" + ` بنویس
 `
 	out := mustRun(t, src)
-	want := "1\nگرفته شد"
+	want := "۱\nگرفته شد"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("generator raise = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -867,13 +867,13 @@ func TestGeneratorDeferAtExhaustion(t *testing.T) {
 	if len(lines) != 3 {
 		t.Fatalf("generator defer output = %q, want 1, 2, پاک‌سازی", out)
 	}
-	for _, want := range []string{"1", "2", "پاک‌سازی"} {
+	for _, want := range []string{"۱", "۲", "پاک‌سازی"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("generator defer output = %q, missing %q", out, want)
 		}
 	}
-	if lines[0] != "1" {
-		t.Fatalf("generator defer = %q, want first yield 1 first", out)
+	if lines[0] != "۱" {
+		t.Fatalf("generator defer = %q, want first yield ۱ first", out)
 	}
 }
 
@@ -891,8 +891,8 @@ func TestGeneratorEarlyBreak(t *testing.T) {
 	تعداد = تعداد + ۱
 تعداد بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("early break = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("early break = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -921,7 +921,7 @@ func TestYieldInsideTryMarksGenerator(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1" {
+	if strings.TrimSpace(out) != "۱" {
 		t.Fatalf("yield in بپا = %q, want 1", strings.TrimSpace(out))
 	}
 }
@@ -935,8 +935,8 @@ func TestYieldFromVerbFinal(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1\n2" {
-		t.Fatalf("verb-final yield-from = %q, want 1 2", strings.TrimSpace(out))
+	if strings.TrimSpace(out) != "۱\n۲" {
+		t.Fatalf("verb-final yield-from = %q, want ۱ ۲", strings.TrimSpace(out))
 	}
 	if _, err := run("بساز‌از فهرست()\n"); err == nil {
 		t.Fatalf("expected parse error for verb-initial بساز‌از")
@@ -948,7 +948,7 @@ func TestYieldFromVerbFinal(t *testing.T) {
 func TestListComprehension(t *testing.T) {
 	src := `ن = [ای * ۲ برای ای در بازه(۱۰)]
 ن بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "[۰, ۱, ۴, ۹, ۱۶, ۲۵, ۳۶, ۴۹, ۶۴, ۸۱]" {
 		t.Fatalf("list comp = %q", got)
 	}
 }
@@ -956,7 +956,7 @@ func TestListComprehension(t *testing.T) {
 func TestListComprehensionFilter(t *testing.T) {
 	src := `زوج‌ها = [ای برای ای در بازه(۱۰) اگر ای % ۲ == ۰ باشد]
 زوج‌ها بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "[0, 2, 4, 6, 8]" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "[۰, ۲, ۴, ۶, ۸]" {
 		t.Fatalf("filtered list comp = %q", got)
 	}
 }
@@ -965,7 +965,7 @@ func TestDictComprehension(t *testing.T) {
 	src := `گ = {ای: ای * ۲ برای ای در بازه(4)}
 گ بنویس`
 	got := strings.TrimSpace(mustRun(t, src))
-	if got != "{0: 0, 1: 1, 2: 4, 3: 9}" {
+	if got != "{۰: ۰, ۱: ۱, ۲: ۴, ۳: ۹}" {
 		t.Fatalf("dict comp = %q", got)
 	}
 }
@@ -973,7 +973,7 @@ func TestDictComprehension(t *testing.T) {
 func TestSetComprehension(t *testing.T) {
 	src := `باقی = {ای % ۳ برای ای در بازه(۱۰)}
 باقی بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "{0, 1, 2}" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "{۰, ۱, ۲}" {
 		t.Fatalf("set comp = %q", got)
 	}
 }
@@ -981,7 +981,7 @@ func TestSetComprehension(t *testing.T) {
 func TestMultiClauseComprehension(t *testing.T) {
 	src := `ن = [الف + ب برای الف در بازه(۳) برای ب در بازه(۲)]
 ن بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "[0, 1, 1, 2, 2, 3]" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "[۰, ۱, ۱, ۲, ۲, ۳]" {
 		t.Fatalf("multi-clause comp = %q", got)
 	}
 }
@@ -1002,7 +1002,7 @@ func TestGenExpEager(t *testing.T) {
 	src := `گ = (ای * ۲ برای ای در بازه(5))
 برای ای در گ:
 	ای بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "0\n1\n4\n9\n16" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۰\n۱\n۴\n۹\n۱۶" {
 		t.Fatalf("genexp = %q", got)
 	}
 }
@@ -1013,7 +1013,7 @@ func TestPipeOperator(t *testing.T) {
 تعریف یکی‌اضافه(x):
 	x + ۱ برگردان
 ۵ |> دو‌برابر |> یکی‌اضافه |> بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "11" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۱" {
 		t.Fatalf("pipe = %q", got)
 	}
 }
@@ -1024,7 +1024,7 @@ func TestPipeWithArgsAndPrint(t *testing.T) {
 تعریف دو‌برابر(x):
 	x × ۲ برگردان
 ۵ |> ضرب‌کن(۱۰) |> بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "50" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۵۰" {
 		t.Fatalf("pipe-with-args = %q", got)
 	}
 }
@@ -1039,7 +1039,7 @@ func TestTernary(t *testing.T) {
 func TestTypedVarOk(t *testing.T) {
 	src := `سن: صحیح = ۲۵
 سن بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "25" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۲۵" {
 		t.Fatalf("typed var = %q", got)
 	}
 }
@@ -1055,7 +1055,7 @@ func TestTypedParamAndReturn(t *testing.T) {
 	src := `تعریف جمع(الف: صحیح و ب: صحیح) -> صحیح:
 	الف + ب برگردان
 جمع(۱۰ و ۲۰) بنویس`
-	if got := strings.TrimSpace(mustRun(t, src)); got != "30" {
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۳۰" {
 		t.Fatalf("typed param/return = %q", got)
 	}
 }
@@ -1097,7 +1097,7 @@ func TestGoroutineSpawn(t *testing.T) {
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	if len(lines) != 6 {
-		t.Fatalf("goroutine spawn = %q, want 6 lines (3 × کار/n)", out)
+		t.Fatalf("goroutine spawn = %q, want ۶ lines (۳ × کار/n)", out)
 	}
 	// Concurrency interleaves the per-goroutine writes, so assert only counts:
 	// exactly 3 «کار» lines and each of 1,2,3 exactly once (any order).
@@ -1106,11 +1106,11 @@ func TestGoroutineSpawn(t *testing.T) {
 		got[strings.TrimSpace(l)]++
 	}
 	if got["کار"] != 3 {
-		t.Fatalf("goroutine spawn = %q, want 3 «کار» lines", out)
+		t.Fatalf("goroutine spawn = %q, want ۳ «کار» lines", out)
 	}
-	for _, n := range []string{"1", "2", "3"} {
+	for _, n := range []string{"۱", "۲", "۳"} {
 		if got[n] != 1 {
-			t.Fatalf("goroutine spawn = %q, want each of 1,2,3 once", out)
+			t.Fatalf("goroutine spawn = %q, want each of ۱,۲,۳ once", out)
 		}
 	}
 }
@@ -1125,8 +1125,8 @@ ch = کانال()
 مقدار = >>ch
 مقدار بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "42" {
-		t.Fatalf("channel send/recv = %q, want 42", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۴۲" {
+		t.Fatalf("channel send/recv = %q, want ۴۲", got)
 	}
 }
 
@@ -1141,8 +1141,8 @@ ch << ۳
 ج = >>ch
 الف + ب + ج بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "6" {
-		t.Fatalf("buffered channel = %q, want 6 (1+2+3)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۶" {
+		t.Fatalf("buffered channel = %q, want ۶ (۱+۲+۳)", got)
 	}
 }
 
@@ -1162,7 +1162,7 @@ ch ببند
 مقدار بنویس
 `
 	out := mustRun(t, src)
-	want := "not-open\nclosed\n10"
+	want := "not-open\nclosed\n۱۰"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("channel close = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -1198,7 +1198,7 @@ ch = کانال(صحیح)
 `
 	out := mustRun(t, src)
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	want := []string{"0", "1", "2", "3"}
+	want := []string{"۰", "۱", "۲", "۳"}
 	if len(lines) != len(want) {
 		t.Fatalf("channel for-range = %q, want %v", out, want)
 	}
@@ -1270,8 +1270,8 @@ func TestChannelWorkerPool(t *testing.T) {
 مجموع بنویس
 `
 	// Jobs are 1,2,3,4,5; their squares sum to 1+4+9+16+25 = 55.
-	if got := strings.TrimSpace(mustRun(t, src)); got != "55" {
-		t.Fatalf("worker pool = %q, want 55 (sum of squares 1..5)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۵۵" {
+		t.Fatalf("worker pool = %q, want ۵۵ (sum of squares ۱..۵)", got)
 	}
 }
 
@@ -1297,8 +1297,8 @@ func TestClosureMutationCounter(t *testing.T) {
 ش() بنویس
 ش() بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "1\n2\n3" {
-		t.Fatalf("closure counter = %q, want 1/2/3 (C1 regression)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱\n۲\n۳" {
+		t.Fatalf("closure counter = %q, want ۱/۲/۳ (C۱ regression)", got)
 	}
 }
 
@@ -1320,8 +1320,8 @@ func TestClosureNestedMutation(t *testing.T) {
 د() بنویس
 `
 	// Base 1, +10 each call: 11, 21.
-	if got := strings.TrimSpace(mustRun(t, src)); got != "11\n21" {
-		t.Fatalf("nested closure = %q, want 11/21", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۱\n۲۱" {
+		t.Fatalf("nested closure = %q, want ۱۱/۲۱", got)
 	}
 }
 
@@ -1338,8 +1338,8 @@ func TestClosureCompoundAssign(t *testing.T) {
 اضافه(۳)
 مجموع بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "18" {
-		t.Fatalf("compound assign closure = %q, want 18", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۸" {
+		t.Fatalf("compound assign closure = %q, want ۱۸", got)
 	}
 }
 
@@ -1357,8 +1357,8 @@ func TestGlobalKeyword(t *testing.T) {
 افزاینده() بنویس
 شمارنده بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "1\n2\n2" {
-		t.Fatalf("global keyword = %q, want 1/2/2", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱\n۲\n۲" {
+		t.Fatalf("global keyword = %q, want ۱/۲/۲", got)
 	}
 }
 
@@ -1379,8 +1379,8 @@ func TestNonlocalKeyword(t *testing.T) {
 ش() بنویس
 ش() بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "1\n2\n3" {
-		t.Fatalf("nonlocal keyword = %q, want 1/2/3", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱\n۲\n۳" {
+		t.Fatalf("nonlocal keyword = %q, want ۱/۲/۳", got)
 	}
 }
 
@@ -1400,8 +1400,8 @@ func TestClosureOverGeneratorEnv(t *testing.T) {
     ای بنویس
 `
 	// حالت starts 0, بخوان() mutates to 1 and returns 1, then حالت = 1 + 10 = 11, yields 11.
-	if got := strings.TrimSpace(mustRun(t, src)); got != "11" {
-		t.Fatalf("closure-over-gen-env = %q, want 11", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۱" {
+		t.Fatalf("closure-over-gen-env = %q, want ۱۱", got)
 	}
 }
 
@@ -1425,8 +1425,8 @@ ch = کانال(صحیح و ۱۰)
 مجموع بنویس
 `
 	// Range 1..5 exclusive of end yields 1,2,3,4 — sum is 10.
-	if got := strings.TrimSpace(mustRun(t, src)); got != "10" {
-		t.Fatalf("goroutine-channel = %q, want 10 (1+2+3+4)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۰" {
+		t.Fatalf("goroutine-channel = %q, want ۱۰ (۱+۲+۳+۴)", got)
 	}
 }
 
@@ -1446,8 +1446,8 @@ ch = کانال(صحیح و ۱)
 `
 	// We can't directly observe the defer's effect easily, but this verifies
 	// no panic/hang and the value passes through.
-	if got := strings.TrimSpace(mustRun(t, src)); got != "42" {
-		t.Fatalf("defer-in-goroutine = %q, want 42", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۴۲" {
+		t.Fatalf("defer-in-goroutine = %q, want ۴۲", got)
 	}
 }
 
@@ -1556,8 +1556,8 @@ func TestGeneratorEarlyBreakClosesGenerator(t *testing.T) {
     شمارش += ۱
 شمارش بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "5" {
-		t.Fatalf("generator-early-break = %q, want 5", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۵" {
+		t.Fatalf("generator-early-break = %q, want ۵", got)
 	}
 }
 
@@ -1573,8 +1573,8 @@ func TestPipeToMethod(t *testing.T) {
 نتیجه = ۵ |> پردازشِ()م
 نتیجه بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "10" {
-		t.Fatalf("pipe-to-method = %q, want 10", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۱۰" {
+		t.Fatalf("pipe-to-method = %q, want ۱۰", got)
 	}
 }
 
@@ -1588,8 +1588,8 @@ d = گنجه(` + "«الف»" + ` و ۱ و ` + "«ب»" + ` و ۲ و ` + "«ج»
     شمارش += ۱
 شمارش بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "3" {
-		t.Fatalf("dict iteration = %q, want 3 (three keys)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۳" {
+		t.Fatalf("dict iteration = %q, want ۳ (three keys)", got)
 	}
 }
 
@@ -1604,8 +1604,8 @@ func TestTupleUnpackingInFor(t *testing.T) {
     مجموع += شماره
 مجموع بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "6" {
-		t.Fatalf("tuple unpacking = %q, want 6 (1+2+3)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۶" {
+		t.Fatalf("tuple unpacking = %q, want ۶ (۱+۲+۳)", got)
 	}
 }
 
@@ -1618,8 +1618,8 @@ xs[۰] = ۹۹
 xs[۲] = ۷۷
 xs بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "[99, 20, 77]" {
-		t.Fatalf("index-assign list = %q, want [99, 20, 77]", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "[۹۹, ۲۰, ۷۷]" {
+		t.Fatalf("index-assign list = %q, want [۹۹, ۲۰, ۷۷]", got)
 	}
 }
 
@@ -1630,8 +1630,8 @@ d = گنجه(` + "«ن»" + ` و ۱)
 d[` + "«م»" + `] = ۲
 طول(d) بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "2" {
-		t.Fatalf("index-assign dict = %q, want 2 (two keys after add)", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۲" {
+		t.Fatalf("index-assign dict = %q, want ۲ (two keys after add)", got)
 	}
 }
 
@@ -1649,8 +1649,8 @@ ch = کانال(صحیح و ۱)
 مقدار = >>ch
 مقدار بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "42" {
-		t.Fatalf("goroutine baseline = %q, want 42", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۴۲" {
+		t.Fatalf("goroutine baseline = %q, want ۴۲", got)
 	}
 }
 
@@ -1670,8 +1670,8 @@ func TestLazyGenexpEarlyBreak(t *testing.T) {
     شمارش += ۱
 شمارش بنویس
 `
-	if got := strings.TrimSpace(mustRun(t, src)); got != "5" {
-		t.Fatalf("lazy genexp early break = %q, want 5", got)
+	if got := strings.TrimSpace(mustRun(t, src)); got != "۵" {
+		t.Fatalf("lazy genexp early break = %q, want ۵", got)
 	}
 }
 
@@ -1684,9 +1684,9 @@ func TestLazyGenexpEarlyBreak(t *testing.T) {
 
 func TestNumbersPersianDigitNormalization(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۰ بنویس", "0"},
-		{"۱۲۳ بنویس", "123"},
-		{"۹۹۹ بنویس", "999"},
+		{"۰ بنویس", "۰"},
+		{"۱۲۳ بنویس", "۱۲۳"},
+		{"۹۹۹ بنویس", "۹۹۹"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1697,13 +1697,13 @@ func TestNumbersPersianDigitNormalization(t *testing.T) {
 
 func TestNumbersIntegerArithmetic(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۵ + ۳ بنویس", "8"},
-		{"۵ - ۳ بنویس", "2"},
-		{"۵ × ۳ بنویس", "15"},   // × is multiply
-		{"۱۰ ÷ ۲ بنویس", "5"},   // ÷ is true division (float result)
-		{"۷ % ۳ بنویس", "1"},    // modulo
-		{"۷ ÷/ ۲ بنویس", "3"},   // floor division
-		{"۵ × ۲ × ۳ بنویس", "30"},
+		{"۵ + ۳ بنویس", "۸"},
+		{"۵ - ۳ بنویس", "۲"},
+		{"۵ × ۳ بنویس", "۱۵"},   // × is multiply
+		{"۱۰ ÷ ۲ بنویس", "۵"},   // ÷ is true division (float result)
+		{"۷ % ۳ بنویس", "۱"},    // modulo
+		{"۷ ÷/ ۲ بنویس", "۳"},   // floor division
+		{"۵ × ۲ × ۳ بنویس", "۳۰"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1714,10 +1714,10 @@ func TestNumbersIntegerArithmetic(t *testing.T) {
 
 func TestNumbersFloatLiterals(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۱٫۵ + ۱ بنویس", "2.5"}, // Persian decimal separator ٫
-		{"2.5 + 2.5 بنویس", "5"}, // Latin decimal point
-		{"۱٫۲۵ × ۲ بنویس", "2.5"},
-		{"۱٫۵ + ۱٫۵ بنویس", "3"},
+		{"۱٫۵ + ۱ بنویس", "۲.۵"}, // Persian decimal separator ٫
+		{"2.5 + 2.5 بنویس", "۵"}, // Latin decimal point
+		{"۱٫۲۵ × ۲ بنویس", "۲.۵"},
+		{"۱٫۵ + ۱٫۵ بنویس", "۳"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1728,9 +1728,9 @@ func TestNumbersFloatLiterals(t *testing.T) {
 
 func TestNumbersDigitGroupSeparators(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۱۲۳٬۴۵۶ بنویس", "123456"}, // Persian separator ٬
-		{"123,456 بنویس", "123456"}, // Latin separator ,
-		{"۱٬۲۳۴ + ۱ بنویس", "1235"},
+		{"۱۲۳٬۴۵۶ بنویس", "۱۲۳۴۵۶"}, // Persian separator ٬
+		{"123,456 بنویس", "۱۲۳۴۵۶"}, // Latin separator ,
+		{"۱٬۲۳۴ + ۱ بنویس", "۱۲۳۵"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1741,11 +1741,11 @@ func TestNumbersDigitGroupSeparators(t *testing.T) {
 
 func TestNumbersRadixPrefixes(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۰x1F بنویس", "31"}, // Persian zero + Latin hex digits
-		{"۰b101 بنویس", "5"},
-		{"۰o17 بنویس", "15"},
-		{"0x10 بنویس", "16"}, // Latin zero + x
-		{"0b11 بنویس", "3"},
+		{"۰x1F بنویس", "۳۱"}, // Persian zero + Latin hex digits
+		{"۰b101 بنویس", "۵"},
+		{"۰o17 بنویس", "۱۵"},
+		{"0x10 بنویس", "۱۶"}, // Latin zero + x
+		{"0b11 بنویس", "۳"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1756,10 +1756,10 @@ func TestNumbersRadixPrefixes(t *testing.T) {
 
 func TestNumbersPowerVsMultiply(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۲ * ۳ بنویس", "8"},  // * is power
-		{"۲ × ۳ بنویس", "6"},  // × is multiply
-		{"۲ * ۳ × ۲ بنویس", "16"}, // power binds tighter than multiply? (2^3)*2 = 16
-		{"۲ * -۱ بنویس", "0.5"},   // negative exponent
+		{"۲ * ۳ بنویس", "۸"},  // * is power
+		{"۲ × ۳ بنویس", "۶"},  // × is multiply
+		{"۲ * ۳ × ۲ بنویس", "۱۶"}, // power binds tighter than multiply? (۲^۳)*۲ = ۱۶
+		{"۲ * -۱ بنویس", "۰.۵"},   // negative exponent
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1781,10 +1781,10 @@ func TestNumbersPowerOverflowRaises(t *testing.T) {
 
 func TestNumbersTrueAndFloorDivision(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۷ ÷ ۲ بنویس", "3.5"},  // true division → float
-		{"۷ ÷/ ۲ بنویس", "3"},   // floor division → int
-		{"-۷ ÷/ ۲ بنویس", "-3"}, // int path truncates toward zero (Go semantics)
-		{"۹ ÷ ۳ بنویس", "3"},
+		{"۷ ÷ ۲ بنویس", "۳.۵"},  // true division → float
+		{"۷ ÷/ ۲ بنویس", "۳"},   // floor division → int
+		{"-۷ ÷/ ۲ بنویس", "-۳"}, // int path truncates toward zero (Go semantics)
+		{"۹ ÷ ۳ بنویس", "۳"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1810,7 +1810,7 @@ func TestNumbersCompoundAssignments(t *testing.T) {
 ن %= ۳
 ن بنویس
 `
-	want := "15\n12\n24\n12\n6\n36\n0"
+	want := "۱۵\n۱۲\n۲۴\n۱۲\n۶\n۳۶\n۰"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("compound assignments = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -1818,12 +1818,12 @@ func TestNumbersCompoundAssignments(t *testing.T) {
 
 func TestNumbersOperatorPrecedence(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۲ + ۳ × ۴ بنویس", "14"},   // × binds tighter than +
-		{"۲ + ۳ * ۲ بنویس", "11"},   // power binds tighter than +
-		{"۲ * ۳ * ۲ بنویس", "512"},  // power is right-associative: 2^(3^2)
-		{"-۲ * ۲ بنویس", "-4"},      // power binds tighter than unary minus
-		{"۱۰ - ۲ - ۳ بنویس", "5"},   // - is left-associative
-		{"۲ × ۳ + ۴ بنویس", "10"},
+		{"۲ + ۳ × ۴ بنویس", "۱۴"},   // × binds tighter than +
+		{"۲ + ۳ * ۲ بنویس", "۱۱"},   // power binds tighter than +
+		{"۲ * ۳ * ۲ بنویس", "۵۱۲"},  // power is right-associative: ۲^(۳^۲)
+		{"-۲ * ۲ بنویس", "-۴"},      // power binds tighter than unary minus
+		{"۱۰ - ۲ - ۳ بنویس", "۵"},   // - is left-associative
+		{"۲ × ۳ + ۴ بنویس", "۱۰"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -1844,8 +1844,8 @@ func TestStringsInterpolationWithNumbers(t *testing.T) {
 	src := `سن = ۲۵
 «سن من {سن} است» بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "سن من 25 است" {
-		t.Fatalf("interpolation = %q, want «سن من 25 است»", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "سن من ۲۵ است" {
+		t.Fatalf("interpolation = %q, want «سن من ۲۵ است»", strings.TrimSpace(got))
 	}
 }
 
@@ -2009,8 +2009,8 @@ func TestBooleansBareInWhile(t *testing.T) {
 		اتمام
 تعداد بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("bare bool while = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("bare bool while = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -2080,7 +2080,7 @@ func TestLoopsForRangeStep(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "0\n2\n4\n6\n8" {
+	if strings.TrimSpace(out) != "۰\n۲\n۴\n۶\n۸" {
 		t.Fatalf("for-range step = %q", strings.TrimSpace(out))
 	}
 }
@@ -2090,7 +2090,7 @@ func TestLoopsForRangeNegativeStep(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "5\n4\n3\n2\n1" {
+	if strings.TrimSpace(out) != "۵\n۴\n۳\n۲\n۱" {
 		t.Fatalf("for-range negative step = %q", strings.TrimSpace(out))
 	}
 }
@@ -2101,8 +2101,8 @@ func TestLoopsForInList(t *testing.T) {
 	مجموع += ای
 مجموع بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "10" {
-		t.Fatalf("for-in list = %q, want 10", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۰" {
+		t.Fatalf("for-in list = %q, want ۱۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2124,8 +2124,8 @@ func TestLoopsForInDictKeys(t *testing.T) {
 	شمارش += ۱
 شمارش بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
-		t.Fatalf("for-in dict = %q, want 2 keys", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
+		t.Fatalf("for-in dict = %q, want ۲ keys", strings.TrimSpace(got))
 	}
 }
 
@@ -2137,8 +2137,8 @@ func TestLoopsWhileCounter(t *testing.T) {
 	ای += ۱
 مجموع بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "10" {
-		t.Fatalf("while counter = %q, want 10", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۰" {
+		t.Fatalf("while counter = %q, want ۱۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2151,7 +2151,7 @@ func TestLoopsBreakContinue(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "0\n1\n2\n4\n5\n6" {
+	if strings.TrimSpace(out) != "۰\n۱\n۲\n۴\n۵\n۶" {
 		t.Fatalf("break/continue = %q", strings.TrimSpace(out))
 	}
 }
@@ -2167,8 +2167,8 @@ func TestLoopsVariableCapturePerIteration(t *testing.T) {
 ها[۲]() بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "0\n1\n2" {
-		t.Fatalf("per-iteration capture = %q, want 0\\n1\\n2", strings.TrimSpace(out))
+	if strings.TrimSpace(out) != "۰\n۱\n۲" {
+		t.Fatalf("per-iteration capture = %q, want ۰\\n۱\\n۲", strings.TrimSpace(out))
 	}
 }
 
@@ -2217,7 +2217,7 @@ func TestFunctionsKeywordArgs(t *testing.T) {
 توان(پایه = ۲ و توان = ۳) بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "8\n8" {
+	if strings.TrimSpace(out) != "۸\n۸" {
 		t.Fatalf("keyword args = %q", strings.TrimSpace(out))
 	}
 }
@@ -2227,8 +2227,8 @@ func TestFunctionsVarargs(t *testing.T) {
 	جمع(اعداد) برگردان
 جمع‌همه(۱ و ۲ و ۳ و ۴) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "10" {
-		t.Fatalf("varargs = %q, want 10", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۰" {
+		t.Fatalf("varargs = %q, want ۱۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2239,8 +2239,8 @@ func TestFunctionsKwargsParam(t *testing.T) {
 ف(۱ و ۲ و x = ۳ و y = ۴)
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "2\n2" {
-		t.Fatalf("kwargs param = %q, want 2\\n2", strings.TrimSpace(out))
+	if strings.TrimSpace(out) != "۲\n۲" {
+		t.Fatalf("kwargs param = %q, want ۲\\n۲", strings.TrimSpace(out))
 	}
 }
 
@@ -2252,7 +2252,7 @@ func TestFunctionsMultipleReturns(t *testing.T) {
 باقیمانده بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "3.5\n1" {
+	if strings.TrimSpace(out) != "۳.۵\n۱" {
 		t.Fatalf("multiple returns = %q", strings.TrimSpace(out))
 	}
 }
@@ -2264,8 +2264,8 @@ func TestFunctionsRecursion(t *testing.T) {
 	ن × فاکتوریل(ن - ۱) برگردان
 فاکتوریل(۵) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "120" {
-		t.Fatalf("recursion = %q, want 120", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۲۰" {
+		t.Fatalf("recursion = %q, want ۱۲۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2291,7 +2291,7 @@ xs[۰] بنویس
 xs[۲] بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "[10, 20, 30]\n10\n30" {
+	if strings.TrimSpace(out) != "[۱۰, ۲۰, ۳۰]\n۱۰\n۳۰" {
 		t.Fatalf("list literal/index = %q", strings.TrimSpace(out))
 	}
 }
@@ -2302,7 +2302,7 @@ xs[۱:۳] بنویس
 xs[:: -۱] بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "[1, 2]\n[4, 3, 2, 1, 0]" {
+	if strings.TrimSpace(out) != "[۱, ۲]\n[۴, ۳, ۲, ۱, ۰]" {
 		t.Fatalf("list slicing = %q", strings.TrimSpace(out))
 	}
 }
@@ -2315,7 +2315,7 @@ xs بنویس
 xs بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "[1, 2, 3, 4]\n[1, 3, 4]" {
+	if strings.TrimSpace(out) != "[۱, ۲, ۳, ۴]\n[۱, ۳, ۴]" {
 		t.Fatalf("append/remove = %q", strings.TrimSpace(out))
 	}
 }
@@ -2327,7 +2327,7 @@ func TestDataDictLiteralAndAccess(t *testing.T) {
 طول(د) بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1\n2\n2" {
+	if strings.TrimSpace(out) != "۱\n۲\n۲" {
 		t.Fatalf("dict literal/access = %q", strings.TrimSpace(out))
 	}
 }
@@ -2364,8 +2364,8 @@ func TestDataSetLiteralDedup(t *testing.T) {
 `
 	out := mustRun(t, src)
 	// Dedup is visible in the printed form: five elements collapse to three.
-	if strings.TrimSpace(out) != "{1, 2, 3}" {
-		t.Fatalf("set dedup = %q, want {1, 2, 3}", strings.TrimSpace(out))
+	if strings.TrimSpace(out) != "{۱, ۲, ۳}" {
+		t.Fatalf("set dedup = %q, want {۱, ۲, ۳}", strings.TrimSpace(out))
 	}
 }
 
@@ -2398,7 +2398,7 @@ xs بنویس
 طول(د) بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "[99, 20, 30]\n100\n2" {
+	if strings.TrimSpace(out) != "[۹۹, ۲۰, ۳۰]\n۱۰۰\n۲" {
 		t.Fatalf("index assignment = %q", strings.TrimSpace(out))
 	}
 }
@@ -2409,7 +2409,7 @@ xs[-۱] بنویس
 xs[-۳] بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "30\n10" {
+	if strings.TrimSpace(out) != "۳۰\n۱۰" {
 		t.Fatalf("negative indexing = %q", strings.TrimSpace(out))
 	}
 }
@@ -2475,8 +2475,8 @@ func TestOOPInstanceFields(t *testing.T) {
 واریزِ(۵۰) ح
 موجودیِ() ح بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "150" {
-		t.Fatalf("instance fields = %q, want 150", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۵۰" {
+		t.Fatalf("instance fields = %q, want ۱۵۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2490,7 +2490,7 @@ func TestOOPAttributeAccessEzafe(t *testing.T) {
 ایکسِ ن بنویس
 وایِ ن بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3\n4" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳\n۴" {
 		t.Fatalf("attribute ezafe = %q", strings.TrimSpace(got))
 	}
 }
@@ -2612,7 +2612,7 @@ func TestGeneratorsYieldFromGenerator(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1\n2\n3" {
+	if strings.TrimSpace(out) != "۱\n۲\n۳" {
 		t.Fatalf("yield-from generator = %q", strings.TrimSpace(out))
 	}
 }
@@ -2631,8 +2631,8 @@ func TestGeneratorsInfiniteWithBreak(t *testing.T) {
 	شمارش += ۱
 شمارش بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "4" {
-		t.Fatalf("infinite generator break = %q, want 4", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۴" {
+		t.Fatalf("infinite generator break = %q, want ۴", strings.TrimSpace(got))
 	}
 }
 
@@ -2675,7 +2675,7 @@ func TestComprehensionsDict(t *testing.T) {
 	src := `گ = {ای: ای * ۲ برای ای در بازه(4)}
 گ بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "{0: 0, 1: 1, 2: 4, 3: 9}" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "{۰: ۰, ۱: ۱, ۲: ۴, ۳: ۹}" {
 		t.Fatalf("dict comp = %q", strings.TrimSpace(got))
 	}
 }
@@ -2684,7 +2684,7 @@ func TestComprehensionsSet(t *testing.T) {
 	src := `س = {ای % ۲ برای ای در بازه(5)}
 س بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "{0, 1}" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "{۰, ۱}" {
 		t.Fatalf("set comp = %q", strings.TrimSpace(got))
 	}
 }
@@ -2693,7 +2693,7 @@ func TestComprehensionsNestedClauses(t *testing.T) {
 	src := `ن = [الف + ب برای الف در بازه(2) برای ب در بازه(2)]
 ن بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "[0, 1, 1, 2]" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "[۰, ۱, ۱, ۲]" {
 		t.Fatalf("nested comp = %q", strings.TrimSpace(got))
 	}
 }
@@ -2704,7 +2704,7 @@ func TestComprehensionsGenExpLazy(t *testing.T) {
 	ای بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "0\n2\n4\n6" {
+	if strings.TrimSpace(out) != "۰\n۲\n۴\n۶" {
 		t.Fatalf("genexp lazy = %q", strings.TrimSpace(out))
 	}
 }
@@ -2718,8 +2718,8 @@ func TestPipesChainedFunctions(t *testing.T) {
 	x + ۱ برگردان
 ۳ |> دوبرابر |> یکیاضافه بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "7" {
-		t.Fatalf("chained pipe = %q, want 7", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۷" {
+		t.Fatalf("chained pipe = %q, want ۷", strings.TrimSpace(got))
 	}
 }
 
@@ -2728,8 +2728,8 @@ func TestPipesToVerb(t *testing.T) {
 	x × ۲ برگردان
 ۵ |> دوبرابر |> بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "10" {
-		t.Fatalf("pipe to verb = %q, want 10", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۰" {
+		t.Fatalf("pipe to verb = %q, want ۱۰", strings.TrimSpace(got))
 	}
 }
 
@@ -2744,8 +2744,8 @@ ch = کانال()
 مقدار = >>ch
 مقدار بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "42" {
-		t.Fatalf("channel rendezvous = %q, want 42", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۴۲" {
+		t.Fatalf("channel rendezvous = %q, want ۴۲", strings.TrimSpace(got))
 	}
 }
 
@@ -2757,8 +2757,8 @@ ch << ۲
 ب = >>ch
 الف + ب بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("buffered send/recv = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("buffered send/recv = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -2777,7 +2777,7 @@ ch ببند
 ج بنویس
 `
 	out := mustRun(t, src)
-	want := "بسته نیست\nبسته\n30\nتهی"
+	want := "بسته نیست\nبسته\n۳۰\nتهی"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("closed check/drain = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2823,8 +2823,8 @@ func TestConcurrencyWorkerPoolPattern(t *testing.T) {
 مجموع بنویس
 `
 	// Squares 1..5 sum to 55.
-	if got := mustRun(t, src); strings.TrimSpace(got) != "55" {
-		t.Fatalf("worker pool = %q, want 55", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۵۵" {
+		t.Fatalf("worker pool = %q, want ۵۵", strings.TrimSpace(got))
 	}
 }
 
@@ -2834,8 +2834,8 @@ func TestImportsModuleImport(t *testing.T) {
 	src := `ریاضی بیار
 جذرِ ریاضی(۲۵) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "5" {
-		t.Fatalf("module import = %q, want 5", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۵" {
+		t.Fatalf("module import = %q, want ۵", strings.TrimSpace(got))
 	}
 }
 
@@ -2843,8 +2843,8 @@ func TestImportsFromImportWithAlias(t *testing.T) {
 	src := `از ریاضی جذر بانام ریشه بیار
 ریشه(۹) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("from-import alias = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("from-import alias = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -2886,7 +2886,7 @@ func TestBuiltinsLenType(t *testing.T) {
 نوع({۱}) بنویس
 `
 	out := mustRun(t, src)
-	want := "4\n2\nصحیح\nاعشاری\nبولی\nتهی\nمتن\nفهرست\nقفسه\nگنجه\nمجموعه"
+	want := "۴\n۲\nصحیح\nاعشاری\nبولی\nتهی\nمتن\nفهرست\nقفسه\nگنجه\nمجموعه"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("len/type builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2907,7 +2907,7 @@ func TestBuiltinsConversions(t *testing.T) {
 بولی(تهی) بنویس
 `
 	out := mustRun(t, src)
-	want := "123\n3\n1\n0\n5\n2.5\n123\nتهی\nغلط\nدرست\nغلط\nغلط"
+	want := "۱۲۳\n۳\n۱\n۰\n۵\n۲.۵\n۱۲۳\nتهی\nغلط\nدرست\nغلط\nغلط"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("conversion builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2921,7 +2921,7 @@ func TestBuiltinsCollections(t *testing.T) {
 گنجه(«الف» و ۱) بنویس
 `
 	out := mustRun(t, src)
-	want := "[0, 1, 2, 3]\n[a, b]\n{1, 2}\n(1, 2, 3)\n{الف: 1}"
+	want := "[۰, ۱, ۲, ۳]\n[a, b]\n{۱, ۲}\n(۱, ۲, ۳)\n{الف: ۱}"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("collection builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2935,7 +2935,7 @@ func TestBuiltinsAggregates(t *testing.T) {
 مرتب(فهرست(۳ و ۱ و ۲)) بنویس
 `
 	out := mustRun(t, src)
-	want := "6\n6\n1\n3\n[1, 2, 3]"
+	want := "۶\n۶\n۱\n۳\n[۱, ۲, ۳]"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("aggregate builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2947,7 +2947,7 @@ func TestBuiltinsSequence(t *testing.T) {
 بقچه(فهرست(۱ و ۲) و فهرست(«الف» و «ب»)) بنویس
 `
 	out := mustRun(t, src)
-	want := "[3, 4]\n[(0, 10), (1, 20)]\n[(1, الف), (2, ب)]"
+	want := "[۳, ۴]\n[(۰, ۱۰), (۱, ۲۰)]\n[(۱, الف), (۲, ب)]"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("sequence builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2962,7 +2962,7 @@ func TestBuiltinsMapFilter(t *testing.T) {
 پالایش(زوج و فهرست(۱ و ۲ و ۳ و ۴)) بنویس
 `
 	out := mustRun(t, src)
-	want := "[2, 4, 6]\n[2, 4]"
+	want := "[۲, ۴, ۶]\n[۲, ۴]"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("map/filter builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2977,7 +2977,7 @@ func TestBuiltinsMathAndReverse(t *testing.T) {
 معکوس(فهرست(۱ و ۲ و ۳)) بنویس
 `
 	out := mustRun(t, src)
-	want := "5\n5\n3\n2\ncba\n[3, 2, 1]"
+	want := "۵\n۵\n۳\n۲\ncba\n[۳, ۲, ۱]"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("math/reverse builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -2996,7 +2996,7 @@ func TestBuiltinsAttrHelpers(t *testing.T) {
 ویژگی(س و «سن») بنویس
 `
 	out := mustRun(t, src)
-	want := "رکس\nدرست\nغلط\n3"
+	want := "رکس\nدرست\nغلط\n۳"
 	if strings.TrimSpace(out) != want {
 		t.Fatalf("attr helper builtins = %q, want %q", strings.TrimSpace(out), want)
 	}
@@ -3018,8 +3018,8 @@ func TestBuiltinsEval(t *testing.T) {
 	src := `اجرا(«x = 42»)
 x بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "42" {
-		t.Fatalf("اجرا builtin = %q, want 42", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۴۲" {
+		t.Fatalf("اجرا builtin = %q, want ۴۲", strings.TrimSpace(got))
 	}
 }
 
@@ -3053,7 +3053,7 @@ func TestTypingAnyWildcard(t *testing.T) {
 ف(فهرست(۱)) بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "5\nمتن\n[1]" {
+	if strings.TrimSpace(out) != "۵\nمتن\n[۱]" {
 		t.Fatalf("any wildcard = %q", strings.TrimSpace(out))
 	}
 }
@@ -3068,7 +3068,7 @@ func TestTypingParenthesizedScalar(t *testing.T) {
 	«نوع» بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "6\nنوع" {
+	if strings.TrimSpace(out) != "۶\nنوع" {
 		t.Fatalf("parenthesized scalar type = %q", strings.TrimSpace(out))
 	}
 }
@@ -3085,7 +3085,7 @@ func TestTypingTupleTypeAnnotation(t *testing.T) {
 	«نوع» بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1\nیک\nنوع" {
+	if strings.TrimSpace(out) != "۱\nیک\nنوع" {
 		t.Fatalf("tuple type annotation = %q", strings.TrimSpace(out))
 	}
 }
@@ -3096,7 +3096,7 @@ func TestTypingNestedTupleAnnotation(t *testing.T) {
 خروجی = جفت()
 طول(خروجی) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
 		t.Fatalf("nested tuple annotation = %q", strings.TrimSpace(got))
 	}
 }
@@ -3111,7 +3111,7 @@ func TestTypingReassignmentTypeCheck(t *testing.T) {
 سن بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "نوع\n10" {
+	if strings.TrimSpace(out) != "نوع\n۱۰" {
 		t.Fatalf("reassignment type-check = %q", strings.TrimSpace(out))
 	}
 }
@@ -3242,8 +3242,8 @@ func TestScopeGlobalMutation(t *testing.T) {
 افزودن(۳)
 شمارنده بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "8" {
-		t.Fatalf("global mutation = %q, want 8", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۸" {
+		t.Fatalf("global mutation = %q, want ۸", strings.TrimSpace(got))
 	}
 }
 
@@ -3258,8 +3258,8 @@ func TestScopeNonlocalMutation(t *testing.T) {
 
 بیرونی() بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "15" {
-		t.Fatalf("nonlocal mutation = %q, want 15", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۵" {
+		t.Fatalf("nonlocal mutation = %q, want ۱۵", strings.TrimSpace(got))
 	}
 }
 
@@ -3277,7 +3277,7 @@ func TestScopeClosureCaptureMutation(t *testing.T) {
 ف() بنویس
 `
 	out := mustRun(t, src)
-	if strings.TrimSpace(out) != "1\n2\n3" {
+	if strings.TrimSpace(out) != "۱\n۲\n۳" {
 		t.Fatalf("closure capture mutation = %q", strings.TrimSpace(out))
 	}
 }
@@ -3289,12 +3289,12 @@ func TestScopeClosureCaptureMutation(t *testing.T) {
 
 func TestPersianDigits(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۱۲۳ بنویس", "123"},
-		{"۱۲٫۵ بنویس", "12.5"},
-		{"۱٬۲۳۴ بنویس", "1234"},
-		{"۰xFF بنویس", "255"},
-		{"۰b101 بنویس", "5"},
-		{"۰o17 بنویس", "15"},
+		{"۱۲۳ بنویس", "۱۲۳"},
+		{"۱۲٫۵ بنویس", "۱۲.۵"},
+		{"۱٬۲۳۴ بنویس", "۱۲۳۴"},
+		{"۰xFF بنویس", "۲۵۵"},
+		{"۰b101 بنویس", "۵"},
+		{"۰o17 بنویس", "۱۵"},
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -3305,12 +3305,12 @@ func TestPersianDigits(t *testing.T) {
 
 func TestArithmeticOperators(t *testing.T) {
 	tests := []struct{ src, want string }{
-		{"۲ × ۳ بنویس", "6"},     // × is multiply
-		{"۲ * ۳ بنویس", "8"},     // * is power
-		{"۷ ÷ ۲ بنویس", "3.5"},   // ÷ is true division
-		{"۷ ÷/ ۲ بنویس", "3"},    // ÷/ is floor division
-		{"۷ % ۳ بنویس", "1"},     // % is modulo
-		{"۲ * -۲ بنویس", "0.25"}, // negative power
+		{"۲ × ۳ بنویس", "۶"},     // × is multiply
+		{"۲ * ۳ بنویس", "۸"},     // * is power
+		{"۷ ÷ ۲ بنویس", "۳.۵"},   // ÷ is true division
+		{"۷ ÷/ ۲ بنویس", "۳"},    // ÷/ is floor division
+		{"۷ % ۳ بنویس", "۱"},     // % is modulo
+		{"۲ * -۲ بنویس", "۰.۲۵"}, // negative power
 	}
 	for _, tc := range tests {
 		if got := mustRun(t, tc.src); strings.TrimSpace(got) != tc.want {
@@ -3336,7 +3336,7 @@ func TestCompoundAssignment(t *testing.T) {
 ن %= ۳
 ن بنویس
 `
-	want := "15\n12\n24\n12\n6\n36\n0"
+	want := "۱۵\n۱۲\n۲۴\n۱۲\n۶\n۳۶\n۰"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("compound assignment = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3354,8 +3354,8 @@ func TestStringInterpolationSpec(t *testing.T) {
 	}
 	// arbitrary expressions interpolate
 	src = "«۱ + ۲ = {۱ + ۲}» بنویس\n"
-	if got := mustRun(t, src); strings.TrimSpace(got) != "۱ + ۲ = 3" {
-		t.Fatalf("expr interpolation = %q, want ۱ + ۲ = 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱ + ۲ = ۳" {
+		t.Fatalf("expr interpolation = %q, want ۱ + ۲ = ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -3428,7 +3428,7 @@ func TestForRangeStep(t *testing.T) {
 	src := `برای ای از ۰ تا ۱۰ گام ۲:
 	ای بنویس
 `
-	want := "0\n2\n4\n6\n8"
+	want := "۰\n۲\n۴\n۶\n۸"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("for-range step = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3452,8 +3452,8 @@ func TestForInDict(t *testing.T) {
 	مجموع += د[ک]
 مجموع بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "6" {
-		t.Fatalf("for-in dict = %q, want 6", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۶" {
+		t.Fatalf("for-in dict = %q, want ۶", strings.TrimSpace(got))
 	}
 }
 
@@ -3462,7 +3462,7 @@ func TestTupleUnpacking(t *testing.T) {
 برای (عدد و نام) در جفتها:
 	«{عدد}-{نام}» بنویس
 `
-	want := "1-یک\n2-دو"
+	want := "۱-یک\n۲-دو"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("tuple unpacking = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3479,8 +3479,8 @@ func TestBreakContinue(t *testing.T) {
 مجموع بنویس
 `
 	// skip 2, break at 5 → 0+1+3+4 = 8
-	if got := mustRun(t, src); strings.TrimSpace(got) != "8" {
-		t.Fatalf("break/continue = %q, want 8", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۸" {
+		t.Fatalf("break/continue = %q, want ۸", strings.TrimSpace(got))
 	}
 }
 
@@ -3493,8 +3493,8 @@ func TestLoopVarCapture(t *testing.T) {
 	برگرداننده به ها بیافزا
 ها[۰]() + ها[۱]() + ها[۲]() بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "60" {
-		t.Fatalf("loop var capture = %q, want 60", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۶۰" {
+		t.Fatalf("loop var capture = %q, want ۶۰", strings.TrimSpace(got))
 	}
 }
 
@@ -3516,8 +3516,8 @@ func TestKeywordArgs(t *testing.T) {
 	«{نام}:{سن}» بنویس
 ساختپروفایل(سن = ۲۵ و نام = «علی»)
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "علی:25" {
-		t.Fatalf("keyword args = %q, want علی:25", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "علی:۲۵" {
+		t.Fatalf("keyword args = %q, want علی:۲۵", strings.TrimSpace(got))
 	}
 }
 
@@ -3527,7 +3527,7 @@ func TestVarargs(t *testing.T) {
 f(۱ و ۲ و ۳) بنویس
 f() بنویس
 `
-	want := "[1, 2, 3]\n[]"
+	want := "[۱, ۲, ۳]\n[]"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("varargs = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3538,8 +3538,8 @@ func TestKwargs(t *testing.T) {
 	kw برگردان
 f(a=۱ و b=۲) بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "{a: 1, b: 2}" {
-		t.Fatalf("kwargs = %q, want {a: 1, b: 2}", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "{a: ۱, b: ۲}" {
+		t.Fatalf("kwargs = %q, want {a: ۱, b: ۲}", strings.TrimSpace(got))
 	}
 }
 
@@ -3550,13 +3550,13 @@ func TestMultipleReturns(t *testing.T) {
 خارج بنویس
 باقیمانده بنویس
 `
-	want := "3.5\n1"
+	want := "۳.۵\n۱"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("multiple returns = %q, want %q", strings.TrimSpace(got), want)
 	}
 	// direct tuple unpacking
-	if got := mustRun(t, "الف و ب = (۱۰ و ۲۰)\nالف + ب بنویس\n"); strings.TrimSpace(got) != "30" {
-		t.Fatalf("tuple unpack = %q, want 30", strings.TrimSpace(got))
+	if got := mustRun(t, "الف و ب = (۱۰ و ۲۰)\nالف + ب بنویس\n"); strings.TrimSpace(got) != "۳۰" {
+		t.Fatalf("tuple unpack = %q, want ۳۰", strings.TrimSpace(got))
 	}
 }
 
@@ -3564,8 +3564,8 @@ func TestTypeAnnotations(t *testing.T) {
 	src := `سن: صحیح = ۵
 سن بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "5" {
-		t.Fatalf("typed var = %q, want 5", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۵" {
+		t.Fatalf("typed var = %q, want ۵", strings.TrimSpace(got))
 	}
 	// mismatch raises a catchable خطای‌نوع
 	src = "بپا:\n\tx: صحیح = «علی»\nخطای‌نوع بگیر:\n\t«نوع» بنویس\n"
@@ -3601,7 +3601,7 @@ xs بنویس
 xs[۱] = ۵
 xs بنویس
 `
-	want := "10\n30\n[20, 30]\n[10, 20, 30, 40]\n[10, 30, 40]\n[10, 5, 40]"
+	want := "۱۰\n۳۰\n[۲۰, ۳۰]\n[۱۰, ۲۰, ۳۰, ۴۰]\n[۱۰, ۳۰, ۴۰]\n[۱۰, ۵, ۴۰]"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("list operations = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3622,7 +3622,7 @@ func TestDictOperations(t *testing.T) {
 	شمارش += ۱
 شمارش بنویس
 `
-	want := "1\nکلید\n2\n2\n2"
+	want := "۱\nکلید\n۲\n۲\n۲"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("dict operations = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3637,7 +3637,7 @@ func TestSetType(t *testing.T) {
 اگر ۵ در س نباشد:
 	«غایب» بنویس
 `
-	want := "{1, 2, 3}\nمجموعه\nعضو\nغایب"
+	want := "{۱, ۲, ۳}\nمجموعه\nعضو\nغایب"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("set type = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3681,7 +3681,7 @@ func TestClassFields(t *testing.T) {
 برچسبِ الف بنویس
 برچسبِ ب بنویس
 `
-	want := "2\nجدید\nتغییر\nجدید"
+	want := "۲\nجدید\nتغییر\nجدید"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("class fields = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3806,8 +3806,8 @@ func TestGeneratorEarlyBreakExtra(t *testing.T) {
 	تعداد += ۱
 تعداد بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2" {
-		t.Fatalf("generator early break = %q, want 2", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲" {
+		t.Fatalf("generator early break = %q, want ۲", strings.TrimSpace(got))
 	}
 }
 
@@ -3823,8 +3823,8 @@ func TestYieldFromExtra(t *testing.T) {
 مجموع بنویس
 `
 	// 1+2+3+4 = 10
-	if got := mustRun(t, src); strings.TrimSpace(got) != "10" {
-		t.Fatalf("yield-from extra = %q, want 10", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۰" {
+		t.Fatalf("yield-from extra = %q, want ۱۰", strings.TrimSpace(got))
 	}
 }
 
@@ -3853,7 +3853,7 @@ func TestListCompFilter(t *testing.T) {
 	src := `ن = [ای برای ای در بازه(۱۰) اگر ای > ۲ باشد]
 ن بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "[3, 4, 5, 6, 7, 8, 9]" {
+	if got := mustRun(t, src); strings.TrimSpace(got) != "[۳, ۴, ۵, ۶, ۷, ۸, ۹]" {
 		t.Fatalf("list comp filter = %q", strings.TrimSpace(got))
 	}
 }
@@ -3864,7 +3864,7 @@ func TestSetComp(t *testing.T) {
 نوع(باقی) بنویس
 باقی بنویس
 `
-	want := "مجموعه\n{0, 1, 2}"
+	want := "مجموعه\n{۰, ۱, ۲}"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("set comp = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3880,8 +3880,8 @@ func TestGenExpLazy(t *testing.T) {
 	تعداد += ۱
 تعداد بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "3" {
-		t.Fatalf("genexp lazy = %q, want 3", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۳" {
+		t.Fatalf("genexp lazy = %q, want ۳", strings.TrimSpace(got))
 	}
 }
 
@@ -3892,14 +3892,14 @@ func TestChainedPipe(t *testing.T) {
 	x + ۱ برگردان
 ۵ |> دوبرابر |> یکی‌اضافه |> بنویس
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "11" {
-		t.Fatalf("chained pipe = %q, want 11", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۱۱" {
+		t.Fatalf("chained pipe = %q, want ۱۱", strings.TrimSpace(got))
 	}
 }
 
 func TestPipeToPrint(t *testing.T) {
-	if got := mustRun(t, "۵ |> بنویس\n"); strings.TrimSpace(got) != "5" {
-		t.Fatalf("pipe to print = %q, want 5", strings.TrimSpace(got))
+	if got := mustRun(t, "۵ |> بنویس\n"); strings.TrimSpace(got) != "۵" {
+		t.Fatalf("pipe to print = %q, want ۵", strings.TrimSpace(got))
 	}
 }
 
@@ -3918,7 +3918,7 @@ ch ببند
 اگر بسته‌استِ ch == درست باشد:
 	«بسته» بنویس
 `
-	want := "30\nباز\nبسته"
+	want := "۳۰\nباز\nبسته"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("channel = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -3956,8 +3956,8 @@ func TestGoroutine(t *testing.T) {
 	for _, l := range strings.Split(strings.TrimSpace(out), "\n") {
 		got[l]++
 	}
-	if got["کار1"] != 1 || got["کار2"] != 1 {
-		t.Fatalf("goroutine = %q, want one کار1 and one کار2", out)
+	if got["کار۱"] != 1 || got["کار۲"] != 1 {
+		t.Fatalf("goroutine = %q, want one کار۱ and one کار۲", out)
 	}
 }
 
@@ -3971,8 +3971,8 @@ func TestDeferLIFOExtra(t *testing.T) {
 
 کار()
 `
-	if got := mustRun(t, src); strings.TrimSpace(got) != "2\n1\n0" {
-		t.Fatalf("defer LIFO = %q, want 2\\n1\\n0", strings.TrimSpace(got))
+	if got := mustRun(t, src); strings.TrimSpace(got) != "۲\n۱\n۰" {
+		t.Fatalf("defer LIFO = %q, want ۲\\n۱\\n۰", strings.TrimSpace(got))
 	}
 }
 
@@ -3994,7 +3994,7 @@ func TestGlobalNonlocal(t *testing.T) {
 
 بیرونی() بنویس
 `
-	want := "5\n1"
+	want := "۵\n۱"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("global/nonlocal = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -4013,7 +4013,7 @@ func TestClosureMutation(t *testing.T) {
 ف(۱۰) بنویس
 ف(۲۰) بنویس
 `
-	want := "1\n2"
+	want := "۱\n۲"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("closure mutation = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -4036,7 +4036,7 @@ xs = فهرست(۱)
 اگر هویت(xs) == هویت(xs) باشد:
 	«یکسان» بنویس
 `
-	want := "7\n3\ncba\n[(0, 10), (1, 20)]\n[(1, الف), (2, ب)]\n[2, 4]\n[2]\nدرست\nیکسان"
+	want := "۷\n۳\ncba\n[(۰, ۱۰), (۱, ۲۰)]\n[(۱, الف), (۲, ب)]\n[۲, ۴]\n[۲]\nدرست\nیکسان"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("builtins batch = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -4050,7 +4050,7 @@ func TestIterableBuiltins(t *testing.T) {
 بیشینه(«abc») بنویس
 مرتب(«cba») بنویس
 `
-	want := "6\n10\na\nc\n[a, b, c]"
+	want := "۶\n۱۰\na\nc\n[a, b, c]"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("iterable builtins = %q, want %q", strings.TrimSpace(got), want)
 	}
@@ -4092,7 +4092,7 @@ xs[۴:۱:-۱] بنویس
 س = «abcdef»
 س[::-۱] بنویس
 `
-	want := "[1, 9, 3, 5]\n[9, 3, 5]\n[1, 9]\nfedcba"
+	want := "[۱, ۹, ۳, ۵]\n[۹, ۳, ۵]\n[۱, ۹]\nfedcba"
 	if got := mustRun(t, src); strings.TrimSpace(got) != want {
 		t.Fatalf("negative slice = %q, want %q", strings.TrimSpace(got), want)
 	}

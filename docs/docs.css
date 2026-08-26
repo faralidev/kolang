@@ -709,6 +709,55 @@ html[data-theme="light"] .run-btn:hover:not(:disabled) {
   background: #0f766e;
 }
 
+/* ===== Copy button (secondary, outline style) ===== */
+.copy-btn {
+  background: transparent;
+  color: var(--text-muted, #7c7e94);
+  border: 1px solid var(--border, #2a2a3e);
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  margin-inline-end: 4px;
+}
+
+.copy-btn:hover {
+  color: var(--text-strong, #eceef5);
+  border-color: var(--text-muted, #7c7e94);
+  background: var(--bg-hover, rgba(255,255,255,0.04));
+}
+
+.copy-btn.copied {
+  color: var(--accent, #2dd4bf);
+  border-color: var(--accent, #2dd4bf);
+  background: var(--accent-soft, rgba(45,212,191,0.10));
+}
+
+/* Intro shell actions group */
+.intro-shell-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.intro-shell-actions .copy-btn {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.8rem;
+}
+
+html[data-theme="light"] .copy-btn {
+  color: #6b7280;
+  border-color: #e6e7eb;
+}
+
+html[data-theme="light"] .copy-btn:hover {
+  color: #16181f;
+  border-color: #6b7280;
+  background: rgba(0,0,0,0.03);
+}
+
 .run-output {
   margin: 8px 0 0 0;
   padding: 10px 14px;
@@ -862,5 +911,257 @@ html[data-theme="light"] .run-output {
   }
   .intro-shell-output {
     font-size: 0.8rem;
+  }
+}
+
+/* ===== Diagrams: pipeline, token list, AST tree, env chain ===== */
+
+/* Pipeline — horizontal flow of steps with arrows */
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 1.6rem 0;
+  padding: 1.2rem;
+  background: var(--bg-elev, #1d1d33);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius, 8px);
+}
+
+.pipeline-step {
+  flex: 1 1 auto;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.7rem 0.5rem;
+  background: var(--bg, #161629);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius-sm, 6px);
+  text-align: center;
+}
+
+.pipeline-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.pipeline-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-strong, #eceef5);
+}
+
+.pipeline-sub {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: var(--text-muted, #7c7e94);
+}
+
+.pipeline-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  color: var(--accent, #2dd4bf);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Token chips */
+.token-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--bg-code, #11111f);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.token-chip {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  background: var(--accent-soft, rgba(45,212,191,0.10));
+  color: var(--accent, #2dd4bf);
+  border: 1px solid var(--accent-border, rgba(45,212,191,0.28));
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* AST tree */
+.ast-tree {
+  margin: 1.4rem 0;
+  padding: 1.2rem;
+  background: var(--bg-elev, #1d1d33);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius, 8px);
+  text-align: center;
+}
+
+.ast-node {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-strong, #eceef5);
+  background: var(--bg-code, #11111f);
+  border: 1px solid var(--border, #2a2a40);
+  line-height: 1.4;
+}
+
+.ast-node small {
+  display: block;
+  font-weight: 400;
+  color: var(--text-muted, #7c7e94);
+  font-size: 0.72rem;
+}
+
+.ast-root {
+  border-color: var(--accent, #2dd4bf);
+  color: var(--accent, #2dd4bf);
+}
+
+.ast-func {
+  border-color: var(--accent-border, rgba(45,212,191,0.28));
+}
+
+.ast-stmt {
+  border-color: #f9e2af80;
+  color: #f9e2af;
+}
+
+.ast-expr {
+  border-color: #89b4fa80;
+  color: #89b4fa;
+}
+
+.ast-call {
+  border-color: #cba6f780;
+  color: #cba6f7;
+}
+
+.ast-children {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+  position: relative;
+}
+
+.ast-children::before {
+  content: "";
+  width: 1px;
+  height: 0.5rem;
+  background: var(--border, #2a2a40);
+}
+
+.ast-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.ast-children .ast-branch {
+  position: relative;
+}
+
+.ast-children .ast-branch::before {
+  content: "";
+  position: absolute;
+  top: -0.8rem;
+  width: 1px;
+  height: 0.8rem;
+  background: var(--border, #2a2a40);
+}
+
+/* Environment chain */
+.env-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.4rem 0;
+  padding: 1.2rem;
+  background: var(--bg-elev, #1d1d33);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius, 8px);
+}
+
+.env-box {
+  flex: 1 1 140px;
+  max-width: 200px;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-code, #11111f);
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius-sm, 6px);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-strong, #eceef5);
+}
+
+.env-box small {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--text-muted, #7c7e94);
+  margin-top: 0.2rem;
+}
+
+.env-global {
+  border-color: var(--accent, #2dd4bf);
+}
+
+.env-func {
+  border-color: #89b4fa80;
+}
+
+.env-block {
+  border-color: #cba6f780;
+}
+
+.env-arrow {
+  font-size: 1.3rem;
+  color: var(--accent, #2dd4bf);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .pipeline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pipeline-step {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: start;
+  }
+  .pipeline-arrow {
+    transform: rotate(90deg);
+    justify-content: center;
+    padding: 0.2rem 0;
+  }
+  .pipeline-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .env-box {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  .env-arrow {
+    transform: rotate(90deg);
   }
 }

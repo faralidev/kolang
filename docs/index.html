@@ -126,7 +126,10 @@
         <div class="intro-shell">
           <div class="intro-shell-header">
             <span class="intro-shell-title">آشنایی — کد کلنگ را اینجا بنویسید و اجرا کنید</span>
-            <button id="intro-run-btn" class="intro-shell-run" type="button">▶ اجرا</button>
+            <div class="intro-shell-actions">
+              <button id="intro-copy-btn" class="copy-btn" type="button">📋 کپی</button>
+              <button id="intro-run-btn" class="intro-shell-run" type="button">▶ اجرا</button>
+            </div>
           </div>
           <textarea id="intro-editor" class="intro-shell-editor" dir="rtl" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="ویرایشگر کد کلنگ">/ به کلنگ خوش آمدید!
 «سلام دنیا!» بنویس
@@ -1073,24 +1076,86 @@
         btn.textContent = '▶ اجرا';
         btn.type = 'button';
 
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = '📋 کپی';
+        copyBtn.type = 'button';
+        copyBtn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          var code = extractCode(pre);
+          var done = function () {
+            copyBtn.textContent = '✓ کپی شد';
+            copyBtn.classList.add('copied');
+            setTimeout(function () {
+              copyBtn.textContent = '📋 کپی';
+              copyBtn.classList.remove('copied');
+            }, 2000);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(done).catch(function () {
+              // Fallback for older browsers
+              fallbackCopy(code); done();
+            });
+          } else {
+            fallbackCopy(code); done();
+          }
+        });
+
         var outDiv = document.createElement('pre');
         outDiv.className = 'run-output';
         outDiv.style.display = 'none';
 
         var toolbar = document.createElement('div');
         toolbar.className = 'code-toolbar';
+        toolbar.appendChild(copyBtn);
         toolbar.appendChild(btn);
 
         wrapper.insertBefore(toolbar, pre);
         wrapper.appendChild(outDiv);
 
-        btn.addEventListener('click', function () { runCode(pre, btn, outDiv); });
+        btn.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          runCode(pre, btn, outDiv);
+        });
       });
+
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
 
       // ===== Intro shell Run button =====
       var introBtn = document.getElementById('intro-run-btn');
       var introEditor = document.getElementById('intro-editor');
       var introOutput = document.getElementById('intro-output');
+      var introCopyBtn = document.getElementById('intro-copy-btn');
+
+      if (introCopyBtn && introEditor) {
+        introCopyBtn.addEventListener('click', function () {
+          var code = introEditor.value;
+          var done = function () {
+            introCopyBtn.textContent = '✓ کپی شد';
+            introCopyBtn.classList.add('copied');
+            setTimeout(function () {
+              introCopyBtn.textContent = '📋 کپی';
+              introCopyBtn.classList.remove('copied');
+            }, 2000);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(done).catch(function () {
+              fallbackCopy(code); done();
+            });
+          } else {
+            fallbackCopy(code); done();
+          }
+        });
+      }
 
       if (introBtn && introEditor && introOutput) {
         // Ctrl+Enter shortcut for the intro editor

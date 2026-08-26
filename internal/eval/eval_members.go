@@ -2,6 +2,7 @@ package eval
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/faralidev/kolang/internal/ast"
@@ -238,7 +239,7 @@ func (e *Eval) evalIndex(ex *ast.Index, env *Env) (Value, error) {
 			i += int64(len(t.Vals))
 		}
 		if i < 0 || i >= int64(len(t.Vals)) {
-			return nil, e.raise(e.excIdx, fmt.Sprintf("نمایه %d خارج از محدوده است", i), ex.L)
+			return nil, e.raise(e.excIdx, fmt.Sprintf("نمایه %s خارج از محدوده است", toPersianDigits(strconv.FormatInt(i, 10))), ex.L)
 		}
 		return t.Vals[i], nil
 	case string:
@@ -251,7 +252,7 @@ func (e *Eval) evalIndex(ex *ast.Index, env *Env) (Value, error) {
 			i += int64(len(rs))
 		}
 		if i < 0 || i >= int64(len(rs)) {
-			return nil, e.raise(e.excIdx, fmt.Sprintf("نمایه %d خارج از محدوده است", i), ex.L)
+			return nil, e.raise(e.excIdx, fmt.Sprintf("نمایه %s خارج از محدوده است", toPersianDigits(strconv.FormatInt(i, 10))), ex.L)
 		}
 		return string(rs[i]), nil
 	case *Dict:
