@@ -9,9 +9,31 @@
 
 **[English version below](#english-section)**
 
-> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر کلنگ (Kolang IDE)](https://github.com/faralidev/kolang-ide) را نصب کنید — یک افزونه‌ی VS Code با پشتیبانی از راست‌به‌چپ، هایلایت نحو، و تکمیل خودکار.
+> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر دسکتاپ کلنگ (Kolang IDE)](https://github.com/faralidev/kolang-ide) را نصب کنید — ویرایشگری مستقل با پشتیبانی کامل از راست‌به‌چپ، هایلایت نحو، و تکمیل خودکار. همچنین [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز موجود است.
 >
-> 📝 **Kolang IDE:** For a better experience, install the [Kolang IDE](https://github.com/faralidev/kolang-ide) — a VS Code extension with RTL support, syntax highlighting, and autocomplete.
+> 🎮 **محیط آزمایش:** کد کلنگ را مستقیماً در مرورگر اجرا کنید — [playground](https://faralidev.github.io/kolang/playground.html)
+
+---
+
+## انگیزه
+
+من همیشه آرزو داشتم زبان برنامه‌نویسی کاملاً فارسی داشته باشم — زبانی که از راست به چپ نوشته شود، نحو آن طبیعی و فارسی باشد، و در عین حال تمام امکانات زبان‌های مدرن را داشته باشد.
+
+زبان‌های برنامه‌نویسی موجود همگی بر پایه‌ی زبان انگلیسی ساخته شده‌اند. این یعنی یک کودک یا فرد فارسی‌زبانی که می‌خواهد برنامه‌نویسی یاد بگیرد، اول باید انگلیسی یاد بگیرد تا مفاهیم پایه را درک کند. کلنگ این مانع را برمی‌دارد: مفاهیم برنامه‌نویسی — متغیر، حلقه، شرط، تابع، شیء — همگی به فارسی بیان می‌شوند.
+
+اما کلنگ فقط یک زبان آموزشی نیست. کلنگ یک زبان قدرتمند و واقعی است که امکانات مدرن را ارائه می‌دهد: همزمانی با تارک و کانال، شیءگرایی کامل، استثناها، جنریتورها، نوع‌دهی تدریجی، و بیشتر. هدف این است که زبانی داشته باشیم که هم برای آموزش به کودکان و افراد تازه‌کار مناسب باشد، و هم برای نوشتن برنامه‌های واقعی و جدی کافی باشد.
+
+### چرا Go؟
+
+کلنگ با زبان Go نوشته شده است. مفسر کلنگ یک ارزیاب درختی (tree-walking interpreter) است که مستقیماً کد را تحلیل و اجرا می‌کند — بدون نیاز به کامپایل به بایت‌کد یا ماشین مجازی. این انتخاب عمدی بود: سادگی پیاده‌سازی، سرعت توسعه، و دسترسی به امکانات همزمانی Go (goroutine و channel) که مستقیماً در زبان کلنگ به عنوان تارک و کانال استفاده شده‌اند.
+
+### چرا ویرایشگر جداگانه؟
+
+موتور داخلی VS Code امکان تجربه‌ی واقعی راست‌به‌چپ را فراهم نمی‌کند — مخصوصاً وقتی متن فارسی با کد و عملگرها ترکیب می‌شود. به همین دلیل [ویرایشگر دسکتاپ کلنگ](https://github.com/faralidev/kolang-ide) ساخته شد تا تجربه‌ی ویرایش واقعی RTL را فراهم کند. با این حال، [افزونه‌ی VS Code](https://github.com/faralidev/kolang-vsextension) نیز برای کاربرانی که VS Code را ترجیح می‌دهند توسعه یافته است.
+
+### نقشه‌ی راه
+
+کلنگ در مراحل اولیه‌ی خود است. مسیر آینده بستگی به توجه و استقبال جامعه دارد. اگر کلنگ توجه بگیرد، جهت‌گیری‌های بعدی شامل کامپایل به بایت‌کد، ماشین مجازی بومی (شبیه Rust)، و کتابخانه‌ی استاندارد کامل‌تر خواهد بود. ما کاربران را تشویق می‌کنیم که با ما تماس بگیرند، بازخورد بدهند، و در توسعه مشارکت کنند!
 
 ---
 
@@ -761,6 +783,12 @@ kolang/
 └── go.mod                / ماژول Go
 ```
 
+## اعتبار
+
+**معماری و خالق:** [رامین خاتمی](https://www.linkedin.com/in/raminkhatami)
+
+**پیاده‌سازی:** این کد با کمک GLM 5.2 تولید شده است، تحت راهبری معماری و طراحی رامین خاتمی.
+
 ---
 
 # English Section
@@ -810,7 +838,7 @@ kolang -version           # version info
 
 ## Documentation
 
-Full documentation is in Persian above. For the complete language specification, see [`SPEC.html`](SPEC.html).
+Full documentation is in Persian above. For the complete language specification, see [`SPEC.html`](SPEC.html). For the reference manual and standard library docs, see the [docs site](https://faralidev.github.io/kolang/).
 
 ## Examples
 
@@ -818,8 +846,36 @@ See the [`examples/`](examples/) directory for 32 sample programs.
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). We encourage users to reach out, give feedback, and contribute — the roadmap depends on community interest!
 
 ## License
 
 MIT — see [`LICENSE`](LICENSE).
+
+---
+
+## Motivation
+
+I always wanted a completely Persian programming language — one that writes from right to left, has natural Persian syntax, and yet has all the functionality of a modern language.
+
+Existing programming languages are all built on English. This means a child or Persian speaker who wants to learn programming must first learn English to understand basic concepts. Kolang removes this barrier: programming concepts — variables, loops, conditionals, functions, objects — are all expressed in Persian.
+
+But Kolang is not just an educational language. It is a powerful, real language that offers modern features: concurrency with goroutines and channels, full OOP, exceptions, generators, gradual typing, and more. The goal is a language that is both suitable for teaching kids and first-time learners, and powerful enough for writing real programs.
+
+### Why Go?
+
+Kolang is written in Go. The interpreter is a tree-walking evaluator that directly parses and executes code — no bytecode compilation or virtual machine needed. This was a deliberate choice: implementation simplicity, rapid development, and access to Go's concurrency primitives (goroutines and channels) which are directly exposed in Kolang as تارک and کانال.
+
+### Why a separate editor?
+
+VS Code's internal engine does not allow a true right-to-left experience — especially when Persian text mixes with code and operators. That's why the [Kolang desktop IDE](https://github.com/faralidev/kolang-ide) was built to provide a genuine RTL editing experience. However, a [VS Code extension](https://github.com/faralidev/kolang-vsextension) has also been developed for users who prefer VS Code.
+
+### Roadmap
+
+Kolang is in its early stages. The future direction depends on community attention and adoption. If Kolang gains traction, next steps may include bytecode compilation, a native VM (Rust-like), and a more complete standard library. We encourage users to reach out, provide feedback, and contribute!
+
+## Credits
+
+**Architecture & Creator:** [Ramin Khatami (رامین خاتمی)](https://www.linkedin.com/in/raminkhatami)
+
+**Implementation:** This code was generated with the help of GLM 5.2, under the architectural direction and design of Ramin Khatami.
