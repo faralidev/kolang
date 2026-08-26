@@ -9,9 +9,9 @@
 
 **[English version below](#english-section)**
 
-> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر کلنگ (Kolang IDE)](https://github.com/farali/kolang-ide) را نصب کنید — یک افزونه‌ی VS Code با پشتیبانی از راست‌به‌چپ، هایلایت نحو، و تکمیل خودکار.
+> 📝 **ویرایشگر کلنگ:** برای تجربه‌ی بهتر، [ویرایشگر کلنگ (Kolang IDE)](https://github.com/faralidev/kolang-ide) را نصب کنید — یک افزونه‌ی VS Code با پشتیبانی از راست‌به‌چپ، هایلایت نحو، و تکمیل خودکار.
 >
-> 📝 **Kolang IDE:** For a better experience, install the [Kolang IDE](https://github.com/farali/kolang-ide) — a VS Code extension with RTL support, syntax highlighting, and autocomplete.
+> 📝 **Kolang IDE:** For a better experience, install the [Kolang IDE](https://github.com/faralidev/kolang-ide) — a VS Code extension with RTL support, syntax highlighting, and autocomplete.
 
 ---
 
