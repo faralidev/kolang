@@ -565,6 +565,11 @@ func (p *Parser) parseDef() (ast.Stmt, error) {
 // constructor (ساخت), and interface method signatures.
 func (p *Parser) parseFuncSig(nameTok token.Token) (*ast.DefStmt, error) {
 	st := &ast.DefStmt{L: nameTok.Line, Name: nameTok.Literal}
+	// Allow an optional ezafe (ِ) between the method name and the opening
+	// paren, e.g. «تعریف صدادهیِ(خود):» — common in Persian class bodies.
+	if p.peek().Type == token.EZAFE {
+		p.next() // consume ezafe
+	}
 	if _, err := p.expect(token.LPAREN); err != nil {
 		return nil, err
 	}
