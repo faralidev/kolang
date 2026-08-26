@@ -91,6 +91,7 @@
         <a class="sb-link" href="#spec">مشخصات</a>
         <a class="sb-link external" href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
         <a class="sb-link external" href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
+        <a class="sb-link" href="playground.html">▶ محیط آزمایش</a>
       </div>
 
     </nav>
@@ -927,6 +928,102 @@
           });
         }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
         targets.forEach(function (t) { observer.observe(t); });
+      }
+    })();
+  </script>
+
+  <!-- ===== Inline Run buttons for code examples (WASM-powered) ===== -->
+  <script src="wasm/wasm_exec.js"></script>
+  <script>
+    (function () {
+      var wasmReady = false;
+      var wasmLoading = false;
+      var go = null;
+
+      function loadWasm() {
+        if (wasmReady || wasmLoading) return;
+        wasmLoading = true;
+        go = new Go();
+        WebAssembly.instantiateStreaming(fetch('wasm/kolang.wasm'), go.importObject)
+          .then(function (r) { return go.run(r.instance); })
+          .then(function () { wasmReady = true; wasmLoading = false; })
+          .catch(function (e) { wasmLoading = false; console.error('WASM load failed:', e); });
+      }
+
+      function extractCode(pre) {
+        var codeEl = pre.querySelector('code');
+        if (!codeEl) return '';
+        return codeEl.textContent.replace(/\n\s*$/, '');
+      }
+
+      function runCode(pre, btn, outDiv) {
+        if (!wasmReady) {
+          if (!wasmLoading) loadWasm();
+          btn.textContent = '⏳ در حال بارگذاری...';
+          var check = setInterval(function () {
+            if (wasmReady) {
+              clearInterval(check);
+              btn.textContent = '▶ اجرا';
+              doRun();
+            }
+          }, 200);
+          return;
+        }
+        doRun();
+
+        function doRun() {
+          var code = extractCode(pre);
+          btn.textContent = '⏳ در حال اجرا...';
+          btn.disabled = true;
+          outDiv.style.display = 'block';
+          outDiv.textContent = 'در حال اجرا...';
+          requestAnimationFrame(function () {
+            runKolang(code).then(function (result) {
+              if (result.error) {
+                outDiv.innerHTML = '<span class="run-error">' + result.error + '</span>' +
+                  (result.output ? '\n' + result.output : '');
+              } else {
+                outDiv.textContent = result.output || '(خروجی خالی)';
+              }
+              btn.textContent = '▶ اجرا';
+              btn.disabled = false;
+            }).catch(function (e) {
+              outDiv.innerHTML = '<span class="run-error">' + String(e) + '</span>';
+              btn.textContent = '▶ اجرا';
+              btn.disabled = false;
+            });
+          });
+        }
+      }
+
+      document.querySelectorAll('pre.kolang-code').forEach(function (pre) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        var btn = document.createElement('button');
+        btn.className = 'run-btn';
+        btn.textContent = '▶ اجرا';
+        btn.type = 'button';
+
+        var outDiv = document.createElement('pre');
+        outDiv.className = 'run-output';
+        outDiv.style.display = 'none';
+
+        var toolbar = document.createElement('div');
+        toolbar.className = 'code-toolbar';
+        toolbar.appendChild(btn);
+
+        wrapper.insertBefore(toolbar, pre);
+        wrapper.appendChild(outDiv);
+
+        btn.addEventListener('click', function () { runCode(pre, btn, outDiv); });
+      });
+
+      // Lazy-load WASM when user scrolls near a code block (optional: preload on idle)
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(function () { loadWasm(); }, { timeout: 5000 });
       }
     })();
   </script>

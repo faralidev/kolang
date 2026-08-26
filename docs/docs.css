@@ -658,3 +658,80 @@ table.ref td:first-child { white-space: nowrap; }
     animation-duration: 0.01ms !important;
   }
 }
+
+/* ===== Inline Run buttons for code examples ===== */
+.code-block-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.code-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 4px 8px;
+  background: var(--bg-code, #11111f);
+  border-radius: 6px 6px 0 0;
+  border: 1px solid var(--border, #2a2a3e);
+  border-bottom: none;
+}
+
+.code-block-wrapper pre.kolang-code {
+  margin: 0;
+  border-radius: 0 0 6px 6px;
+}
+
+.run-btn {
+  background: #0d9488;
+  color: #fff;
+  border: none;
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: #0f766e;
+}
+
+.run-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+html[data-theme="light"] .run-btn {
+  background: #0d9488;
+}
+
+html[data-theme="light"] .run-btn:hover:not(:disabled) {
+  background: #0f766e;
+}
+
+.run-output {
+  margin: 8px 0 0 0;
+  padding: 10px 14px;
+  background: var(--bg-code, #11111f);
+  border: 1px solid var(--border, #2a2a3e);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  direction: rtl;
+  text-align: right;
+  color: var(--text, #e0e0e0);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.run-output .run-error {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+html[data-theme="light"] .run-output {
+  background: #f5f6f8;
+  color: #1a1a2e;
+  border-color: #d1d5db;
+}
