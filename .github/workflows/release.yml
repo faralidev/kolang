@@ -46,9 +46,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/*
-          name: "کلنگ نسخه ${GITHUB_REF_NAME}"
+          name: "کلنگ نسخه ${{ github.ref_name }}"
           body: |
-            ## کلنگ ${GITHUB_REF_NAME}
+            ## کلنگ ${{ github.ref_name }}
 
             نسخه‌ی جدید کلنگ منتشر شد! برای نصب:
 
@@ -58,7 +58,7 @@ jobs:
 
             یا فایل اجرایی مناسب سیستم‌عامل خود را از زیر دانلود کنید.
 
-            ## Kolang ${GITHUB_REF_NAME}
+            ## Kolang ${{ github.ref_name }}
 
             New release of Kolang. Install with:
 
