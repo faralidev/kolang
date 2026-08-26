@@ -274,25 +274,71 @@
 
 
   // =========================================================================
-  // Editor — textarea + highlighting overlay
+  // Editor — textarea + highlighting overlay + line-number gutter
+  // --------------------------------------------------------------------------
+  // The .pg-editor-wrap is restructured into a flex row:
+  //   [ .pg-gutter (line numbers) ] [ .pg-editor-area (pre + textarea) ]
+  // The textarea (transparent text, visible caret) sits on top of the <pre>
+  // that shows the highlighted code. The gutter is a sibling column.
   // =========================================================================
+
+  var editorWrap = document.querySelector('.pg-editor-wrap')
+
+  // Build the gutter + area wrapper (HTML can't be edited, so do it in JS)
+  var gutter = document.createElement('div')
+  gutter.className = 'pg-gutter'
+  gutter.setAttribute('aria-hidden', 'true')
+
+  var editorArea = document.createElement('div')
+  editorArea.className = 'pg-editor-area'
+
+  // Move the pre + textarea into the area, then add gutter + area to wrap
+  editorWrap.appendChild(gutter)
+  editorWrap.appendChild(editorArea)
+  editorArea.appendChild(editorPre)
+  editorArea.appendChild(editorInput)
+
+  function countLines(text) {
+    var n = text.split('\n').length
+    return n < 1 ? 1 : n
+  }
+
+  function syncGutter() {
+    var lines = countLines(editorInput.value)
+    var html = ''
+    for (var i = 1; i <= lines; i++) {
+      html += '<span class="pg-gutter-line">' + i + '</span>'
+    }
+    gutter.innerHTML = html
+  }
 
   function syncHighlight() {
     var code = editorInput.value
     // Trailing newline keeps the last line visible in the overlay
     editorHighlight.innerHTML = highlightKolang(code) + '\n'
+    syncGutter()
   }
 
   function syncScroll() {
     editorPre.scrollTop = editorInput.scrollTop
     editorPre.scrollLeft = editorInput.scrollLeft
+    // Gutter scrolls vertically in sync with the textarea
+    gutter.scrollTop = editorInput.scrollTop
   }
 
   editorInput.addEventListener('input', syncHighlight)
   editorInput.addEventListener('scroll', syncScroll)
 
-  // Tab key — insert 4 spaces
+  // Get the leading-whitespace indent of the line containing `pos`
+  function getLineIndent(text, pos) {
+    var lineStart = text.lastIndexOf('\n', pos - 1) + 1
+    var line = text.slice(lineStart, pos)
+    var match = line.match(/^[ \t]*/)
+    return match ? match[0] : ''
+  }
+
   editorInput.addEventListener('keydown', function (e) {
+    // Tab key — insert 4 spaces
     if (e.key === 'Tab') {
       e.preventDefault()
       var start = editorInput.selectionStart
@@ -301,11 +347,39 @@
       editorInput.value = val.substring(0, start) + '    ' + val.substring(end)
       editorInput.selectionStart = editorInput.selectionEnd = start + 4
       syncHighlight()
+      return
     }
+
     // Ctrl+Enter / Cmd+Enter to run
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault()
       runCode()
+      return
+    }
+
+    // Enter — auto-indent: match current line's indent, add one level if it
+    // ends with ':' (block opener) or 'ِ' (ezafe method on its own line)
+    if (e.key === 'Enter') {
+      var s = editorInput.selectionStart
+      var en = editorInput.selectionEnd
+      var val = editorInput.value
+      var indent = getLineIndent(val, s)
+      // Peek at the text of the current line up to the cursor
+      var lineStart = val.lastIndexOf('\n', s - 1) + 1
+      var beforeCursor = val.slice(lineStart, s).trim()
+      var extra = ''
+      if (beforeCursor.charCodeAt(beforeCursor.length - 1) === 0x3A /* ':' */) {
+        extra = '    '
+      }
+      var insert = '\n' + indent + extra
+      e.preventDefault()
+      editorInput.value = val.substring(0, s) + insert + val.substring(en)
+      var newPos = s + insert.length
+      editorInput.selectionStart = editorInput.selectionEnd = newPos
+      syncHighlight()
+      // Keep the cursor in view
+      syncScroll()
+      return
     }
   })
 

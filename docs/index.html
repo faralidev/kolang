@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>کلنگ — مستندات زبان برنامه‌نویسی فارسی</title>
-  <meta name="description" content="مستندات کامل زبان برنامه‌نویسی کلنگ (Kolang) — زبان فارسی با الهام از پایتون و گو. نصب، آموزش گام‌به‌گام، مرجع کامل و مثال‌ها.">
+  <meta name="description" content="مستندات کامل زبان برنامه‌نویسی کلنگ (Kolang) — زبان فارسی با نحو طبیعی فارسی. نصب، آموزش گام‌به‌گام، مرجع کامل و مثال‌ها.">
   <meta name="theme-color" content="#161629">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,10 +90,15 @@
         <a class="sb-link" href="#examples">مثال‌ها</a>
         <a class="sb-link" href="#spec">مشخصات</a>
         <a class="sb-link" href="reference.html">مرجع کامل زبان</a>
-        <a class="sb-link" href="stdlib.html">کتابخانه‌ی استاندارد</a>
+        <a class="sb-link" href="stdlib.html">کتابخانهٔ استاندارد</a>
+        <a class="sb-link" href="playground.html">▶ محیط آزمایش</a>
         <a class="sb-link external" href="https://github.com/faralidev/kolang" target="_blank" rel="noopener">GitHub</a>
         <a class="sb-link external" href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">ویرایشگر کلنگ</a>
-        <a class="sb-link" href="playground.html">▶ محیط آزمایش</a>
+      </div>
+
+      <div class="sb-section">
+        <span class="sb-title">برای توسعه‌دهندگان</span>
+        <a class="sb-link" href="how-it-works.html">چگونه کار می‌کند</a>
       </div>
 
     </nav>
@@ -110,8 +115,8 @@
         <p class="lead">
           کلنگ یک زبان برنامه‌نویسی فارسی است که برای آموزش برنامه‌نویسی به فارسی‌زبانان طراحی شده است.
           نحو آن طبیعی و فارسی است: افعال در انتهای جمله می‌آیند، دسترسی به اعضا با اضافه (کسره) انجام می‌شود
-          و اعداد فارسی (۰–۹) پشتیبانی می‌شوند. کلنگ از زبان گو الهام گرفته و ویژگی‌هایی مانند تارک، کانال،
-          تأخیر، رابط و نوع‌دهی تدریجی را ارائه می‌دهد.
+          و اعداد فارسی (۰–۹) پشتیبانی می‌شوند. کلنگ ویژگی‌هایی مانند تارک، کانال، تأخیر، رابط و نوع‌دهی
+          تدریجی را برای نوشتن برنامه‌های ساده و پیشرفته ارائه می‌دهد.
         </p>
 
         <div class="callout">
@@ -143,7 +148,7 @@
       <!-- ===================================================== INSTALL -->
       <section class="section" id="install">
         <h2 class="section-h2">نصب</h2>
-        <p>کلنگ را به چند روش می‌توانید نصب کنید. برای روش‌های مبتنی بر کدمنبع به Go نسخهٔ ۱.۲۷ یا بالاتر نیاز دارید.</p>
+        <p>کلنگ را به چند روش می‌توانید نصب کنید. برای ساخت از کدمنبع به Go نسخهٔ ۱.۲۷ یا بالاتر نیاز دارید.</p>
 
         <h3 class="section-h3">روش ۱ — نصب با Go</h3>
         <div class="terminal">
@@ -183,6 +188,22 @@
 <span class="out">کلنگ نسخه ۱.۰.۰ (kolang 1.0.0)</span>
 <span class="dim">github.com/faralidev/kolang</span>
 <span class="dim">Go go1.27.0</span></code></pre>
+        </div>
+
+        <h3 class="section-h3">دستورات Make</h3>
+        <p>اگر از کدمنبع ساخته‌اید، می‌توانید از دستورات <code>make</code> استفاده کنید:</p>
+        <div class="table-wrap">
+          <table class="ref">
+            <thead><tr><th>دستور</th><th>توضیح</th></tr></thead>
+            <tbody>
+              <tr><td><code>make build</code></td><td>ساخت فایل اجرایی</td></tr>
+              <tr><td><code>make test</code></td><td>اجرای تست‌ها</td></tr>
+              <tr><td><code>make test-race</code></td><td>اجرای تست‌ها با رقابت</td></tr>
+              <tr><td><code>make examples</code></td><td>اجرای همهٔ مثال‌ها</td></tr>
+              <tr><td><code>make install</code></td><td>نصب در سیستم</td></tr>
+              <tr><td><code>make clean</code></td><td>پاک‌سازی فایل‌های ساخته‌شده</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -583,7 +604,7 @@
         <!-- همزمانی -->
         <div class="subsection" id="t-concurrency">
           <h3 class="section-h3">همزمانی</h3>
-          <p><code>برو</code> یک تارک (goroutine) اجرا می‌کند و <code>کانال</code> ارتباط بین آن‌ها را برقرار می‌کند — درست مثل گو.</p>
+          <p><code>برو</code> یک تارک اجرا می‌کند و <code>کانال</code> ارتباط همزمان بین تارک‌ها را برقرار می‌کند. با <code>&lt;&lt;</code> مقدار می‌فرستید و با <code>&gt;&gt;</code> دریافت می‌کنید.</p>
           <pre class="kolang-code" dir="ltr"><code>ch <span class="kolang-operator">=</span> <span class="kolang-builtin">کانال</span>(<span class="kolang-class-name">صحیح</span> و <span class="kolang-number">۱</span>)                   <span class="kolang-comment">/ کانال با بافر ۱</span>
 
 <span class="kolang-keyword">تعریف</span> <span class="kolang-function-name">تولیدکننده</span>():
@@ -727,7 +748,7 @@
                 <tr><td><code>ببند</code></td><td>بستن کانال</td><td><code>ch ببند</code></td></tr>
                 <tr><td><code>بساز</code></td><td>بازدهی (yield)</td><td><code>ای بساز</code></td></tr>
                 <tr><td><code>بساز‌از</code></td><td>بازدهی از</td><td><code>expr بساز‌از</code></td></tr>
-                <tr><td><code>برو</code></td><td>گوروتین</td><td><code>برو f()</code></td></tr>
+                <tr><td><code>برو</code></td><td>تارک</td><td><code>برو f()</code></td></tr>
                 <tr><td><code>تأخیری</code></td><td>تأخیر</td><td><code>f() تأخیری</code></td></tr>
               </tbody>
             </table>
@@ -794,7 +815,7 @@
                 <tr><td><code>اجرا(src)</code></td><td>ارزیابی کد</td></tr>
                 <tr><td><code>خطا(msg)</code></td><td>ساخت خطا</td></tr>
                 <tr><td><code>کانال(type و n)</code></td><td>ساخت کانال</td></tr>
-                <tr><td><code>برو(f)</code></td><td>گوروتین</td></tr>
+                <tr><td><code>برو(f)</code></td><td>تارک</td></tr>
               </tbody>
             </table>
           </div>
@@ -821,7 +842,7 @@
               <tr><td><code>comprehensions.kolang</code></td><td>درک‌لیست‌ها</td></tr>
               <tr><td><code>pipe.kolang</code></td><td>لوله‌ها</td></tr>
               <tr><td><code>channel.kolang</code></td><td>کانال‌ها</td></tr>
-              <tr><td><code>goroutine.kolang</code></td><td>تارک</td></tr>
+              <tr><td><code>goroutine.kolang</code></td><td>تارک و همزمانی</td></tr>
               <tr><td><code>worker_pool.kolang</code></td><td>استخر کارگر</td></tr>
               <tr><td><code>defer.kolang</code></td><td>تأخیر</td></tr>
               <tr><td><code>typing.kolang</code></td><td>نوع‌دهی</td></tr>

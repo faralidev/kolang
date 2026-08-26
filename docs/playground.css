@@ -383,20 +383,53 @@ button {
 
 
 /* --------------------------------------------------------------------------
-   Editor — textarea + syntax-highlighting overlay
+   Editor — textarea + syntax-highlighting overlay + line-number gutter
    --------------------------------------------------------------------------
-   The textarea (transparent text, visible caret) sits on top of a <pre>
+   .pg-editor-wrap is a flex row:
+     [ .pg-gutter (line numbers, LTR) ] [ .pg-editor-area (pre + textarea) ]
+   The textarea (transparent text, visible caret) sits on top of the <pre>
    that shows the highlighted code. Both share identical typography and
    padding so they align perfectly. The textarea handles scrolling; the
-   overlay syncs via JS on the 'scroll' event.
+   overlay + gutter sync via JS on the 'scroll' event.
    -------------------------------------------------------------------------- */
 
 .pg-editor-wrap {
   flex: 1;
   min-height: 0;
-  position: relative;
+  display: flex;
+  flex-direction: row;   /* gutter on the left (inline-start in LTR flow) */
   overflow: hidden;
   background: var(--bg-output);
+}
+
+/* Line-number gutter */
+.pg-gutter {
+  flex-shrink: 0;
+  width: 3.2rem;
+  padding: 1rem 0.5rem 1rem 0.4rem;
+  overflow: hidden;
+  background: var(--bg-elev);
+  border-inline-end: 1px solid var(--border);
+  font-family: var(--font-mono), 'Vazirmatn', monospace;
+  font-size: 0.8rem;
+  line-height: 1.85;
+  color: var(--text-muted);
+  text-align: end;        /* numbers flush against the editor area */
+  direction: ltr;
+  user-select: none;
+  white-space: pre;
+}
+
+.pg-gutter-line {
+  display: block;
+}
+
+/* Editor area — relative container for the overlay <pre> + <textarea> */
+.pg-editor-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .pg-editor-highlight,
