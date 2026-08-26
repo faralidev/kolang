@@ -122,6 +122,19 @@
             <a href="https://github.com/faralidev/kolang-ide" target="_blank" rel="noopener">دریافت از GitHub ↗</a>
           </div>
         </div>
+
+        <div class="intro-shell">
+          <div class="intro-shell-header">
+            <span class="intro-shell-title">آشنایی — کد کلنگ را اینجا بنویسید و اجرا کنید</span>
+            <button id="intro-run-btn" class="intro-shell-run" type="button">▶ اجرا</button>
+          </div>
+          <textarea id="intro-editor" class="intro-shell-editor" dir="rtl" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="ویرایشگر کد کلنگ">/ به کلنگ خوش آمدید!
+«سلام دنیا!» بنویس
+
+برای ای از ۱ تا ۵:
+    ای بنویس</textarea>
+          <pre id="intro-output" class="intro-shell-output" dir="rtl"><span class="intro-shell-placeholder">برای اجرا، دکمهٔ «اجرا» را بزنید</span></pre>
+        </div>
       </section>
 
       <!-- ===================================================== INSTALL -->
@@ -940,16 +953,56 @@
     (function () {
       var wasmReady = false;
       var wasmLoading = false;
-      var go = null;
+      var wasmError = null;
 
       function loadWasm() {
         if (wasmReady || wasmLoading) return;
+        if (typeof Go === 'undefined') {
+          wasmError = 'wasm_exec.js بارگذاری نشد';
+          console.error('Kolang WASM:', wasmError);
+          return;
+        }
         wasmLoading = true;
-        go = new Go();
-        WebAssembly.instantiateStreaming(fetch('wasm/kolang.wasm'), go.importObject)
-          .then(function (r) { return go.run(r.instance); })
-          .then(function () { wasmReady = true; wasmLoading = false; })
-          .catch(function (e) { wasmLoading = false; console.error('WASM load failed:', e); });
+        var go = new Go();
+        var wasmUrl = 'wasm/kolang.wasm';
+
+        // Try streaming first (needs application/wasm MIME), fall back to
+        // fetch + arrayBuffer for servers that don't set the right content type.
+        var instantiatePromise;
+        if (typeof WebAssembly.instantiateStreaming === 'function') {
+          instantiatePromise = WebAssembly.instantiateStreaming(
+            fetch(wasmUrl), go.importObject
+          ).catch(function () {
+            return fetch(wasmUrl)
+              .then(function (r) { return r.arrayBuffer(); })
+              .then(function (bytes) { return WebAssembly.instantiate(bytes, go.importObject); });
+          });
+        } else {
+          instantiatePromise = fetch(wasmUrl)
+            .then(function (r) { return r.arrayBuffer(); })
+            .then(function (bytes) { return WebAssembly.instantiate(bytes, go.importObject); });
+        }
+
+        instantiatePromise.then(function (result) {
+          var instance = result.instance || result;
+          // go.run starts the Go runtime. It returns a Promise that resolves
+          // when the Go program exits — but our program blocks on select{}
+          // forever, keeping the runtime alive. Don't await it.
+          go.run(instance);
+
+          // Poll until runKolang is registered by Go's main()
+          var checkReady = setInterval(function () {
+            if (typeof runKolang === 'function') {
+              clearInterval(checkReady);
+              wasmReady = true;
+              wasmLoading = false;
+            }
+          }, 50);
+        }).catch(function (e) {
+          wasmLoading = false;
+          wasmError = 'خطا در بارگذاری مفسر';
+          console.error('Kolang WASM instantiation failed:', e);
+        });
       }
 
       function extractCode(pre) {
@@ -959,6 +1012,11 @@
       }
 
       function runCode(pre, btn, outDiv) {
+        if (wasmError) {
+          outDiv.style.display = 'block';
+          outDiv.innerHTML = '<span class="run-error">' + wasmError + '</span>';
+          return;
+        }
         if (!wasmReady) {
           if (!wasmLoading) loadWasm();
           btn.textContent = '⏳ در حال بارگذاری...';
@@ -967,6 +1025,12 @@
               clearInterval(check);
               btn.textContent = '▶ اجرا';
               doRun();
+            }
+            if (wasmError) {
+              clearInterval(check);
+              btn.textContent = '▶ اجرا';
+              outDiv.style.display = 'block';
+              outDiv.innerHTML = '<span class="run-error">' + wasmError + '</span>';
             }
           }, 200);
           return;
@@ -1023,9 +1087,85 @@
         btn.addEventListener('click', function () { runCode(pre, btn, outDiv); });
       });
 
-      // Lazy-load WASM when user scrolls near a code block (optional: preload on idle)
+      // ===== Intro shell Run button =====
+      var introBtn = document.getElementById('intro-run-btn');
+      var introEditor = document.getElementById('intro-editor');
+      var introOutput = document.getElementById('intro-output');
+
+      if (introBtn && introEditor && introOutput) {
+        // Ctrl+Enter shortcut for the intro editor
+        introEditor.addEventListener('keydown', function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            introBtn.click();
+          }
+        });
+        // Tab key — insert 4 spaces
+        introEditor.addEventListener('keydown', function (e) {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            var s = introEditor.selectionStart;
+            var en = introEditor.selectionEnd;
+            var v = introEditor.value;
+            introEditor.value = v.substring(0, s) + '    ' + v.substring(en);
+            introEditor.selectionStart = introEditor.selectionEnd = s + 4;
+          }
+        });
+
+        introBtn.addEventListener('click', function () {
+          if (wasmError) {
+            introOutput.innerHTML = '<span class="run-error">' + wasmError + '</span>';
+            return;
+          }
+          if (!wasmReady) {
+            if (!wasmLoading) loadWasm();
+            introBtn.textContent = '⏳ در حال بارگذاری...';
+            var check = setInterval(function () {
+              if (wasmReady) {
+                clearInterval(check);
+                introBtn.textContent = '▶ اجرا';
+                doIntroRun();
+              }
+              if (wasmError) {
+                clearInterval(check);
+                introBtn.textContent = '▶ اجرا';
+                introOutput.innerHTML = '<span class="run-error">' + wasmError + '</span>';
+              }
+            }, 200);
+            return;
+          }
+          doIntroRun();
+
+          function doIntroRun() {
+            var code = introEditor.value;
+            introBtn.textContent = '⏳ در حال اجرا...';
+            introBtn.disabled = true;
+            introOutput.innerHTML = 'در حال اجرا...';
+            requestAnimationFrame(function () {
+              runKolang(code).then(function (result) {
+                if (result.error) {
+                  introOutput.innerHTML = '<span class="run-error">' + result.error + '</span>' +
+                    (result.output ? '\n' + result.output : '');
+                } else {
+                  introOutput.textContent = result.output || '(خروجی خالی)';
+                }
+                introBtn.textContent = '▶ اجرا';
+                introBtn.disabled = false;
+              }).catch(function (e) {
+                introOutput.innerHTML = '<span class="run-error">' + String(e) + '</span>';
+                introBtn.textContent = '▶ اجرا';
+                introBtn.disabled = false;
+              });
+            });
+          }
+        });
+      }
+
+      // Preload WASM on idle so the first Run click is instant
       if ('requestIdleCallback' in window) {
         requestIdleCallback(function () { loadWasm(); }, { timeout: 5000 });
+      } else {
+        setTimeout(loadWasm, 2000);
       }
     })();
   </script>

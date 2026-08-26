@@ -735,3 +735,132 @@ html[data-theme="light"] .run-output {
   color: #1a1a2e;
   border-color: #d1d5db;
 }
+
+/* ===== Intro shell — interactive editor at the top of the docs ===== */
+.intro-shell {
+  margin: 2rem 0;
+  border: 1px solid var(--border, #2a2a40);
+  border-radius: var(--radius, 8px);
+  overflow: hidden;
+  background: var(--bg-elev, #1d1d33);
+}
+
+.intro-shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  background: var(--bg-elev, #1d1d33);
+  border-bottom: 1px solid var(--border, #2a2a40);
+}
+
+.intro-shell-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-muted, #7c7e94);
+}
+
+.intro-shell-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent, #2dd4bf);
+  border: 1px solid var(--accent-deep, #14b8a6);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-family: var(--font-prose, sans-serif);
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.intro-shell-run:hover:not(:disabled) {
+  background: var(--accent-deep, #14b8a6);
+}
+
+.intro-shell-run:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.intro-shell-editor {
+  display: block;
+  width: 100%;
+  min-height: 160px;
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border: none;
+  background: var(--bg-code, #11111f);
+  color: var(--text-strong, #eceef5);
+  font-family: var(--font-mono), 'Vazirmatn', monospace;
+  font-size: 0.875rem;
+  line-height: 1.85;
+  white-space: pre;
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  tab-size: 4;
+  resize: vertical;
+  outline: none;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border, #2a2a40) transparent;
+}
+
+.intro-shell-editor::-webkit-scrollbar { width: 8px; height: 8px; }
+.intro-shell-editor::-webkit-scrollbar-track { background: transparent; }
+.intro-shell-editor::-webkit-scrollbar-thumb {
+  background: var(--border, #2a2a40);
+  border-radius: 99px;
+}
+
+.intro-shell-editor:focus {
+  box-shadow: inset 0 0 0 2px var(--accent-border, rgba(45, 212, 191, 0.28));
+}
+
+.intro-shell-output {
+  margin: 0;
+  padding: 0.8rem 1.2rem;
+  background: var(--bg-code, #11111f);
+  border-top: 1px solid var(--border, #2a2a40);
+  font-family: var(--font-mono), 'Vazirmatn', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  color: var(--text, #b8bac8);
+  max-height: 200px;
+  overflow-y: auto;
+  min-height: 2.5rem;
+}
+
+.intro-shell-output:empty::before {
+  content: "";
+}
+
+.intro-shell-placeholder {
+  color: var(--text-muted, #7c7e94);
+  font-style: italic;
+}
+
+.intro-shell-output .run-error {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+@media (max-width: 560px) {
+  .intro-shell-editor {
+    font-size: 0.8rem;
+    min-height: 120px;
+  }
+  .intro-shell-output {
+    font-size: 0.8rem;
+  }
+}

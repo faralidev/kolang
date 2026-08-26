@@ -383,28 +383,88 @@ button {
 
 
 /* --------------------------------------------------------------------------
-   Editor container — always dark (matches CM6 Catppuccin theme)
+   Editor — textarea + syntax-highlighting overlay
+   --------------------------------------------------------------------------
+   The textarea (transparent text, visible caret) sits on top of a <pre>
+   that shows the highlighted code. Both share identical typography and
+   padding so they align perfectly. The textarea handles scrolling; the
+   overlay syncs via JS on the 'scroll' event.
    -------------------------------------------------------------------------- */
 
-.pg-editor-container {
+.pg-editor-wrap {
   flex: 1;
   min-height: 0;
+  position: relative;
   overflow: hidden;
-  background: #1e1e2e; /* Catppuccin Mocha base — always dark */
+  background: var(--bg-output);
 }
 
-/* CodeMirror fills its container */
-.pg-editor-container .cm-editor {
-  height: 100%;
-}
-.pg-editor-container .cm-scroller {
-  overflow: auto;
-}
-
-/* Ensure the editor's font includes JetBrains Mono for Latin/punctuation */
-.pg-editor-container .cm-content,
-.pg-editor-container .cm-line {
+.pg-editor-highlight,
+.pg-editor-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 1rem 1.2rem;
   font-family: var(--font-mono), 'Vazirmatn', monospace;
+  font-size: 0.875rem;
+  line-height: 1.85;
+  white-space: pre;
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  tab-size: 4;
+  border: none;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.pg-editor-highlight {
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  color: var(--text-strong);
+  background: transparent;
+}
+
+.pg-editor-highlight code {
+  font-family: inherit;
+  font-size: inherit;
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+.pg-editor-input {
+  overflow: auto;
+  z-index: 2;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--accent);
+  resize: none;
+  outline: none;
+}
+
+.pg-editor-input::selection {
+  background: var(--accent-soft);
+}
+
+/* Scrollbar for the textarea */
+.pg-editor-input::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.pg-editor-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pg-editor-input::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
+}
+.pg-editor-input::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+.pg-editor-input {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 
@@ -530,12 +590,12 @@ button {
 .pg-loading-card.pg-error .pg-spinner {
   display: none;
 }
-.pg-loading-card.pg-error .pg-loading-text {
-  color: var(--error);
-}
-.pg-loading-card.pg-error-icon::before {
+.pg-loading-card.pg-error::before {
   content: "⚠";
   font-size: 2rem;
+  color: var(--error);
+}
+.pg-loading-card.pg-error .pg-loading-text {
   color: var(--error);
 }
 

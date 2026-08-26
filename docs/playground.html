@@ -12,31 +12,14 @@
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d9488'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>ک</text></svg>">
 
+  <link rel="stylesheet" href="kolang-syntax-theme.css">
   <link rel="stylesheet" href="playground.css">
 
   <!-- Go WASM glue — classic script, defines globalThis.Go -->
   <script src="wasm/wasm_exec.js"></script>
-
-  <!-- Import map: resolve bare CM6 specifiers to esm.sh CDN.
-       ?external= ensures all packages share ONE instance of
-       @codemirror/state (avoids "duplicate Facet" runtime errors). -->
-  <script type="importmap">
-  {
-    "imports": {
-      "@codemirror/state": "https://esm.sh/@codemirror/state@6",
-      "@codemirror/view": "https://esm.sh/@codemirror/view@6?external=@codemirror/state",
-      "@codemirror/language": "https://esm.sh/@codemirror/language@6?external=@codemirror/state,@codemirror/view,@lezer/highlight,@lezer/common",
-      "@codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete@6?external=@codemirror/state,@codemirror/view,@codemirror/language,@lezer/highlight,@lezer/common",
-      "@codemirror/commands": "https://esm.sh/@codemirror/commands@6?external=@codemirror/state,@codemirror/view,@codemirror/language",
-      "@codemirror/search": "https://esm.sh/@codemirror/search@6?external=@codemirror/state,@codemirror/view,@codemirror/language",
-      "@lezer/highlight": "https://esm.sh/@lezer/highlight@1",
-      "@lezer/common": "https://esm.sh/@lezer/common@1"
-    }
-  }
-  </script>
 </head>
 <body>
-  <a class="skip-link" href="#editor">پرش به ویرایشگر</a>
+  <a class="skip-link" href="#editor-input">پرش به ویرایشگر</a>
 
   <!-- ============================================================ HEADER -->
   <header class="pg-header">
@@ -81,7 +64,10 @@
           </button>
         </div>
       </div>
-      <div id="editor" class="pg-editor-container" aria-label="ویرایشگر کد کلنگ"></div>
+      <div class="pg-editor-wrap">
+        <pre class="pg-editor-highlight" aria-hidden="true"><code id="editor-highlight-code"></code></pre>
+        <textarea id="editor-input" class="pg-editor-input" dir="rtl" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="ویرایشگر کد کلنگ"></textarea>
+      </div>
     </section>
 
     <section class="pg-panel pg-output-panel">
@@ -105,6 +91,6 @@
   </div>
 
   <!-- ============================================================ JS -->
-  <script type="module" src="playground.js"></script>
+  <script src="playground.js"></script>
 </body>
 </html>
