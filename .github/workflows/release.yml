@@ -191,12 +191,14 @@ jobs:
           HB_VERSION="${VERSION#v}"
           mkdir -p /tmp/assets
           declare -A HASHES
+          # Releases publish raw binaries (no .tar.gz/.zip archives):
+          #   kolang-{linux,darwin}-{amd64,arm64}, kolang-windows-amd64.exe
           for asset in \
-            kolang-linux-amd64.tar.gz \
-            kolang-linux-arm64.tar.gz \
-            kolang-darwin-amd64.tar.gz \
-            kolang-darwin-arm64.tar.gz \
-            kolang-windows-amd64.zip; do
+            kolang-linux-amd64 \
+            kolang-linux-arm64 \
+            kolang-darwin-amd64 \
+            kolang-darwin-arm64 \
+            kolang-windows-amd64.exe; do
             for attempt in 1 2 3 4 5; do
               if curl -fsSL -o "/tmp/assets/$asset" "https://github.com/faralidev/kolang/releases/download/${VERSION}/$asset"; then
                 break
@@ -211,11 +213,11 @@ jobs:
           {
             echo "version=${VERSION}"
             echo "hb_version=${HB_VERSION}"
-            echo "linux_amd64=${HASHES[kolang-linux-amd64.tar.gz]}"
-            echo "linux_arm64=${HASHES[kolang-linux-arm64.tar.gz]}"
-            echo "darwin_amd64=${HASHES[kolang-darwin-amd64.tar.gz]}"
-            echo "darwin_arm64=${HASHES[kolang-darwin-arm64.tar.gz]}"
-            echo "windows_amd64=${HASHES[kolang-windows-amd64.zip]}"
+            echo "linux_amd64=${HASHES[kolang-linux-amd64]}"
+            echo "linux_arm64=${HASHES[kolang-linux-arm64]}"
+            echo "darwin_amd64=${HASHES[kolang-darwin-amd64]}"
+            echo "darwin_arm64=${HASHES[kolang-darwin-arm64]}"
+            echo "windows_amd64=${HASHES[kolang-windows-amd64.exe]}"
           } >> "$GITHUB_OUTPUT"
 
       - name: Bump Homebrew tap
@@ -263,15 +265,16 @@ jobs:
 
           for platform, digest in hashes.items():
               asset = prefix + "-" + platform
-              # Bump the tag inside the download URL for this asset.
+              # Bump the tag inside the download URL for this asset (raw binary,
+              # no .tar.gz/.zip extension).
               content = re.sub(
-                  r'(url\s+"[^"]*/download/)v[^/]+(/' + re.escape(asset) + r'\.(?:tar\.gz|zip)")',
+                  r'(url\s+"[^"]*/download/)v[^/]+(/' + re.escape(asset) + r'")',
                   lambda m: m.group(1) + version + m.group(2),
                   content,
               )
               # Set the sha256 that immediately follows the matching URL.
               content = re.sub(
-                  r'(url\s+"[^"]*/download/' + re.escape(version) + r'/' + re.escape(asset) + r'\.(?:tar\.gz|zip)"\s*\n\s*sha256\s+")[^"]*(")',
+                  r'(url\s+"[^"]*/download/' + re.escape(version) + r'/' + re.escape(asset) + r'"\s*\n\s*sha256\s+")[^"]*(")',
                   lambda m: m.group(1) + digest + m.group(2),
                   content,
               )
