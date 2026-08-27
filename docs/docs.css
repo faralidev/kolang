@@ -229,6 +229,50 @@ hr {
 }
 .topbar-link svg { display: block; }
 
+/* Top-level navigation links (between brand and GitHub) */
+.topbar-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-inline-start: 0.4rem;
+}
+.topbar-nav-link {
+  position: relative;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.topbar-nav-link:hover {
+  color: var(--text-strong);
+  background: var(--bg-hover);
+}
+.topbar-nav-link[aria-current="page"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+/* animated underline on hover */
+.topbar-nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.65rem;
+  bottom: 0.18rem;
+  height: 1.5px;
+  background: var(--accent);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.18s ease;
+}
+.topbar-nav-link:hover::after,
+.topbar-nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
 .theme-toggle {
   display: inline-grid;
   place-items: center;
@@ -622,6 +666,7 @@ table.ref td:first-child { white-space: nowrap; }
 @media (max-width: 860px) {
   .hamburger { display: grid; }
   .topbar-link.topbar-github { display: none; }
+  .topbar-nav { display: none; }
 
   .sidebar {
     transform: translateX(100%);   /* hidden off the right edge */
@@ -659,130 +704,110 @@ table.ref td:first-child { white-space: nowrap; }
   }
 }
 
-/* ===== Inline Run buttons for code examples ===== */
+/* ===== Run button + output panel for code examples ===== */
 .code-block-wrapper {
   position: relative;
-  margin: 1rem 0;
-}
-
-.code-toolbar {
-  display: flex;
-  justify-content: flex-start;
-  padding: 4px 8px;
-  background: var(--bg-code, #11111f);
-  border-radius: 6px 6px 0 0;
-  border: 1px solid var(--border, #2a2a3e);
-  border-bottom: none;
+  margin: 0 0 1.3rem;
 }
 
 .code-block-wrapper pre.kolang-code {
   margin: 0;
-  border-radius: 0 0 6px 6px;
 }
 
+/* Run button — top-right corner of the code block (code is dir=ltr) */
 .run-btn {
-  background: #0d9488;
-  color: #fff;
-  border: none;
-  padding: 3px 12px;
-  border-radius: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.75rem;
+  font-family: var(--font-prose);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--bg);
+  background: var(--accent);
+  border: 1px solid var(--accent-deep);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.15s;
+  user-select: none;
+  transition: background 0.15s ease, transform 0.08s ease, opacity 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
-
 .run-btn:hover:not(:disabled) {
-  background: #0f766e;
+  background: var(--accent-deep);
+  color: #fff;
 }
-
+.run-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
 .run-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: wait;
 }
-
 html[data-theme="light"] .run-btn {
-  background: #0d9488;
+  color: #fff;
 }
 
-html[data-theme="light"] .run-btn:hover:not(:disabled) {
-  background: #0f766e;
-}
-
-/* ===== Copy button (secondary, outline style) ===== */
-.copy-btn {
-  background: transparent;
-  color: var(--text-muted, #7c7e94);
-  border: 1px solid var(--border, #2a2a3e);
-  padding: 3px 12px;
-  border-radius: 4px;
+/* Output panel — appears below the code block on run */
+.code-output {
+  margin: 0;
+  padding: 0.7rem 0.95rem;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-  margin-inline-end: 4px;
-}
-
-.copy-btn:hover {
-  color: var(--text-strong, #eceef5);
-  border-color: var(--text-muted, #7c7e94);
-  background: var(--bg-hover, rgba(255,255,255,0.04));
-}
-
-.copy-btn.copied {
-  color: var(--accent, #2dd4bf);
-  border-color: var(--accent, #2dd4bf);
-  background: var(--accent-soft, rgba(45,212,191,0.10));
-}
-
-/* Intro shell actions group */
-.intro-shell-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.intro-shell-actions .copy-btn {
-  font-size: 0.78rem;
-  padding: 0.3rem 0.8rem;
-}
-
-html[data-theme="light"] .copy-btn {
-  color: #6b7280;
-  border-color: #e6e7eb;
-}
-
-html[data-theme="light"] .copy-btn:hover {
-  color: #16181f;
-  border-color: #6b7280;
-  background: rgba(0,0,0,0.03);
-}
-
-.run-output {
-  margin: 8px 0 0 0;
-  padding: 10px 14px;
-  background: var(--bg-code, #11111f);
-  border: 1px solid var(--border, #2a2a3e);
-  border-radius: 6px;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  white-space: pre-wrap;
+  font-size: 0.84rem;
+  line-height: 1.7;
   direction: rtl;
   text-align: right;
-  color: var(--text, #e0e0e0);
-  max-height: 300px;
+  unicode-bidi: plaintext;
+  color: var(--text);
+  max-height: 320px;
   overflow-y: auto;
+  scrollbar-width: thin;
+}
+.code-output[hidden] { display: none; }
+
+/* When the output panel is visible, square the code block's bottom corners off */
+.code-block-wrapper:has(.code-output:not([hidden])) pre.kolang-code {
+  border-radius: var(--radius) var(--radius) 0 0;
+  border-bottom: none;
 }
 
-.run-output .run-error {
-  color: #ef4444;
+.code-output-text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-mono);
+  color: var(--text-strong);
+}
+
+.run-status {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.run-status.run-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.run-error {
+  color: #f38ba8;
   font-weight: 500;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
+html[data-theme="light"] .run-error { color: #dc2626; }
 
-html[data-theme="light"] .run-output {
-  background: #f5f6f8;
-  color: #1a1a2e;
-  border-color: #d1d5db;
+.code-output::-webkit-scrollbar { width: 7px; }
+.code-output::-webkit-scrollbar-track { background: transparent; }
+.code-output::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
 }
 
 /* ===== Intro shell — interactive editor at the top of the docs ===== */
@@ -1163,5 +1188,116 @@ html[data-theme="light"] .run-output {
   }
   .env-arrow {
     transform: rotate(90deg);
+  }
+}
+
+
+/* ==========================================================================
+   Syntax highlighting — Catppuccin Mocha token palette
+   --------------------------------------------------------------------------
+   وقتی Prism اجرا می‌شود، توکن‌ها با کلاس .token.* می‌آیند. اگر Prism از
+   CDN بارگذاری نشد، spanهای دستیِ .kolang-* همچنان با همین رنگ‌ها نمایش
+   داده می‌شوند (هاlights tất cả رنگ‌ها در هر دو مسیر یکسان است).
+
+   پالت Catppuccin Mocha:
+     green   #a6e3a1   blue    #89b4fa   peach   #fab387
+     yellow  #f9e2af   mauve   #cba6f7   teal    #94e2d5
+     sky     #89dceb   red     #f38ba8   flamingo #f5c2e7
+     overlay0 #6c7086  surface2 #7f849c  text     #cdd6f4
+   ========================================================================== */
+
+pre.kolang-code code {
+  color: var(--text-strong, #eceef5);
+  background: none;
+}
+
+/* ---- توکن‌های Prism ---- */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6c7086;
+  font-style: italic;
+}
+.token.punctuation { color: #9399b2; }
+.token.keyword     { color: #a6e3a1; font-weight: 600; }
+.token.boolean,
+.token.nil,
+.token.number,
+.token.constant    { color: #fab387; }
+.token.string      { color: #89b4fa; unicode-bidi: isolate; }
+.token.char        { color: #89b4fa; }
+.token.builtin     { color: #94e2d5; }
+.token.operator    { color: #89dceb; background: none; }
+.token.ezafe       { color: #7f849c; }
+.token.class-name  { color: #f9e2af; font-weight: 600; }
+.token.function    { color: #89b4fa; }
+.token.decorator,
+.token.annotation  { color: #a6e3a1; }
+.token.property    { color: #89b4fa; }
+.token.symbol      { color: #fab387; }
+.token.important   { color: #f38ba8; }
+
+/* ---- fallback: spanهای دستیِ .kolang-* (وقتی Prism در دسترس نیست) ---- */
+.kolang-comment    { color: #6c7086; font-style: italic; }
+.kolang-keyword    { color: #a6e3a1; font-weight: 600; }
+.kolang-boolean    { color: #fab387; }
+.kolang-null       { color: #fab387; }
+.kolang-number     { color: #fab387; }
+.kolang-string     { color: #89b4fa; unicode-bidi: isolate; }
+.kolang-builtin    { color: #94e2d5; }
+.kolang-operator   { color: #89dceb; }
+.kolang-class-name { color: #f9e2af; font-weight: 600; }
+.kolang-function-name { color: #89b4fa; }
+.kolang-error-type { color: #f38ba8; }
+.kolang-self       { color: #f38ba8; font-style: italic; }
+.kolang-ezafe      { color: #7f849c; }
+.kolang-channel-op { color: #f5c2e7; }
+.kolang-decorator  { color: #a6e3a1; }
+.kolang-module-name{ color: #94e2d5; }
+.kolang-punctuation{ color: #9399b2; }
+
+/* حالت روشن: کمی تیره‌تر برای خوانایی روی پس‌زمینهٔ روشن */
+html[data-theme="light"] .token.comment,
+html[data-theme="light"] .kolang-comment { color: #6b7280; }
+html[data-theme="light"] .token.keyword,
+html[data-theme="light"] .kolang-keyword { color: #15803d; }
+html[data-theme="light"] .token.string,
+html[data-theme="light"] .kolang-string { color: #2563eb; }
+html[data-theme="light"] .token.number,
+html[data-theme="light"] .token.boolean,
+html[data-theme="light"] .token.nil,
+html[data-theme="light"] .kolang-number,
+html[data-theme="light"] .kolang-boolean,
+html[data-theme="light"] .kolang-null { color: #b45309; }
+html[data-theme="light"] .token.builtin,
+html[data-theme="light"] .kolang-builtin { color: #0f766e; }
+html[data-theme="light"] .token.operator,
+html[data-theme="light"] .kolang-operator { color: #0e7490; }
+html[data-theme="light"] .token.class-name,
+html[data-theme="light"] .kolang-class-name { color: #a16207; }
+html[data-theme="light"] .token.function,
+html[data-theme="light"] .kolang-function-name { color: #2563eb; }
+html[data-theme="light"] .token.ezafe,
+html[data-theme="light"] .kolang-ezafe { color: #6b7280; }
+html[data-theme="light"] .token.important,
+html[data-theme="light"] .kolang-error-type,
+html[data-theme="light"] .kolang-self { color: #be123c; }
+
+
+/* ==========================================================================
+   Small-screen tweaks for code blocks + run buttons
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .run-btn {
+    top: 0.4rem;
+    right: 0.4rem;
+    padding: 0.22rem 0.6rem;
+    font-size: 0.72rem;
+  }
+  .code-output {
+    font-size: 0.78rem;
+    padding: 0.55rem 0.7rem;
   }
 }
