@@ -392,3 +392,46 @@ jobs:
             هیچ ویرایش دستی لازم نیست — در انتشار بعدی دوباره به‌روزرسانی می‌شود.
 
             /cc @faralidev
+
+  update-wasm:
+    name: Update kolang-wasm (rebuild WASM from new interpreter)
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout kolang-wasm
+        uses: actions/checkout@v4
+        with:
+          repository: faralidev/kolang-wasm
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          path: kolang-wasm
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Bump patch version
+        working-directory: kolang-wasm
+        run: npm version patch --no-git-tag-version
+
+      - name: Create PR to kolang-wasm
+        uses: peter-evans/create-pull-request@v6
+        with:
+          path: kolang-wasm
+          token: ${{ secrets.KOLANG_BOT_TOKEN }}
+          commit-message: "deps: bump version for kolang ${{ github.ref_name }}"
+          branch: deps/bump-kolang-${{ github.ref_name }}
+          delete-branch: true
+          title: "Update WASM for kolang ${{ github.ref_name }}"
+          body: |
+            Automated by the kolang release workflow. When this PR is merged, the
+            auto-tag workflow bumps the version and tags v*, which triggers
+            publish.yml to rebuild kolang.wasm from the new interpreter and
+            publish @kolang/interpreter to npm.
+
+            **Trigger:** kolang ${{ github.ref_name }}
+
+            /cc @faralidev
