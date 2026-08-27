@@ -34,3 +34,8 @@ Thumbs.db
 # WASM build artifacts (canonical producer is kolang-wasm)
 *.wasm
 docs/wasm/
+
+# Local tooling (not for publication)
+.cortexkit/
+.slim/
+.ignore
