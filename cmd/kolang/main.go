@@ -17,7 +17,7 @@ import (
 )
 
 // version is the Kolang release version reported by -version.
-const version = "0.0.1"
+const version = "1.1.0"
 
 // main parses the command line and dispatches to the REPL, -c inline code, or
 // a source file, exiting with status 1 if the command fails.

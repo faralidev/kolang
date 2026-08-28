@@ -36,10 +36,12 @@ jobs:
             if [ "$os" = "windows" ]; then
               ext=".exe"
             fi
+            # Raw binary (for Homebrew formula + scoop manifests)
             binary="dist/kolang-${os}-${arch}${ext}"
             GOOS="$os" GOARCH="$arch" go build \
               -o "$binary" \
               ./cmd/kolang
+            # Also create archives for convenience
             if [ "$os" = "windows" ]; then
               mkdir -p "dist/pkg-${os}-${arch}"
               cp "$binary" "dist/pkg-${os}-${arch}/kolang.exe"
@@ -57,6 +59,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
+            dist/kolang-*
             dist/*.tar.gz
             dist/*.zip
           name: "کلنگ نسخه ${{ github.ref_name }}"
