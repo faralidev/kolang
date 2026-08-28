@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.27"
 
@@ -94,10 +94,10 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout kolang
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.27"
 
@@ -111,12 +111,12 @@ jobs:
 
       # ── kolang-grammar ──────────────────────────────────────────────────
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: '24'
 
       - name: Checkout kolang-grammar
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/kolang-grammar
           token: ${{ secrets.KOLANG_BOT_TOKEN }}
@@ -152,7 +152,7 @@ jobs:
 
       # ── kolang-data ────────────────────────────────────────────────────
       - name: Checkout kolang-data
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/kolang-data
           token: ${{ secrets.KOLANG_BOT_TOKEN }}
@@ -224,7 +224,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Bump Homebrew tap
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/homebrew-tap
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
@@ -301,7 +301,7 @@ jobs:
             Automated by the kolang release workflow.
 
       - name: Bump Scoop bucket
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/scoop-bucket
           token: ${{ secrets.SCOOP_BUCKET_TOKEN }}
@@ -360,14 +360,14 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout kolang-linter
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/kolang-linter
           token: ${{ secrets.KOLANG_BOT_TOKEN }}
           path: kolang-linter
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.27"
 
@@ -408,16 +408,16 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout kolang-wasm
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: faralidev/kolang-wasm
           token: ${{ secrets.KOLANG_BOT_TOKEN }}
           path: kolang-wasm
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: '24'
 
       - name: Bump patch version
         working-directory: kolang-wasm
